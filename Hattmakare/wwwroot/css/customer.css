@@ -1,0 +1,113 @@
+﻿
+#customer {
+    display: flex;
+   justify-content: space-between;
+   
+ 
+}
+
+#customer #customerSearch svg{
+    height: 15px;
+    padding: 0px;
+   
+   
+}
+
+
+#customer #customerSearch {
+        
+ background-color: transparent;
+        padding: 0px;
+        border: none;
+
+}
+
+#customer #customerAdd svg {
+    height: 25px;
+    margin-top: 5px;
+    margin: 5px;
+}
+
+#customer #customerAdd {
+    border:0;
+    background-color: transparent;
+    margin-left: auto;
+    margin-right: 25rem;
+    display: flex;
+    width: 300px;
+    font-size: 25px;
+}
+
+#customer #customerEdit svg {
+    height: 15px;
+}
+
+#customer #customerEdit {
+    border: 0;
+    background-color: transparent;
+    padding: 0px;
+}
+
+#customer #customerDelete svg{
+    height: 15px;
+   
+}
+
+#customer #customerDelete {
+    border: 0;
+    background-color: transparent;
+    padding: 0px;
+}
+
+#customer button {
+    
+    background-color: transparent;
+}
+
+#customer ul {
+    padding: 0;
+ 
+}
+
+#customer ul li {
+    list-style: none;
+    font-size: 20px;
+    margin: 15px;
+    padding: 0;
+    margin-left: auto; 
+}
+
+#customer .customerList {
+    display: flex;
+    flex-direction: column;
+    width: 45%;
+    
+}
+
+#customer .customerFields {
+    display: flex;
+    flex-direction: column;
+    width: 45%;
+    font-size: 20px;
+}
+
+#customer .search {
+    display 25px;: flex;
+    border.: none;
+}
+
+#customer .search input {
+    border: 1px solid-black;
+    width: 95%;
+}
+
+    #customer li a {
+        color: black;
+        text-decoration: none;
+    }
+
+
+
+
+}
+    
