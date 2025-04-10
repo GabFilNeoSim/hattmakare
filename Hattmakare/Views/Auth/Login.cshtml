@@ -1,5 +1,26 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using Hattmakare.Models.Auth;
+@model LoginViewModel
 @{
+	ViewBag.Title = "Logga in";
 }
+
+<h1>Logga in<h1/>
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <form method="post" asp-action="LogIn">
+        
+        <div class="form-group row">
+            <div class="col-sm-2">
+                <label>Lösenord: </label>
+            </div>
+            <div class="col-sm-4">
+                
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="offset-2 col-sm-4">
+                <button type="submit" class="btn btn-primary">Logga in</button>
+            </div>
+        </div>
+        <label>Har du inget konto?</label>
+        <a asp-action="Register">Registrera dig</a>
+    </form>
