@@ -18,12 +18,10 @@ namespace Hattmakare.Data.Entities
         [Required]
         public int PurchasePrice { get; set; }
 
-        // Foreign keys
-        public int SupplierId { get; set; }
+        [Required]
+        public string Supplier { get; set; }
 
         // Navigation props
-        [ForeignKey(nameof(SupplierId))]
-        public virtual Supplier Supplier { get; set; }
-
+        public virtual ICollection<HatMaterial> HatMaterials { get; set; }
     }
 }

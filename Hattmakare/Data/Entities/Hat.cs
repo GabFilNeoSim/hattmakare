@@ -13,5 +13,6 @@ namespace Hattmakare.Data.Entities
 
         // Navigation props
         public virtual ICollection<HatMaterial> HatMaterials { get; set; }
+        public virtual ICollection<OrderHat> OrderHats { get; set; }
     }
 }
