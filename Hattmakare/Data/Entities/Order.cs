@@ -13,14 +13,14 @@ namespace Hattmakare.Data.Entities
         public bool SpecialOrder { get; set; } = false;
 
         // Foreign keys
-        public int CustomerId { get; set; }
-        public int OrderStatusId { get; set; }
+        public int? CustomerId { get; set; }
+        public int? OrderStatusId { get; set; }
 
         // Navigation props
-        public virtual ICollection<OrderHat> Orderhats { get; set; }
+        public virtual ICollection<OrderHat> OrderHats { get; set; }
 
         [ForeignKey(nameof(CustomerId))]
-        public virtual Customer Customer { get; set; }
+        public virtual Customer? Customer { get; set; }
 
         [ForeignKey(nameof(OrderStatusId))]
         public virtual OrderStatus OrderStatus { get; set; }
