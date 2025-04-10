@@ -4,8 +4,6 @@ namespace Hattmakare.Data.Entities
 {
     public class OrderHat
     {
-        public int Id { get; set; }
-
         // Foreign keys
         public int HatId { get; set; }
         public int OrderId { get; set; }

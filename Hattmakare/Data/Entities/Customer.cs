@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Hattmakare.Data.Entities
 {
@@ -18,9 +19,16 @@ namespace Hattmakare.Data.Entities
         [MaxLength(100)]
         public string Email { get; set; }
 
+        [Required]
+        [MaxLength(20)]
+        public string PhoneNumber { get; set; }
+
+        // Foreign keys
+        public int AddressId { get; set; }
+
         // Navigation props
-        public virtual ICollection<PhoneNumbers> PhoneNumbers { get; set; }
-        public virtual ICollection<CustomerAddress> Addresses { get; set; }
-        public virtual ICollection<Order> Orders { get; set; }
+        [ForeignKey(nameof(AddressId))]
+        public virtual Address Address { get; set; }
+        public virtual ICollection<Order>? Orders { get; set; }
     }
 }
