@@ -1,0 +1,55 @@
+﻿@using Hattmakare.Models.Auth;
+@model RegisterViewModel
+@{
+	ViewBag.Title = "Registrera ett nytt konto";
+}
+
+<h1>Registrera<h1/>
+	<div asp-validation-summary="All" class="text-danger"></div>
+<form method="post" asp-action="Register">
+        <div class="form-group row">
+            <div class="col-sm-2">
+                <label>Förnamn: </label>
+            </div>
+            <div class="col-sm-4">
+                <input asp-for="FirstName" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-2">
+                <label>Efternamn: </label>
+            </div>
+            <div class="col-sm-4">
+                <input asp-for="LastName" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-2">
+                <label>Epost: </label>
+            </div>
+            <div class="col-sm-4">
+                <input asp-for="Email" class="form-control" />
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-2">
+                    <label>Lösenord: </label>
+                </div>
+                <div class="col-sm-4">
+                    <input asp-for="Password" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-2">
+                    <label>Bekräfta lösenord: </label>
+                </div>
+                <div class="col-sm-4">
+                    <input asp-for="ConfirmPassword" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="offset-2 col-sm-4">
+                    <button type="submit" class="btn btn-primary">Registrera</button>
+                </div>
+            </div>
+</form>
+
