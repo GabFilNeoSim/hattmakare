@@ -16,7 +16,6 @@ namespace Hattmakare.Data
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderHat> OrderHats { get; set; }
         public DbSet<OrderStatus> OrderStatuses { get; set; }
-        public DbSet<PhoneNumber> PhoneNumbers { get; set; }
         public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
