@@ -21,5 +21,8 @@ namespace Hattmakare.Data.Entities
         [Required]
         [MaxLength(100)]
         public string Country { get; set; }
+
+        // Navigation props
+        public virtual ICollection<Customer> Customers { get; set; }
     }
 }
