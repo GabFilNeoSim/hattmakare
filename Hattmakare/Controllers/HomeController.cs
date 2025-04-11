@@ -27,6 +27,8 @@ namespace Hattmakare.Controllers
         [HttpGet]
         public JsonResult PopulateCalendar()
         {
+
+            // Todo: lägg till villkor där den inloggde användarens ordrar visas
             var events = _appDbContext.Orders
                 .GroupBy(o => o.EndDate)
                 .Select(g => new
@@ -41,6 +43,7 @@ namespace Hattmakare.Controllers
         [HttpGet]
         public async Task<IActionResult> PopulateCalendarPopUp(DateOnly date)
         {
+            // Todo: samma som ovan
             var orders = await _appDbContext.Orders
             .Where(o => o.EndDate == date)
             .Select(x => new CalendarPopupViewModel
