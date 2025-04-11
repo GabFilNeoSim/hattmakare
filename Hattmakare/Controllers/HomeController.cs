@@ -33,7 +33,7 @@ namespace Hattmakare.Controllers
                 .GroupBy(o => o.EndDate)
                 .Select(g => new
                 {
-                    Title = $"{g.Count()} Orders",
+                    Title = $"{g.Count()} ordrar",
                     Start = g.Key.ToString("yyyy-MM-dd")
                 }).ToList();
 
