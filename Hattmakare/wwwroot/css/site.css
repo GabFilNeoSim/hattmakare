@@ -50,3 +50,11 @@ body {
     }
   }
 }
+
+.fc-daygrid-day-number, .fc-col-header-cell-cushion {
+    text-decoration: none !important;
+}
+
+.fc-col-header thead tr a, .fc-daygrid-day-number {
+    color: #2c3e50 !important;
+}
