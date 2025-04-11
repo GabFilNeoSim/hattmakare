@@ -2,11 +2,13 @@ using System.Diagnostics;
 using Hattmakare.Data;
 using Hattmakare.Models;
 using Hattmakare.Models.Home;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Hattmakare.Controllers
 {
+    //[Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

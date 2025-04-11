@@ -5,6 +5,9 @@
         initialView: 'dayGridMonth',
         firstDay: 1,
         locale: 'sv',
+        buttonText: {
+            today: 'Idag'
+        },
         events: '/Home/PopulateCalendar',
         eventClick: function (info) {
             const date = info.event.startStr;
