@@ -18,7 +18,7 @@ public class AddCustomerViewModel
 
     [Required(ErrorMessage = "Please enter a city")]
     [MaxLength(100)]
-    public string City { get; set; }
+    public string? City { get; set; }
 
     [Required(ErrorMessage = "Please enter a postal code")]
     [MaxLength(20)]

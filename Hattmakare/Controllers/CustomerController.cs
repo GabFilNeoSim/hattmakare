@@ -1,6 +1,12 @@
-﻿using Hattmakare.Data;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.Metrics;
+using Hattmakare.Data;
+using Hattmakare.Data.Entities;
 using Hattmakare.Models.Customer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace Hattmakare.Controllers;
 
@@ -16,17 +22,52 @@ public class CustomerController : Controller
 
     // Visa kundsidan
     [HttpGet]
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        return View();
+        var customers = await _context.Customers
+            .ToListAsync();
+
+        return View("Index");
     }
 
     // Lägg till kund
     [HttpPost("add")]
     public async Task<IActionResult> AddCustomer(AddCustomerViewModel newCustomer)
     {
-        throw new NotImplementedException();
-    }
+
+        if (ModelState.IsValid)
+        {
+            var customer = new Customer
+            {
+                FirstName = newCustomer.FirstName,
+                LastName = newCustomer.LastName,
+                Email = newCustomer.Email,
+                PhoneNumber = newCustomer.Phone,
+
+                Address = new Address
+                {
+                    StreetAddress = newCustomer.StreetAddress,
+                    PostalCode = newCustomer.PostalCode,
+                    City = newCustomer.City,
+                    Country = newCustomer.Country,
+
+                }
+            };
+
+            await _context.Customers.AddAsync(customer);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index");
+        
+        }
+
+        return View(AddCustomer);
+
+     }
+    
+
+    
+
 
     // Ta bort en kund
     [HttpPost("remove/{customerId:int}")]
