@@ -24,10 +24,16 @@ public class CustomerController : Controller
     [HttpGet]
     public async Task<IActionResult> Index()
     {
-        var customers = await _context.Customers
-            .ToListAsync();
+        var customers = await _context.Customers.ToListAsync();
 
-        return View("Index");
+        var viewModel = new CustomerViewModel
+        {
+            customers = customers,
+
+            AddCustomer = new AddCustomerViewModel()
+        };
+
+        return View(viewModel);
     }
 
     // Lägg till kund
@@ -35,8 +41,18 @@ public class CustomerController : Controller
     public async Task<IActionResult> AddCustomer(AddCustomerViewModel newCustomer)
     {
 
-        if (ModelState.IsValid)
+        if (!ModelState.IsValid)
         {
+            var customers = await _context.Customers.ToListAsync();
+            var viewModel = new CustomerViewModel
+            {
+                customers = customers,
+                AddCustomer = new AddCustomerViewModel()
+            };
+
+            return View("Index", viewModel);
+        }
+
             var customer = new Customer
             {
                 FirstName = newCustomer.FirstName,
@@ -52,29 +68,37 @@ public class CustomerController : Controller
                     Country = newCustomer.Country,
 
                 }
+
             };
 
             await _context.Customers.AddAsync(customer);
+           
             await _context.SaveChangesAsync();
 
             return RedirectToAction("Index");
         
-        }
-
-        return View(AddCustomer);
-
-     }
-    
-
-    
-
+    }
 
     // Ta bort en kund
     [HttpPost("remove/{customerId:int}")]
     public async Task<IActionResult> RemoveCustomer(int customerId)
     {
-        throw new NotImplementedException();
+        var customer = await _context.Customers.FirstOrDefaultAsync(c => c.Id == customerId);
+
+        _context.Customers.Remove(customer);
+
+        try
+        {
+            await _context.SaveChangesAsync();
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Ett fel inträffade: {ex.Message}");
+        }
+
+        return RedirectToAction("Index");
     }
+
 
     // Uppdatera en kund
     [HttpPost("update/{customerId:int}")]

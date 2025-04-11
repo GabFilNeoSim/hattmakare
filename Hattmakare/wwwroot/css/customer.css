@@ -6,63 +6,31 @@
  
 }
 
-#customer #customerSearch svg{
-    height: 15px;
-    padding: 0px;
-   
-   
-}
-
-
-#customer #customerSearch {
-        
- background-color: transparent;
-        padding: 0px;
-        border: none;
-
-}
-
 #customer #customerAdd svg {
     height: 25px;
-    margin-top: 5px;
-    margin: 5px;
+    /*margin-top: 5px;*/
+    /*margin: 5px;*/
 }
 
 #customer #customerAdd {
     border:0;
     background-color: transparent;
-    margin-left: auto;
-    margin-right: 25rem;
     display: flex;
     width: 300px;
     font-size: 25px;
 }
 
-#customer #customerEdit svg {
+#customer .customerList svg {
     height: 15px;
-}
-
-#customer #customerEdit {
-    border: 0;
-    background-color: transparent;
-    padding: 0px;
-}
-
-#customer #customerDelete svg{
-    height: 15px;
-   
-}
-
-#customer #customerDelete {
-    border: 0;
-    background-color: transparent;
-    padding: 0px;
-}
-
-#customer button {
     
-    background-color: transparent;
 }
+
+#customer .customerList button {
+    border: 0;
+    background-color: transparent;
+    padding: 0px;
+}
+
 
 #customer .customerList {
     display: flex;
@@ -71,11 +39,15 @@
 }
 
 #customer .customerFields  {
-    display: flex;
     flex-direction: column;
     width: 45%;
     font-size: 20px;
-    background-color: red;
+    margin-top: 1px;
+}
+
+#customer .customerFields input {
+    width: 180%;
+    
 }
 
 #customer form {
@@ -84,7 +56,7 @@
 
 #customer .search {
     display: flex;
-    border.: none;
+    border: none;
 }
 
 #customer .search input {
