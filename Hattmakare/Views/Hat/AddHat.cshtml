@@ -1,0 +1,21 @@
+﻿@using Hattmakare.Models.Hats
+
+@model AddHatViewModel
+
+@{
+    ViewData["Title"] = "Lägg till hatt";
+}
+
+<form method="post" asp-action="AddHat" enctype="multipart/form-data">
+    <h3>Namn på hatt</h3>
+    <div class="form-group">
+        <label for="Name">Hattens namn</label>
+        <input asp-for="@Model.Name" class="form-control" id="Name" placeholder="Skriv namn på hatten" required />
+        <span asp-validation-for="@Model.Name" class="text-danger"></span>
+    </div>
+
+
+    <div class="offset-sm-2 col-sm-4">
+        <button type="submit" class="btn btn-primary">Lägg till hatt</button>
+    </div>
+</form>
