@@ -4,17 +4,17 @@ namespace Hattmakare.Models.Auth;
 
 public class RegisterViewModel
 {
-    [Required(ErrorMessage = "Du måste skriva ett förnamn")]
+    [Required(ErrorMessage = "Skriv in ett förnamn")]
     [RegularExpression("^[a-zA-ZåäöÅÄÖ]+$", ErrorMessage = "Endast bokstäver är tillåtna")]
     [StringLength(50)]
     public string FirstName { get; set; }
 
-    [Required(ErrorMessage = "Du måste skriva ett efternamn")]
+    [Required(ErrorMessage = "Skriv in ett efternamn")]
     [RegularExpression("^[a-zA-ZåäöÅÄÖ]+$", ErrorMessage = "Endast bokstäver är tillåtna")]
     [StringLength(50)]
     public string LastName { get; set; }
 
-    [Required(ErrorMessage = "Du måste skriva en epost")]
+    [Required(ErrorMessage = "Skriv in en epost")]
     [EmailAddress(ErrorMessage = "Fel format på eposten")]
     [DataType(DataType.EmailAddress)]
     public string Email { get; set; }

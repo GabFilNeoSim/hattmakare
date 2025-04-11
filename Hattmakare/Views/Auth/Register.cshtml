@@ -1,55 +1,58 @@
-﻿@using Hattmakare.Models.Auth;
+﻿@using Hattmakare.Models.Auth
 @model RegisterViewModel
+
 @{
-	ViewBag.Title = "Registrera ett nytt konto";
+    ViewBag.Title = "Registrera ett nytt konto";
 }
 
-<h1>Registrera<h1/>
-	<div asp-validation-summary="All" class="text-danger"></div>
-<form method="post" asp-action="Register">
-        <div class="form-group row">
-            <div class="col-sm-2">
-                <label>Förnamn: </label>
-            </div>
-            <div class="col-sm-4">
-                <input asp-for="FirstName" class="form-control" />
-            </div>
-        </div>
-        <div class="form-group row">
-            <div class="col-sm-2">
-                <label>Efternamn: </label>
-            </div>
-            <div class="col-sm-4">
-                <input asp-for="LastName" class="form-control" />
-            </div>
-        </div>
-        <div class="form-group row">
-            <div class="col-sm-2">
-                <label>Epost: </label>
-            </div>
-            <div class="col-sm-4">
-                <input asp-for="Email" class="form-control" />
-            </div>
-            <div class="form-group row">
-                <div class="col-sm-2">
-                    <label>Lösenord: </label>
+<div class="register-container">
+    <h1>Registrera ett konto</h1>
+    <div asp-validation-summary="ModelOnly"></div>
+    <form method="post" asp-controller="Auth" asp-action="Register">
+        <div class="register-forms">
+            <div class="form-group">
+                <div class="form-text">
+                    <label for="FirstName">Förnamn:</label>
+                    <span asp-validation-for="FirstName" class="field-validation"></span>
                 </div>
-                <div class="col-sm-4">
-                    <input asp-for="Password" class="form-control" />
-                </div>
+                <input asp-for="FirstName" class="form-input" />
             </div>
-            <div class="form-group row">
-                <div class="col-sm-2">
-                    <label>Bekräfta lösenord: </label>
+            <div class="form-group">
+                <div class="form-text">
+                    <label for="LastName">Efternamn:</label>
+                    <span asp-validation-for="LastName" class="field-validation"></span>
                 </div>
-                <div class="col-sm-4">
-                    <input asp-for="ConfirmPassword" class="form-control" />
-                </div>
+                <input asp-for="LastName" class="form-input" />
             </div>
-            <div class="form-group row">
-                <div class="offset-2 col-sm-4">
-                    <button type="submit" class="btn btn-primary">Registrera</button>
-                </div>
-            </div>
-</form>
 
+            <div class="form-group">
+                <div class="form-text">
+                    <label for="Email">Epost:</label>
+                    <span asp-validation-for="Email" class="field-validation"></span>
+                </div>
+                <input asp-for="Email" class="form-input" />
+            </div>
+
+            <div class="form-group">
+                <div class="form-text">
+                    <label for="Password">Lösenord:</label>
+                    <span asp-validation-for="Password" class="field-validation"></span>
+                </div>
+                <input asp-for="Password" type="password" class="form-input" />
+            </div>
+
+            <div class="form-group">
+                <div class="form-text">
+                    <label for="ConfirmPassword">Bekräfta lösenord:</label>
+                    <span asp-validation-for="ConfirmPassword" class="field-validation"></span>
+                </div>
+                <input asp-for="ConfirmPassword" type="password" class="form-input" />
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="submit-button">Registrera</button>
+            </div>
+
+        </div>
+    </form>
+</div>

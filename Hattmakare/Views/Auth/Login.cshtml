@@ -1,26 +1,46 @@
 ﻿@using Hattmakare.Models.Auth;
+
 @model LoginViewModel
+
 @{
 	ViewBag.Title = "Logga in";
 }
 
-<h1>Logga in<h1/>
-    <div asp-validation-summary="All" class="text-danger"></div>
-    <form method="post" asp-action="LogIn">
-        
-        <div class="form-group row">
-            <div class="col-sm-2">
-                <label>Lösenord: </label>
-            </div>
-            <div class="col-sm-4">
-                
-            </div>
+<div id="login-container">
+    <div id="login-wrapper">
+        <div id="login-header">
+            <h2>Logga in</h2>
         </div>
-        <div class="form-group row">
-            <div class="offset-2 col-sm-4">
-                <button type="submit" class="btn btn-primary">Logga in</button>
-            </div>
+        <div id="login-content">
+            <form id="login-form" asp-controller="Auth" asp-action="Login">
+                <div id="login-error-summary" asp-validation-summary="ModelOnly"></div>
+                <div class="login-form-child">
+                    <div class="login-form-child-header">
+                        <label asp-for="Email">Epost<span>*</span></label>
+                        <span class="login-error" asp-validation-for="Email"></span>
+                    </div>
+                    <div class="login-form-child-input">
+                        <input type="text" asp-for="Email">
+                    </div>
+                </div>
+                <div class="login-form-child">
+                    <div class="login-form-child-header">
+                        <label asp-for="Password">Lösenord<span>*</span></label>
+                        <span class="login-error" asp-validation-for="Password"></span>
+                    </div>
+                    <div class="login-form-child-input">
+                        <input type="password" asp-for="Password">
+                    </div>
+                </div>
+                <div class="login-form-checkbox">
+                    <input type="checkbox" asp-for="RememberMe">
+                    <label asp-for="RememberMe">Kom ihåg mig</label>
+                </div>
+                <button id="login-submit" type="submit">Logga in</button>
+                <div id="login-register-wrapper">
+                    <a asp-controller="Auth" asp-action="Register">Saknar du konto? Registrera dig här.</a>
+                </div>
+            </form>
         </div>
-        <label>Har du inget konto?</label>
-        <a asp-action="Register">Registrera dig</a>
-    </form>
+    </div>
+</div>

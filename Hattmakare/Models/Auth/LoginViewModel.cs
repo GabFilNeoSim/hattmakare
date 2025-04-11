@@ -4,7 +4,7 @@ namespace Hattmakare.Models.Auth;
 
 public class LoginViewModel
 {
-    [Required(ErrorMessage = "Du måste skriva en epost")]
+    [Required(ErrorMessage = "Skriva in en epost")]
     [EmailAddress(ErrorMessage = "Fel format på eposten")]
     [DataType(DataType.EmailAddress)]
     public string Email { get; set; }
