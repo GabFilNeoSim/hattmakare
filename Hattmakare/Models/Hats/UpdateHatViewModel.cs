@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Hattmakare.Models.Hat;
+namespace Hattmakare.Models.Hats;
 
-public class AddHatViewModel
+public class UpdateHatViewModel
 {
     [Required(ErrorMessage = "Please enter a name")]
     [MaxLength(100)]
@@ -12,6 +12,5 @@ public class AddHatViewModel
     //[Range(0, double.MaxValue, ErrorMessage = "The price must be 0 or higher")]
     //public decimal Price {  get; set; }
 
-    [Required(ErrorMessage = "Please upload an image")]
     public IFormFile Image { get; set; }
 }

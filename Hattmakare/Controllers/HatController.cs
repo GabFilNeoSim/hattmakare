@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Hattmakare.Models.Hat;
+using Hattmakare.Models.Hats;
 using Hattmakare.Data;
+using Hattmakare.Data.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Hattmakare.Controllers;
 
@@ -30,15 +32,36 @@ public class HatController : Controller
         return View(hats);
     }
 
-    [HttpPost("add")]
+
+    //[Authorize]
+    [HttpGet("AddHat")]
+    public IActionResult Addhat()
+    {
+        var hat = new AddHatViewModel();
+        return View(hat);
+    }
+
+    //[Authorize]
+    [HttpPost("AddHat")]
     public async Task<IActionResult> AddHat(AddHatViewModel newHat)
     {
-        throw new NotImplementedException();
+        var hat = new Hat();
+        hat.Name = newHat.Name;
+
+        await _context.Hats.AddAsync(hat);
+        await _context.SaveChangesAsync();
+
+        return View(newHat);
     }
 
     [HttpPost("remove/{hatId:int}")]
     public async Task<IActionResult> RemoveHat(int hatId)
     {
-        throw new NotImplementedException();
+        Data.Entities.Hat hat = _context.Hats.Find(hatId);
+        _context.Hats.Remove(hat); //Ändra denna till true or false
+
+        await _context.SaveChangesAsync();
+        return RedirectToAction("Index");
+        //throw new NotImplementedException();
     }
 }
