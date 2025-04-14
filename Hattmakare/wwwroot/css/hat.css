@@ -39,19 +39,39 @@
     }
 
     .settings{   
-        margin-left: auto;
-        display: flex;
-        gap: 8px;
-        button{
-          border: none;
-          background-color: transparent;
-        }
-        svg{
-          height: 16px;
-        }
-        svg:hover{
-          cursor: pointer;
-        }
+      margin-left: auto;
+      display: flex;
+      gap: 8px;
+      button{
+        border: none;
+        background-color: transparent;
+      }
+      svg{
+        height: 16px;
+      }
+      svg:hover{
+        cursor: pointer;
+      }
+    }
+
+  .counter {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    button {
+      border: none;
+      background-color: transparent;
+      font-size: 32px;
+      font-weight: 500;
+      line-height: 12px;
+      padding-bottom: 8px;
+    }
+
+    p {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 500;
+    }
     }
   }
 }
