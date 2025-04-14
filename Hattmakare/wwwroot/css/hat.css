@@ -20,6 +20,11 @@
     }
   }
 
+.RemoveHat button:focus {
+    outline: none;
+    box-shadow: none;
+}
+
   #addNewHat:hover{
     box-shadow: 0px 0px 25px rgba(50, 50, 50, 0.1);
   }

@@ -3,6 +3,7 @@ using Hattmakare.Models.Hats;
 using Hattmakare.Data;
 using Hattmakare.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 
 namespace Hattmakare.Controllers;
 
@@ -10,25 +11,37 @@ namespace Hattmakare.Controllers;
 public class HatController : Controller
 {
     private readonly AppDbContext _context;
+    private readonly ILogger<HatController> _logger;
 
-    public HatController(AppDbContext context)
+    public HatController(AppDbContext context, ILogger<HatController> logger)
     {
         _context = context;
+        _logger = logger;
     }
 
     [HttpGet]
     public async Task<IActionResult> Index()
     {
-        var hats = new HatsViewModel();
-        hats.Hats = new List<HatViewModel>
+        var hats = await _context.Hats
+             .Where(x => !x.IsDeleted)
+             .Select(x => new HatViewModel
         {
-            new HatViewModel { Name = "Hat 1", ImageUrl = "500x500_placeholder.png" },
-            new HatViewModel { Name = "Hat 2", ImageUrl = "500x500_placeholder.png" },
-            new HatViewModel { Name = "Hat 3", ImageUrl = "500x500_placeholder.png" },
-            new HatViewModel { Name = "Hat 4", ImageUrl = "500x500_placeholder.png" },
-            new HatViewModel { Name = "Hat 5", ImageUrl = "500x500_placeholder.png" },
-            new HatViewModel { Name = "Hat 6", ImageUrl = "500x500_placeholder.png" }
-        };
+            Name = x.Name,
+            ImageUrl = "...",
+            Hid = x.Id,
+            
+            
+        }).ToListAsync();
+       
+        //var hats = new List<HatViewModel>
+        //{
+        //    new HatViewModel { Name = "Hat 1", ImageUrl = "500x500_placeholder.png" },
+        //    new HatViewModel { Name = "Hat 2", ImageUrl = "500x500_placeholder.png" },
+        //    new HatViewModel { Name = "Hat 3", ImageUrl = "500x500_placeholder.png" },
+        //    new HatViewModel { Name = "Hat 4", ImageUrl = "500x500_placeholder.png" },
+        //    new HatViewModel { Name = "Hat 5", ImageUrl = "500x500_placeholder.png" },
+        //    new HatViewModel { Name = "Hat 6", ImageUrl = "500x500_placeholder.png" }
+        //};
         return View(hats);
     }
 
@@ -50,16 +63,24 @@ public class HatController : Controller
 
         await _context.Hats.AddAsync(hat);
         await _context.SaveChangesAsync();
+        return RedirectToAction("Index");
 
-        return View(newHat);
+        //return View(newHat);
     }
 
-    [HttpPost("remove/{hatId:int}")]
-    public async Task<IActionResult> RemoveHat(int hatId)
+    [HttpPost("remove/{hid}")]
+    public async Task<IActionResult> RemoveHat(int hid)
     {
-        Data.Entities.Hat hat = _context.Hats.Find(hatId);
-        _context.Hats.Remove(hat); //Ändra denna till true or false
-
+        _logger.LogWarning("Failed to find: {a}", hid);
+        var hat = await _context.Hats.FirstOrDefaultAsync(x => x.Id == hid);
+        if (hat is null)
+        {
+            return View("asd");
+        }
+        hat.IsDeleted= true;
+        
+        _context.Hats.Update(hat);
+        
         await _context.SaveChangesAsync();
         return RedirectToAction("Index");
         //throw new NotImplementedException();

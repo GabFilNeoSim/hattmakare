@@ -10,7 +10,7 @@ namespace Hattmakare.Data.Entities
         [Required]
         public DateOnly StartDate { get; set; }
         public DateOnly EndDate { get; set; }
-        public bool SpecialOrder { get; set; } = false;
+       
 
         // Foreign keys
         public int? CustomerId { get; set; }
