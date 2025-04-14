@@ -1,4 +1,4 @@
-﻿using Hattmakare.Models.Hat;
+﻿using Hattmakare.Models.Hats;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hattmakare.Controllers
