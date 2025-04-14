@@ -1,4 +1,4 @@
-﻿namespace Hattmakare.Models.Hat
+﻿namespace Hattmakare.Models.Hats
 {
     public class HatsViewModel
     {
