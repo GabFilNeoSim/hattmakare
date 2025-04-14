@@ -53,30 +53,30 @@ public class CustomerController : Controller
             return View("Index", viewModel);
         }
 
-            var customer = new Customer
+        var customer = new Customer
+        {
+            FirstName = newCustomer.FirstName,
+            LastName = newCustomer.LastName,
+            Email = newCustomer.Email,
+            PhoneNumber = newCustomer.Phone,
+
+            Address = new Address
             {
-                FirstName = newCustomer.FirstName,
-                LastName = newCustomer.LastName,
-                Email = newCustomer.Email,
-                PhoneNumber = newCustomer.Phone,
+                StreetAddress = newCustomer.StreetAddress,
+                PostalCode = newCustomer.PostalCode,
+                City = newCustomer.City,
+                Country = newCustomer.Country,
 
-                Address = new Address
-                {
-                    StreetAddress = newCustomer.StreetAddress,
-                    PostalCode = newCustomer.PostalCode,
-                    City = newCustomer.City,
-                    Country = newCustomer.Country,
+            }
 
-                }
+        };
 
-            };
+        await _context.Customers.AddAsync(customer);
 
-            await _context.Customers.AddAsync(customer);
-           
-            await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync();
 
-            return RedirectToAction("Index");
-        
+        return RedirectToAction("Index");
+
     }
 
     // Ta bort en kund
@@ -99,10 +99,17 @@ public class CustomerController : Controller
         return RedirectToAction("Index");
     }
 
-
     // Uppdatera en kund
     [HttpPost("update/{customerId:int}")]
     public async Task<IActionResult> UpdateCustomer(int customerId, UpdateCustomerViewModel updateCustomer)
+    {
+        throw new NotImplementedException();
+    }
+
+    [HttpPost("search/{customerId:int}")]
+    
+    // Söka efter en kund
+    public async Task<IActionResult> SearchCustomer(int customerId, CustomerViewModel customerViewModel)
     {
         throw new NotImplementedException();
     }
