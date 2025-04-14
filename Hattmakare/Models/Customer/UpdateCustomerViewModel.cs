@@ -4,6 +4,8 @@ namespace Hattmakare.Models.Customer;
 
 public class UpdateCustomerViewModel
 {
+    public int Id { get; set; }
+
     [Required(ErrorMessage = "Please enter a firstname")]
     [MaxLength(50)]
     public string FirstName { get; set; }

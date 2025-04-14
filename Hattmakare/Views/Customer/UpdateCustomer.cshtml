@@ -1,0 +1,51 @@
+﻿@model Hattmakare.Models.Customer.UpdateCustomerViewModel
+
+
+
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div id="updateCustomer">
+    <h2>Uppdatera kund</h2>
+
+    <form asp-controller="Customer" asp-action="UpdateCustomerPost" asp-route-customerId="@Model.Id" method="post">
+
+        <input asp-for="Id" type="hidden" />
+
+    <label for="FirstName">Förnamn: </label>
+    <input asp-for="FirstName" type="text" id="firstName">
+
+    <label for="LastName">Efternamn: </label>
+    <input asp-for="LastName" type="text" id="lastName" >
+
+    <label for="StreetAddress">Adress: </label>
+    <input asp-for="StreetAddress" type="text" id="streetAddress" >
+
+    <label for="City">Stad: </label>
+    <input asp-for="City" type="text" id="city">
+
+    <label for="PostalCode">Postnummer: </label>
+    <input asp-for="PostalCode" type="text" id="postalCode" >
+
+    <label for="Country">Land: </label>
+    <input asp-for="Country" type="text" id="country" >
+
+    <label for="Email">Email: </label>
+    <input asp-for="Email" type="text" id="email" >
+
+    <label for="Phone">Telefonnummer: </label>
+    <input asp-for="Phone" type="tel" id="phone" >
+
+      
+</form>
+<form asp-controller="Customer" asp-action="Index" method="get">
+        <button type="submit">Spara ändring</button>
+        </form>
+
+
+
+
+
+</div>

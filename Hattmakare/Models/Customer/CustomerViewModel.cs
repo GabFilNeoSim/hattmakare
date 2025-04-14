@@ -6,6 +6,10 @@ namespace Hattmakare.Models.Customer
     {
         public List<Data.Entities.Customer> customers { get; set; }
 
+        public int Id { get; set; }
+
+        public UpdateCustomerViewModel UpdateCustomer { get; set; }
+
         public AddCustomerViewModel AddCustomer { get; set; }
     }
 }

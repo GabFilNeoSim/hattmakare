@@ -8,8 +8,7 @@
 
 #customer #customerAdd svg {
     height: 25px;
-    /*margin-top: 5px;*/
-    /*margin: 5px;*/
+    
 }
 
 #customer #customerAdd {
@@ -19,6 +18,11 @@
     width: 300px;
     font-size: 25px;
 }
+
+#customer #edit svg{
+    display: block;
+}
+
 
 #customer .customerList svg {
     height: 15px;
@@ -52,7 +56,13 @@
 
 #customer form {
     width: 45%;
+    
 }
+
+#customer .search form {
+    display: flex;
+}
+
 
 #customer .search {
     display: flex;
@@ -64,8 +74,20 @@
     width: 95%;
 }
 
+#customer .search svg {
+    height: 18px;
+    margin: 5px;
+}
 
-
+#updateCustomer form {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    width: 45%;
 
 }
+
+
+
+
     
