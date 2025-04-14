@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace Hattmakare.Data.Entities
 {
@@ -11,6 +12,13 @@ namespace Hattmakare.Data.Entities
         public string? Name { get; set; }
         public int Price { get; set; }
 
+        public bool IsDeleted { get; set; } = false;
+
+        public string? Comment { get; set; }
+
+        public bool IsSpecial { get; set; } = false;
+
+        public string? ImageUrl { get; set; }
         // Navigation props
         public virtual ICollection<HatMaterial> HatMaterials { get; set; }
         public virtual ICollection<OrderHat> OrderHats { get; set; }
