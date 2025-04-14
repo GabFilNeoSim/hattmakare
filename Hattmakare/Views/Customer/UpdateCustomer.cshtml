@@ -1,8 +1,5 @@
 ﻿@model Hattmakare.Models.Customer.UpdateCustomerViewModel
 
-
-
-
 @{
     ViewData["Title"] = "Index";
 }
@@ -10,9 +7,7 @@
 <div id="updateCustomer">
     <h2>Uppdatera kund</h2>
 
-    <form asp-controller="Customer" asp-action="UpdateCustomerPost" asp-route-customerId="@Model.Id" method="post">
-
-        <input asp-for="Id" type="hidden" />
+    <form asp-controller="Customer" asp-action="UpdateCustomer" asp-route-customerId="@Model.Id">
 
     <label for="FirstName">Förnamn: </label>
     <input asp-for="FirstName" type="text" id="firstName">
@@ -38,14 +33,7 @@
     <label for="Phone">Telefonnummer: </label>
     <input asp-for="Phone" type="tel" id="phone" >
 
-      
+    <button type="submit">Spara ändring</button>
 </form>
-<form asp-controller="Customer" asp-action="Index" method="get">
-        <button type="submit">Spara ändring</button>
-        </form>
-
-
-
-
 
 </div>

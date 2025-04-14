@@ -110,16 +110,15 @@ public class CustomerController : Controller
     }
 
     // Uppdatera en kund
-    [HttpPost("Update/{customerId:int}")]
-    public async Task<IActionResult> UpdateCustomerPost(int customerId, UpdateCustomerViewModel updateCustomer)
+    [HttpPost("edit/{customerId:int}")]
+    public async Task<IActionResult> UpdateCustomer(int customerId, UpdateCustomerViewModel updateCustomer)
     {
         if (!ModelState.IsValid)
         {
             return View(updateCustomer);
         }
 
-            var customer = await _context.Customers.FirstOrDefaultAsync(c => c.Id == customerId);
-
+        var customer = await _context.Customers.FirstOrDefaultAsync(c => c.Id == customerId);
 
         if(customer == null)
         {
@@ -146,8 +145,6 @@ public class CustomerController : Controller
         return RedirectToAction("Index");
     }
 
-    
-
     //Visa formuläret för uppdatering
     [HttpGet("edit/{customerId:int}")]
     public async Task<IActionResult> UpdateCustomer(int customerId)
@@ -156,6 +153,7 @@ public class CustomerController : Controller
 
         var viewModel = new UpdateCustomerViewModel
         {
+            Id = customer.Id,
             FirstName = customer.FirstName,
             LastName = customer.LastName,
             Email = customer.Email,
@@ -168,18 +166,4 @@ public class CustomerController : Controller
 
         return View(viewModel);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
