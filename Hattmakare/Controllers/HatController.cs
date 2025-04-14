@@ -4,6 +4,7 @@ using Hattmakare.Data;
 using Hattmakare.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
 
 namespace Hattmakare.Controllers;
 
@@ -68,6 +69,33 @@ public class HatController : Controller
         //return View(newHat);
     }
 
+    [HttpGet("EditHat/{hid}")]
+    public async Task<IActionResult> EditHat(int Hid)
+    {
+        var hat = await _context.Hats.FirstOrDefaultAsync(x => x.Id == Hid);
+
+        var model = new EditHatViewModel
+        {
+
+            
+            Name = hat.Name
+
+        };
+        return View(model);
+    }
+
+    [HttpPost("EditHat/{hid}")]
+
+    public async Task<IActionResult> EditHat(EditHatViewModel selectedHat)
+    {
+        var hat = await _context.Hats.FirstOrDefaultAsync(x => x.Id == selectedHat.Hid);
+        hat.Name = selectedHat.Name;
+        _context.Hats.Update(hat);
+
+        await _context.SaveChangesAsync();
+        return RedirectToAction("Index");
+    }
+
     [HttpPost("remove/{hid}")]
     public async Task<IActionResult> RemoveHat(int hid)
     {
@@ -85,4 +113,36 @@ public class HatController : Controller
         return RedirectToAction("Index");
         //throw new NotImplementedException();
     }
+
+
+
+
+    [HttpGet("SearchHat")]
+    public IActionResult SearchHat(string searchTerm)
+    {
+        
+        var allHats = _context.Hats.AsEnumerable();  
+
+       
+        allHats = allHats.Where(h => !h.IsDeleted);
+
+       
+        if (!string.IsNullOrEmpty(searchTerm))
+        {
+            allHats = allHats.Where(h => h.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase));
+        }
+
+        
+        var model = allHats.Select(hat => new HatViewModel
+        {
+            Hid = hat.Id,
+            Name = hat.Name,
+            ImageUrl = hat.ImageUrl,
+            IsDeleted = hat.IsDeleted
+        }).ToList();
+
+        return View("Index", model);  
+    }
+
+
 }
