@@ -5,7 +5,7 @@ using Hattmakare.Models.Order;
 using Microsoft.EntityFrameworkCore;
 
 namespace Hattmakare.Controllers;
-
+[Authorize]
 [Route("order")]
 public class OrderController : Controller 
 {
