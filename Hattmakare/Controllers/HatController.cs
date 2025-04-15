@@ -29,7 +29,7 @@ public class HatController : Controller
              .Select(x => new HatViewModel
         {
             Name = x.Name,
-            ImageUrl = "...",
+            ImageUrl = x.ImageUrl,
             Hid = x.Id,
             
             
