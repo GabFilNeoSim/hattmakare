@@ -1,0 +1,24 @@
+﻿@using Hattmakare.Models.Hats
+
+@model EditHatViewModel
+
+<form method="post" asp-action="EditHat" enctype="multipart/form-data" class="p-4 shadow rounded bg-light">
+    <h2 class="mb-4 text-center">Redigera Hatt</h2>
+
+    <div class="form-group mb-3">
+        <label asp-for="Name" class="form-label fw-bold">Hattens namn</label>
+        <input asp-for="Name" class="form-control" placeholder="Skriv namn på hatten" required />
+        <span asp-validation-for="Name" class="text-danger small"></span>
+    </div>
+
+
+    @*   <div class="form-group mb-4">
+        <label asp-for="ImageFile" class="form-label fw-bold">Ladda upp bild</label>
+        <input asp-for="ImageFile" type="file" class="form-control" />
+        <span asp-validation-for="ImageFile" class="text-danger small"></span>
+    </div>
+ *@
+    <div class="text-end">
+        <button type="submit" class="btn btn-dark px-4">➕ Spara ändringar</button>
+    </div>
+</form>
