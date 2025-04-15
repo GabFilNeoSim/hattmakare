@@ -2,6 +2,6 @@
 {
     public class HatsViewModel
     {
-        public List<HatViewModel> Hats { get; set; }
+        public List<HatViewModel2> Hats { get; set; }
     }
 }
