@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Identity;
 using Hattmakare.Data;
 using Hattmakare.Data.Entities;
 using Hattmakare.Models.Auth;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Hattmakare.Controllers;
 
+//[Authorize]
 [Route("auth")]
 public class AuthController : Controller
 {
