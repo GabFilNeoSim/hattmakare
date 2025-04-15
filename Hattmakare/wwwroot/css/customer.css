@@ -1,0 +1,93 @@
+﻿
+#customer {
+    display: flex;
+   justify-content: space-between;
+   
+ 
+}
+
+#customer #customerAdd svg {
+    height: 25px;
+    
+}
+
+#customer #customerAdd {
+    border:0;
+    background-color: transparent;
+    display: flex;
+    width: 300px;
+    font-size: 25px;
+}
+
+#customer #edit svg{
+    display: block;
+}
+
+
+#customer .customerList svg {
+    height: 15px;
+    
+}
+
+#customer .customerList button {
+    border: 0;
+    background-color: transparent;
+    padding: 0px;
+}
+
+
+#customer .customerList {
+    display: flex;
+    flex-direction: column;
+    width: 45%; 
+}
+
+#customer .customerFields  {
+    flex-direction: column;
+    width: 45%;
+    font-size: 20px;
+    margin-top: 1px;
+}
+
+#customer .customerFields input {
+    width: 180%;
+    
+}
+
+#customer form {
+    width: 45%;
+    
+}
+
+#customer .search form {
+    display: flex;
+}
+
+
+#customer .search {
+    display: flex;
+    border: none;
+}
+
+#customer .search input {
+    border: 1px solid-black;
+    width: 95%;
+}
+
+#customer .search svg {
+    height: 18px;
+    margin: 5px;
+}
+
+#updateCustomer form {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    width: 45%;
+
+}
+
+
+
+
+    

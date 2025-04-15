@@ -16,7 +16,7 @@ namespace Hattmakare.Data.Entities
 
         [Required]
         [MaxLength (100)]
-        public string City { get; set; }
+        public string? City { get; set; }
 
         [Required]
         [MaxLength(100)]
