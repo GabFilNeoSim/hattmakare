@@ -27,7 +27,6 @@ namespace Hattmakare.Controllers
         [HttpGet]
         public JsonResult PopulateCalendar()
         {
-
             // Todo: lägg till villkor där den inloggde användarens ordrar visas
             var events = _appDbContext.Orders
                 .GroupBy(o => o.EndDate)
