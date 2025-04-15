@@ -3,6 +3,7 @@ using Hattmakare.Models.Hats;
 using Microsoft.AspNetCore.Mvc;
 using Hattmakare.Models.Order;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Hattmakare.Controllers;
 [Authorize]
