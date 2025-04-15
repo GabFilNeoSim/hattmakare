@@ -11,19 +11,23 @@
     justify-content: center;
     align-items: center;
     width: 250px;
+    height: 350px;
     transition: all ease-in-out 300ms;
     border-radius: 8px;
+    text-decoration: none;
 
-    svg{
-      width: 50%;
-      fill: rgba(50, 50, 50, 0.1);
+    .container{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: black;
+
+      svg{
+        width: 50%;
+        fill: rgba(50, 50, 50, 0.1);
+      }
     }
   }
-
-.RemoveHat button:focus {
-    outline: none;
-    box-shadow: none;
-}
 
   #addNewHat:hover{
     box-shadow: 0px 0px 25px rgba(50, 50, 50, 0.1);
@@ -34,10 +38,11 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
     width: 250px;
+    height: 350px;
     img {
       object-fit: cover;
       width: 100%;
@@ -45,11 +50,14 @@
 
     .settings{   
       margin-left: auto;
+      padding: 4px 8px;
       display: flex;
-      gap: 8px;
-      button{
+      gap: 12px;
+      button, a{
         border: none;
         background-color: transparent;
+        padding: 0px;
+        margin: 0px;
       }
       svg{
         height: 16px;
@@ -77,6 +85,38 @@
       font-size: 24px;
       font-weight: 500;
     }
+    }
+  }
+}
+
+#hat #search{
+  margin-bottom: 16px;
+  width: 50%;
+  display: flex;
+  border: 1px solid black;
+  border-radius: 16px;
+  padding: 2px 8px;
+
+  input{
+    padding: 0px;
+    border: none;
+  }
+
+  input:focus{
+    outline: none;
+    border: none;
+    box-shadow: none;
+  }
+
+  button {
+    padding: 0px;
+    background-color: transparent;
+    border: none;
+
+    svg{
+      height: 100%;
+      width: 32px;
+      padding: 8px;
     }
   }
 }

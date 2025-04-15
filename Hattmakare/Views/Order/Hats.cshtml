@@ -1,4 +1,6 @@
-﻿@using Hattmakare.Models.Hats
+﻿@using Hattmakare.Models.Order;
+
+@model OrderHatsViewModel;
 
 <div id="hat">
   <div id="hatList">
@@ -8,18 +10,27 @@
         <p>Skapa specialhatt</p>
       </div>
     </button>
-    @foreach (HatViewModel hat in Model.Hats)
+    @foreach (var hat in Model.Hats)
     {
-      <div class="hatItem" data-name="@hat.Name">
-        <img src="/assets/@hat.ImageUrl" />
+      <div class="hatItem" data-name="@hat.Name" data-id="@hat.Id">
+        <img src="/assets/500x500_placeholder.png"/>
         <h2>@hat.Name</h2>
         <div class="counter">
-          <button class="count-remove">-</button>
+          <form class="count-remove" asp-action="RemoveFromCart" asp-controller="Order" asp-route-id="@hat.Id">-</form>
           <p class="count">0</p>
-          <button class="count-add">+</button>
+          <form class="count-add" asp-action="RemoveFromCart" asp-controller="Order" asp-route-hat="@hat">+</form>
         </div>
       </div>
     }
+    <div id="cart">
+
+    </div>
+
+    <button>
+      go to order
+
+
+    </button>
   </div>
   <div id="hatPopup">
   </div>
