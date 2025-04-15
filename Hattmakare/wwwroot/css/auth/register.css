@@ -1,0 +1,56 @@
+﻿.register-container {
+    align-items: center;
+    display: flex;
+    flex-direction: column
+}
+
+.form-group {
+    margin-bottom: 0,5rem;
+    display: flex;
+    flex-direction: column;
+    width: 25rem;
+}
+
+.form-text {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.form-group label {
+    margin-bottom: 0rem;
+    font-size: 1rem;
+    color: black;
+}
+
+.form-input {
+    padding: 0.5rem;
+    font-size: 1rem;
+}
+
+.field-validation {
+    color: orangered;
+    font-size: 1rem;
+}
+
+.form-actions {
+    margin-top: 1rem;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.submit-button {
+    padding: 0.6rem 1.2rem;
+    font-size: 1rem;
+    width: 20rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    outline: none;
+    border-radius: 4px;
+}
+
+.submit-button:hover{
+    background-color: darkgrey;
+}

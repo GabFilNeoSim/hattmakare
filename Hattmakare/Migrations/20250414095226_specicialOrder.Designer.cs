@@ -4,6 +4,7 @@ using Hattmakare.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hattmakare.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250414095226_specicialOrder")]
+    partial class specicialOrder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -104,12 +107,11 @@ namespace Hattmakare.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-<<<<<<< HEAD
-=======
                     b.Property<string>("Comment")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImageUrl")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
@@ -118,7 +120,6 @@ namespace Hattmakare.Migrations
                     b.Property<bool>("IsSpecial")
                         .HasColumnType("bit");
 
->>>>>>> main
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -200,12 +201,6 @@ namespace Hattmakare.Migrations
                     b.Property<bool>("Priority")
                         .HasColumnType("bit");
 
-<<<<<<< HEAD
-                    b.Property<bool>("SpecialOrder")
-                        .HasColumnType("bit");
-
-=======
->>>>>>> main
                     b.Property<DateOnly>("StartDate")
                         .HasColumnType("date");
 

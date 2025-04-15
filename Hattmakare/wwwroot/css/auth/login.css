@@ -1,0 +1,93 @@
+﻿#login-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    height: 100%;
+}
+
+#login-wrapper {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+#login-header {
+    padding: 1rem;
+}
+
+#login-header > h2 {
+    margin: 0;
+    text-align: center;
+}
+
+#login-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding: 1rem 0;
+}
+
+#login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+#login-error-summary {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#login-error-summary ul {
+    padding: 0;
+    list-style: none;
+    color: orangered;
+}
+
+.login-form-child {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    width: 300px;
+}
+
+.login-form-child-header span {
+    color: orangered
+}
+
+.login-form-child-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between
+}
+
+.login-form-child-input > input {
+    width: 100%;
+}
+
+#login-submit {
+    border: none;
+    border-radius: 4px;
+    padding: 0.25rem 0;
+}
+
+#login-register-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 0.5rem;
+}
+
+#login-register-wrapper > a {
+    text-decoration: none;
+    color: dodgerblue;
+}
+
+#login-register-wrapper > a:active {
+    color: dodgerblue;
+}
+
+#login-register-wrapper > a:hover {
+    text-decoration: underline;
+}

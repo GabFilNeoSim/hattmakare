@@ -9,9 +9,14 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/customer.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/hat.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/order.css" asp-append-version="true" />  
+    <link rel="stylesheet" href="~/css/auth/register.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/auth/login.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Hattmakare.styles.css" asp-append-version="true" />
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css' rel='stylesheet' />
 </head>
 <body>
+    <partial name="_ConfirmModal"/>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
@@ -23,10 +28,7 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Hem</a>
                         </li>
                         <li
                             class="nav-item">
@@ -52,7 +54,11 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/customer.js"></script>
-
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js'></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/locales-all.global.min.js"></script>
+     <script src="~/js/site.js" asp-append-version="true"></script>
+     <script src="~/js/hat.js" asp-append-version="true"></script>
+    <script src="~/js/calendar.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
