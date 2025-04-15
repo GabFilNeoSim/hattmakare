@@ -8,6 +8,7 @@ using System.Security.Cryptography;
 
 namespace Hattmakare.Controllers;
 
+[Authorize]
 [Route("hats")]
 public class HatController : Controller
 {
