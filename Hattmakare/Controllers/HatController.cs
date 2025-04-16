@@ -33,6 +33,9 @@ public class HatController : Controller
              .Select(x => new HatViewModel
         {
             Name = x.Name,
+            Price = x.Price,
+            InStock = x.InStock,
+            Size = x.Size,
             ImageUrl = x.ImageUrl,
             Hid = x.Id,
             
@@ -66,6 +69,9 @@ public class HatController : Controller
     {
         var hat = new Hat();
         hat.Name = newHat.Name;
+        hat.Size = newHat.Size;
+        hat.InStock = newHat.InStock;
+        hat.Price = newHat.Price;
         
         var image = await _imageService.UploadImageAsync(newHat.Image);
         hat.ImageUrl = image;
@@ -84,8 +90,10 @@ public class HatController : Controller
 
         var model = new EditHatViewModel
         {
-            Name = hat.Name
-
+            Name = hat.Name,
+            Price = hat.Price,
+            Size = hat.Size,
+            InStock = hat.InStock
         };
         return View(model);
     }
@@ -95,6 +103,9 @@ public class HatController : Controller
     {
         var hat = await _context.Hats.FirstOrDefaultAsync(x => x.Id == selectedHat.Hid);
         hat.Name = selectedHat.Name;
+        hat.Price = selectedHat.Price;
+        hat.Size = selectedHat.Size;
+        hat.InStock = selectedHat.InStock;
 
         var image = await _imageService.UploadImageAsync(selectedHat.Image);
         hat.ImageUrl = image;
@@ -154,7 +165,11 @@ public class HatController : Controller
             Hid = hat.Id,
             Name = hat.Name,
             ImageUrl = hat.ImageUrl,
-            IsDeleted = hat.IsDeleted
+            IsDeleted = hat.IsDeleted,
+            Size = hat.Size,
+            InStock = hat.InStock,
+            Price = hat.Price
+
         }).ToList();
 
         return View("Index", model);  
