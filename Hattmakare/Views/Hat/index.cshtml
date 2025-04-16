@@ -29,6 +29,23 @@
                 </form>
               </div>
             <h2>@hat.Name</h2>
+                <div class="counter">
+                    @if (hat.InStock > 0)
+                    {
+                        <p>Storlek: @hat.Size</p>
+                    }
+
+                    @if (hat.InStock > 0)
+                    {
+                        <p>Antal i lager: @hat.InStock</p>
+                    }
+
+                    @if (hat.Price > 0)
+                    {
+                        <p>Pris: @hat.Price</p>
+                    }
+                </div>
+
         </div>
     }
   </div>
