@@ -12,9 +12,13 @@ public class AddCustomerViewModel
     [MaxLength(50)]
     public string LastName { get; set; }
 
-    [Required(ErrorMessage = "Please enter a street address")]
+    [Required(ErrorMessage = "Please enter a billing address")]
     [MaxLength(100)]
-    public string StreetAddress { get; set; }
+    public string BillingAddress { get; set; }
+
+    [Required(ErrorMessage = "Please enter a delivery address")]
+    [MaxLength(100)]
+    public string DeliveryAddress { get; set; }
 
     [Required(ErrorMessage = "Please enter a city")]
     [MaxLength(100)]
