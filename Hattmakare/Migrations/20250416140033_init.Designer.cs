@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hattmakare.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250415075751_init")]
+    [Migration("20250416140033_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -36,6 +36,11 @@ namespace Hattmakare.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("BillingAddress")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<string>("City")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -46,15 +51,15 @@ namespace Hattmakare.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<string>("DeliveryAddress")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<string>("PostalCode")
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("StreetAddress")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
@@ -113,23 +118,16 @@ namespace Hattmakare.Migrations
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsSpecial")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("Price")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.ToTable("Hats");
+                    b.ToTable("Hats", (string)null);
+
+                    b.UseTptMappingStrategy();
                 });
 
             modelBuilder.Entity("Hattmakare.Data.Entities.HatMaterial", b =>
@@ -456,6 +454,41 @@ namespace Hattmakare.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Hattmakare.Data.Entities.SpecialHat", b =>
+                {
+                    b.HasBaseType("Hattmakare.Data.Entities.Hat");
+
+                    b.Property<double>("Depth")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Length")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Width")
+                        .HasColumnType("float");
+
+                    b.ToTable("SpecialHats", (string)null);
+                });
+
+            modelBuilder.Entity("Hattmakare.Data.Entities.StandardHat", b =>
+                {
+                    b.HasBaseType("Hattmakare.Data.Entities.Hat");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Size")
+                        .HasColumnType("int");
+
+                    b.ToTable("StandardHats", (string)null);
+                });
+
             modelBuilder.Entity("Hattmakare.Data.Entities.Customer", b =>
                 {
                     b.HasOne("Hattmakare.Data.Entities.Address", "Address")
@@ -575,6 +608,24 @@ namespace Hattmakare.Migrations
                     b.HasOne("Hattmakare.Data.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Hattmakare.Data.Entities.SpecialHat", b =>
+                {
+                    b.HasOne("Hattmakare.Data.Entities.Hat", null)
+                        .WithOne()
+                        .HasForeignKey("Hattmakare.Data.Entities.SpecialHat", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Hattmakare.Data.Entities.StandardHat", b =>
+                {
+                    b.HasOne("Hattmakare.Data.Entities.Hat", null)
+                        .WithOne()
+                        .HasForeignKey("Hattmakare.Data.Entities.StandardHat", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

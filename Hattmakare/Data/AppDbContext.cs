@@ -1,6 +1,7 @@
 ﻿using Hattmakare.Data.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
 
 namespace Hattmakare.Data
 {
@@ -11,6 +12,8 @@ namespace Hattmakare.Data
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Hat> Hats { get; set; }
+        public DbSet<StandardHat> StandardHats { get; set; }
+        public DbSet<SpecialHat> SpecialHats { get; set; }
         public DbSet<HatMaterial> HatsMaterial { get; set; }
         public DbSet<Material> Materials { get; set; }
         public DbSet<Order> Orders { get; set; }
@@ -26,6 +29,11 @@ namespace Hattmakare.Data
                 .HasOne(x => x.Address)
                 .WithMany(x => x.Customers)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            // Hat inheritance
+            builder.Entity<Hat>().ToTable("Hats"); 
+            builder.Entity<StandardHat>().ToTable("StandardHats");
+            builder.Entity<SpecialHat>().ToTable("SpecialHats");
 
             // Hat material
             builder.Entity<HatMaterial>()
