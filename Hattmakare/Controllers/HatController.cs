@@ -28,7 +28,7 @@ public class HatController : Controller
     [HttpGet]
     public async Task<IActionResult> Index()
     {
-        var hats = await _context.Hats
+        var hats = await _context.StandardHats
              .Where(x => !x.IsDeleted)
              .Select(x => new HatViewModel
         {
@@ -109,7 +109,7 @@ public class HatController : Controller
     public async Task<IActionResult> RemoveHat(int hid)
     {
         _logger.LogWarning("Failed to find: {a}", hid);
-        var hat = await _context.Hats.FirstOrDefaultAsync(x => x.Id == hid);
+        var hat = await _context.StandardHats.FirstOrDefaultAsync(x => x.Id == hid);
         if (hat is null)
         {
             return View("asd");
@@ -137,7 +137,7 @@ public class HatController : Controller
     public IActionResult SearchHat(string searchTerm)
     {
         
-        var allHats = _context.Hats.AsEnumerable();  
+        var allHats = _context.StandardHats.AsEnumerable();  
 
        
         allHats = allHats.Where(h => !h.IsDeleted);

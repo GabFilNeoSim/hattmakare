@@ -23,7 +23,7 @@ public class OrderController : Controller
     {
         var model = new OrderHatsViewModel
         {
-            Hats = await _context.Hats.Where(h => h.IsSpecial == false && h.IsDeleted == false).Select(x =>
+            Hats = await _context.StandardHats.Where(h => h.IsDeleted == false).Select(x =>
                 new HatViewModel2 {
                     Id = x.Id,
                     Name = x.Name,
@@ -32,12 +32,11 @@ public class OrderController : Controller
                     ImageUrl = x.ImageUrl
                 }
             ).ToListAsync(),
-            SpecialHats = await _context.Hats.Where(h => h.IsSpecial == true && h.IsDeleted == false).Select(x =>
+            SpecialHats = await _context.SpecialHats.Select(x =>
                 new HatViewModel2
                 {
                     Id = x.Id,
                     Name = x.Name,
-                    Price = x.Price,
                     Comment = x.Comment,
                     ImageUrl = x.ImageUrl
                 }
