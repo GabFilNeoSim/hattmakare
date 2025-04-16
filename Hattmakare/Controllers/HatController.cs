@@ -110,8 +110,11 @@ public class HatController : Controller
         hat.Size = selectedHat.Size;
         hat.Quantity = selectedHat.Quantity;
 
-        var image = await _imageService.UploadImageAsync(selectedHat.Image);
-        hat.ImageUrl = image;
+        if (selectedHat.Image != null)
+        {
+            var image = await _imageService.UploadImageAsync(selectedHat.Image);
+            hat.ImageUrl = image;
+        }
 
         _context.Hats.Update(hat);
 
