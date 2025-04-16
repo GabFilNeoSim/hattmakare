@@ -1,0 +1,145 @@
+﻿#material-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    box-shadow: 0px 0px 4px rgba(0,0,0,0.1);
+    padding: 2rem;
+}
+
+#material-tables {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 5rem;
+    flex-wrap: wrap;
+}
+
+#material-tables button {
+    border: none;
+    background: transparent;
+}
+
+#material-tables svg {
+    height: 16px;
+    transition: all 0.25s;
+}
+
+#material-tables svg:hover {
+    transform: scale(1.075);
+}
+
+.material-table-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.material-table-header svg {
+    height: 20px !important;
+}
+
+.material-table-header > h2 {
+    text-align: left;
+    margin-bottom: 1rem;
+}
+
+/* ------------- Add & Edit ---------------- */
+
+.material-form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+    padding: 2rem;
+}
+
+.material-form-header {
+    padding: 1rem;
+}
+
+.material-form-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding: 1rem 0;
+}
+
+.material-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.material-error-summary {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.material-error-summary ul {
+    padding: 0;
+    list-style: none;
+    color: orangered;
+}
+
+.material-form-child {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    width: 300px;
+}
+
+.material-form-child-header span {
+    color: orangered
+}
+
+.material-form-child-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between
+}
+
+.material-form-child-input > input {
+    width: 100%;
+}
+
+.material-submit {
+    border: none;
+    border-radius: 4px;
+    padding: 0.25rem 0;
+}
+
+.material-register-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 0.5rem;
+}
+
+.material-register-wrapper > a {
+    text-decoration: none;
+    color: dodgerblue;
+}
+
+.material-register-wrapper > a:active {
+    color: dodgerblue;
+}
+
+.material-register-wrapper > a:hover {
+    text-decoration: underline;
+}
+
+.material-goback {
+    margin-top: 0.25rem;
+    text-decoration: none;
+    color: black;
+    transition: all 0.25s;
+}
+
+.material-goback:hover {
+    transform: scale(1.025);
+}
+
+.material-goback svg {
+    height: 16px;
+}

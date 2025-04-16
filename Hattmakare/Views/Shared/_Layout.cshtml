@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="~/css/order.css" asp-append-version="true" />  
     <link rel="stylesheet" href="~/css/auth/register.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/auth/login.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/material.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Hattmakare.styles.css" asp-append-version="true" />
     <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css' rel='stylesheet' />
 </head>
@@ -30,13 +31,13 @@
                     <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                         <ul class="navbar-nav flex-grow-1">
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Hem</a>
-                            </li>
-                            <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Hat" asp-action="Index">Hattar</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="Index">Kunder</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Material" asp-action="Index">Material</a>
                             </li>
                             <li class="nav-item logout">
                                 <form class="nav-link text-dark" asp-controller="Auth" asp-action="Logout" method="post">
