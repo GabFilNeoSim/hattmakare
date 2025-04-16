@@ -5,6 +5,8 @@ using Hattmakare.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
+using Hattmakare.Services;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 
 namespace Hattmakare.Controllers;
 
@@ -14,11 +16,13 @@ public class HatController : Controller
 {
     private readonly AppDbContext _context;
     private readonly ILogger<HatController> _logger;
+    private readonly IImageService _imageService;
 
-    public HatController(AppDbContext context, ILogger<HatController> logger)
+    public HatController(AppDbContext context, ILogger<HatController> logger, IImageService imageService)
     {
         _context = context;
         _logger = logger;
+        _imageService = imageService;
     }
 
     [HttpGet]
@@ -62,6 +66,9 @@ public class HatController : Controller
     {
         var hat = new Hat();
         hat.Name = newHat.Name;
+        
+        var image = await _imageService.UploadImageAsync(newHat.Image);
+        hat.ImageUrl = image;
 
         await _context.Hats.AddAsync(hat);
         await _context.SaveChangesAsync();
@@ -77,8 +84,6 @@ public class HatController : Controller
 
         var model = new EditHatViewModel
         {
-
-            
             Name = hat.Name
 
         };
@@ -86,11 +91,14 @@ public class HatController : Controller
     }
 
     [HttpPost("EditHat/{hid}")]
-
     public async Task<IActionResult> EditHat(EditHatViewModel selectedHat)
     {
         var hat = await _context.Hats.FirstOrDefaultAsync(x => x.Id == selectedHat.Hid);
         hat.Name = selectedHat.Name;
+
+        var image = await _imageService.UploadImageAsync(selectedHat.Image);
+        hat.ImageUrl = image;
+
         _context.Hats.Update(hat);
 
         await _context.SaveChangesAsync();
@@ -106,8 +114,15 @@ public class HatController : Controller
         {
             return View("asd");
         }
-        hat.IsDeleted= true;
+        hat.IsDeleted = true;
+
+        if (!String.IsNullOrWhiteSpace(hat.ImageUrl)) 
+        {
+            _imageService.DeleteImage(hat.ImageUrl);
+            hat.ImageUrl = null;
+        }
         
+
         _context.Hats.Update(hat);
         
         await _context.SaveChangesAsync();
@@ -144,6 +159,5 @@ public class HatController : Controller
 
         return View("Index", model);  
     }
-
 
 }

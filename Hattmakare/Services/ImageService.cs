@@ -8,6 +8,16 @@ namespace Hattmakare.Services
     {
         public ImageService() { }
 
+        public void DeleteImage(string fileName)
+        {
+            string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "assets/hats", fileName);
+            if (File.Exists(filePath)) 
+            {
+                File.Delete(filePath);         
+            }
+
+        }
+
         public async Task<string?> UploadImageAsync(IFormFile file)
         {
 
