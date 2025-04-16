@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Hattmakare.Data;
 using Hattmakare.Models.Material;
 using Microsoft.EntityFrameworkCore;
+using Hattmakare.Data.Entities;
 
 namespace Hattmakare.Controllers;
 
@@ -32,6 +33,7 @@ public class MaterialController : Controller
                 Price = material.Price,
                 Supplier = material.Supplier
             }).ToListAsync(),
+
             Decorations = await _context.Materials
                 .Where(material => material.IsDecoration == true)
                 .Select(material => new MaterialViewModel
@@ -47,21 +49,99 @@ public class MaterialController : Controller
         return View(model);
     }
 
-    [HttpPost]
-    public IActionResult AddMaterial(AddMaterialViewModel model)
-    {
-        return View();
+    [HttpGet("add")]
+    public IActionResult AddMaterial() => View(new AddMaterialViewModel());
+
+    [HttpPost("add")]
+    public async Task<IActionResult> AddMaterial(AddMaterialViewModel model)
+    {   
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
+
+        var exists = await _context.Materials.Where(m => m.Name == model.Name).SingleOrDefaultAsync();
+        if (exists != null)
+        {
+            string message = $"Materialet '{model.Name}' finns redan";
+            ModelState.AddModelError(string.Empty, message);
+            return View(model);
+        }
+
+        var newMaterial = new Material
+        {
+            Name = model.Name,
+            Unit = model.Unit,
+            Price = model.Price,
+            Supplier = model.Supplier,
+            IsDecoration = model.IsDecoration
+        };
+
+        await _context.Materials.AddAsync(newMaterial);
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction(nameof(Index));
     }
 
-    [HttpPost]
-    public IActionResult EditMaterial(EditMaterialViewModel model)
+    [HttpGet("{id:int}/edit")]
+    public async Task<IActionResult> EditMaterial(int id)
     {
-        return View();
+        var material = await _context.Materials.Where(m => m.Id == id).SingleOrDefaultAsync();
+        if (material == null)
+        {
+            return RedirectToAction(nameof(Index));
+        }
+        
+        var model = new EditMaterialViewModel
+        {
+            Id = material.Id,
+            Name = material.Name,
+            Unit = material.Unit,
+            Price = material.Price,
+            Supplier = material.Supplier,
+            IsDecoration = material.IsDecoration
+        };
+
+        return View(model);
+    }
+    
+    [HttpPost("{id:int}/edit")]
+    public async Task<IActionResult> EditMaterial(int id, EditMaterialViewModel model)
+    {
+        var material = await _context.Materials.Where(m => m.Id == id).SingleOrDefaultAsync();
+        if (material == null)
+        {
+            return RedirectToAction(nameof(Index));
+        }
+
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
+
+        material.Name = model.Name;
+        material.Unit = model.Unit;
+        material.Price = model.Price;
+        material.Supplier = model.Supplier;
+        material.IsDecoration = model.IsDecoration;
+
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction(nameof(Index));
     }
 
-    [HttpPost("{id:int}")]
-    public IActionResult RemoveMaterial(int id)
+    [HttpPost("{id:int}/remove")]
+    public async Task<IActionResult> RemoveMaterial(int id)
     {
-        return View();
+        var material = await _context.Materials.Where(m => m.Id == id).SingleOrDefaultAsync();
+        if (material == null)
+        {
+            return RedirectToAction(nameof(Index));
+        }
+
+        _context.Materials.Remove(material);
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction(nameof(Index));
     }
 }
