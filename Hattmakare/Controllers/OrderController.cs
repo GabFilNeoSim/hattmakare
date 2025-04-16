@@ -11,7 +11,7 @@ namespace Hattmakare.Controllers;
 public class OrderController : Controller 
 {
     private readonly AppDbContext _context;
-    private readonly List<HatViewModel2> Cart = [];
+    private readonly List<StandardHatViewModel> Cart = [];
 
     public OrderController(AppDbContext context)
     {
@@ -23,8 +23,9 @@ public class OrderController : Controller
     {
         var model = new OrderHatsViewModel
         {
-            Hats = await _context.Hats.Where(h => h.IsSpecial == false && h.IsDeleted == false).Select(x =>
-                new HatViewModel2 {
+            Hats = await _context.StandardHats.Where(h => h.IsDeleted == false).Select(x =>
+                new StandardHatViewModel
+                {
                     Id = x.Id,
                     Name = x.Name,
                     Price = x.Price,
@@ -32,12 +33,11 @@ public class OrderController : Controller
                     ImageUrl = x.ImageUrl
                 }
             ).ToListAsync(),
-            SpecialHats = await _context.Hats.Where(h => h.IsSpecial == true && h.IsDeleted == false).Select(x =>
-                new HatViewModel2
+            SpecialHats = await _context.SpecialHats.Select(x =>
+                new StandardHatViewModel
                 {
                     Id = x.Id,
                     Name = x.Name,
-                    Price = x.Price,
                     Comment = x.Comment,
                     ImageUrl = x.ImageUrl
                 }
@@ -48,7 +48,7 @@ public class OrderController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddToCart(HatViewModel2 hat)
+    public async Task<IActionResult> AddToCart(StandardHatViewModel hat)
     {   
         if (hat != null)
         {
