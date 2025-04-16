@@ -25,6 +25,7 @@ public class MaterialController : Controller
         {
             Materials = await _context.Materials
                 .Where(material => material.IsDecoration == false)
+                .OrderBy(material => material.Name)
                 .Select(material => new MaterialViewModel
             {
                 Id = material.Id,
@@ -36,6 +37,7 @@ public class MaterialController : Controller
 
             Decorations = await _context.Materials
                 .Where(material => material.IsDecoration == true)
+                .OrderBy(material => material.Name)
                 .Select(material => new MaterialViewModel
             {
                 Id = material.Id,
