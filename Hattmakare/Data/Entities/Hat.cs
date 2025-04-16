@@ -16,6 +16,10 @@ namespace Hattmakare.Data.Entities
 
         public string? Comment { get; set; }
 
+        public int Size { get; set; }
+
+        public int InStock {  get; set; }
+
         public bool IsSpecial { get; set; } = false;
 
         public string? ImageUrl { get; set; }
