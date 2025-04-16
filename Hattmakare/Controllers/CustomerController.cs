@@ -74,7 +74,8 @@ public class CustomerController : Controller
 
             Address = new Address
             {
-                StreetAddress = newCustomer.StreetAddress,
+                BillingAddress = newCustomer.BillingAddress,
+                DeliveryAddress = newCustomer.DeliveryAddress,
                 PostalCode = newCustomer.PostalCode,
                 City = newCustomer.City,
                 Country = newCustomer.Country,
@@ -137,7 +138,8 @@ public class CustomerController : Controller
             customer.Address = new Address();
         }
 
-        customer.Address.StreetAddress = updateCustomer.StreetAddress;
+        customer.Address.BillingAddress = updateCustomer.BillingAddress;
+        customer.Address.DeliveryAddress = updateCustomer.DeliveryAddress;
         customer.Address.City = updateCustomer.City;
         customer.Address.PostalCode = updateCustomer.PostalCode;
         customer.Address.Country = updateCustomer.Country;
@@ -160,7 +162,8 @@ public class CustomerController : Controller
             LastName = customer.LastName,
             Email = customer.Email,
             Phone = customer.PhoneNumber,
-            StreetAddress = customer.Address?.StreetAddress,
+            BillingAddress = customer.Address?.BillingAddress,
+            DeliveryAddress = customer.Address?.DeliveryAddress,
             City = customer.Address?.City,
             PostalCode = customer.Address?.PostalCode,
             Country = customer.Address?.Country
