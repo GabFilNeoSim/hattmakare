@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Hattmakare.Models.Order;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using Hattmakare.Data.Entities;
 
 namespace Hattmakare.Controllers;
 [Authorize]
@@ -34,13 +35,64 @@ public class OrderController : Controller
                 .ToList(),
         }).ToListAsync();
 
-        var orderList = new OrderListViewModel
+        var viewModel = await _context.OrderStatuses.Select(x => new OrderListViewModel
         {
-            Orders = orders
-        };
+            Id = x.Id,
+            Status = x.Name,
+            Orders = x.Orders.Select(y => new OrderViewModel
+            {
+                Id = y.Id,
+                Customer = y.Customer.FirstName + " " + y.Customer.LastName,
+                StartDate = y.StartDate,
+                EndDate = y.EndDate,
+                Price = y.Price,
+                Priority = y.Priority,
+                Status = y.OrderStatus.Name,
+                Managers = y.OrderHats.Select(z => $"{z.User.FirstName[0].ToString().ToUpper()}{z.User.LastName[0].ToString().ToUpper()}")
+                .Distinct()
+                .ToList(),
+            }).ToList()
+        }).ToListAsync();
 
-        return View(orderList);
+        return View(viewModel);
     }
+
+    [HttpPost("{oid}/status")]
+    public async Task<IActionResult> EditOrderStatus(int oid, int sid)
+    {
+        var order = await _context.Orders.SingleOrDefaultAsync(x => x.Id == oid);
+        if (order == null)
+            return NotFound();
+
+        var status = await _context.OrderStatuses.SingleOrDefaultAsync(x => x.Id == sid);
+        if (status == null)
+            return NotFound();
+
+        order.OrderStatusId = sid;
+
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction("Index");
+    }
+
+    [HttpGet("edit")]
+    public async Task<IActionResult> PopulateEditOrderPopup(int oid)
+    {
+        var order = await _context.Orders.Where(x => x.Id == oid).Select(x => new OrderViewModel
+        {
+            Id = x.Id,
+            Customer = x.Customer.FirstName + "" + x.Customer.LastName,
+            StartDate = x.StartDate,
+            EndDate = x.EndDate,
+            Price = x.Price,
+            Priority = x.Priority,
+            Status = x.OrderStatus.Name
+        }).FirstOrDefaultAsync();
+
+        if (order is null) return NotFound();
+        return PartialView("_EditOrderPopupPartial", order);
+    }
+
 
 
     [HttpGet("new/hats")]
