@@ -11,12 +11,37 @@ namespace Hattmakare.Controllers;
 public class OrderController : Controller 
 {
     private readonly AppDbContext _context;
-    private readonly List<HatViewModel2> Cart = [];
 
     public OrderController(AppDbContext context)
     {
         _context = context;
     }
+
+    [HttpGet]
+    public async Task<IActionResult> Index()
+    {
+        var orders = await _context.Orders.Select(x => new OrderViewModel
+        {
+            Id = x.Id,
+            Customer = x.Customer.FirstName + " " + x.Customer.LastName,
+            StartDate = x.StartDate,
+            EndDate = x.EndDate,
+            Price = x.Price,
+            Priority = x.Priority,
+            Status = x.OrderStatus.Name,
+            Managers = x.OrderHats.Select(y => $"{y.User.FirstName[0]}{y.User.LastName[0]}")
+                .Distinct()
+                .ToList(),
+        }).ToListAsync();
+
+        var orderList = new OrderListViewModel
+        {
+            Orders = orders
+        };
+
+        return View(orderList);
+    }
+
 
     [HttpGet("new/hats")]
     public async Task<IActionResult> Hats()
@@ -47,26 +72,8 @@ public class OrderController : Controller
         return View(model);
     }
 
-    [HttpPost]
-    public async Task<IActionResult> AddToCart(HatViewModel2 hat)
-    {   
-        if (hat != null)
-        {
-            Cart.Add(hat);
-        }
 
-        return View();
-    }
+    
 
-    [HttpPost("{id:int}")]
-    public async Task<IActionResult> RemoveFromCart(int id)
-    {
-        var hatToRemove = Cart.FirstOrDefault(hat => hat.Id == id);
-        if (hatToRemove != null)
-        {
-            Cart.Remove(hatToRemove);
-        }
-
-        return View();
-    }
+ 
 }
