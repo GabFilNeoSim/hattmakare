@@ -15,7 +15,7 @@ public class AddMaterialViewModel
     [Required(ErrorMessage = "Skriv in ett pris")]
     [DataType(DataType.Currency)]
     [Range(0d, Double.MaxValue, ErrorMessage = "Priset måste vara 0 eller större")]
-    public decimal Price { get; set; }
+    public decimal Price { get; set; } = 0m;
 
     [Required(ErrorMessage = "Skriv in en leverantör")]
     [StringLength(50)]

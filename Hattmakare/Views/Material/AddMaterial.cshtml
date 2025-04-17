@@ -19,7 +19,7 @@
                     <span class="material-error" asp-validation-for="Name"></span>
                 </div>
                 <div class="material-form-child-input">
-                    <input type="text" asp-for="Name">
+                    <input class="form-control" type="text" asp-for="Name">
                 </div>
             </div>
             <div class="material-form-child">
@@ -28,7 +28,7 @@
                     <span class="material-error" asp-validation-for="Unit"></span>
                 </div>
                 <div class="material-form-child-input">
-                    <select asp-for="Unit">
+                    <select class="form-control" asp-for="Unit">
                         <option value="kg">Kilogram</option>
                         <option value="g">Gram</option>
                         <option value="m">Meter</option>
@@ -45,7 +45,7 @@
                     <span class="material-error" asp-validation-for="Price"></span>
                 </div>
                 <div class="material-form-child-input">
-                    <input type="text" asp-for="Price">
+                    <input class="form-control"  type="number" asp-for="Price" step="0.01">
                 </div>
             </div>
             <div class="material-form-child">
@@ -54,12 +54,14 @@
                     <span class="material-error" asp-validation-for="Supplier"></span>
                 </div>
                 <div class="material-form-child-input">
-                    <input type="text" asp-for="Supplier">
+                    <input class="form-control"  type="text" asp-for="Supplier">
                 </div>
             </div>
-            <div class="material-form-checkbox">
-                <input type="checkbox" asp-for="IsDecoration">
-                <label asp-for="IsDecoration">Markera som dekoration</label>
+            <div class="checkbox">
+                <label asp-for="IsDecoration">
+                    <input type="checkbox" asp-for="IsDecoration">
+                    Markera som dekoration
+                </label>
             </div>
             <button class="material-submit" type="submit">Lägg till</button>
             <a class="material-goback" asp-controller="Material" asp-action="Index">
