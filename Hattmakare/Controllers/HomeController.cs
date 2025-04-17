@@ -1,8 +1,10 @@
-using System.Diagnostics;
+using System.Security.Claims;
 using Hattmakare.Data;
+using Hattmakare.Data.Entities;
 using Hattmakare.Models;
 using Hattmakare.Models.Home;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,17 +13,37 @@ namespace Hattmakare.Controllers;
 [Authorize]
 public class HomeController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
+    private readonly UserManager<User> _userManager;
     private readonly AppDbContext _appDbContext;
-    public HomeController(ILogger<HomeController> logger, AppDbContext appDbContext)
+    public HomeController(AppDbContext appDbContext, UserManager<User> userManager)
     {
-        _logger = logger;
+        _userManager = userManager;
         _appDbContext = appDbContext;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        return View();
+        string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (userId == null)
+        {
+            return RedirectToAction("Login", "Auth");
+        }
+
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null)
+        {
+            return RedirectToAction("Login", "Auth");
+        }
+
+        var model = new HomeIndexViewModel
+        {
+            LoggedInUser = new UserViewModel
+            {
+                FirstName = user.FirstName
+            }
+        };
+
+        return View(model);
     }
 
     [HttpGet]
@@ -55,16 +77,5 @@ public class HomeController : Controller
         .ToListAsync();
 
         return PartialView("_CalendarOrdersPopupPartial", orders);
-    }
-
-    public IActionResult Privacy()
-    {
-        return View();
-    }
-
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }
