@@ -65,7 +65,7 @@ public class MaterialController : Controller
         var exists = await _context.Materials.Where(m => m.Name == model.Name).SingleOrDefaultAsync();
         if (exists != null)
         {
-            string message = $"Materialet '{model.Name}' finns redan";
+            string message = $"Materialet {model.Name} finns redan";
             ModelState.AddModelError(string.Empty, message);
             return View(model);
         }

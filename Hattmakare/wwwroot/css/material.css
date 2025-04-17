@@ -2,7 +2,6 @@
     display: flex;
     flex-direction: row;
     justify-content: center;
-    box-shadow: 0px 0px 4px rgba(0,0,0,0.1);
     padding: 2rem;
 }
 
@@ -12,6 +11,8 @@
     justify-content: center;
     gap: 5rem;
     flex-wrap: wrap;
+    box-shadow: 0px 0px 4px rgba(0,0,0,0.1);
+    padding: 2rem;
 }
 
 #material-tables button {
@@ -41,7 +42,7 @@
 .material-table-header > h2 {
     text-align: left;
     margin-bottom: 1rem;
-}
+    }
 
 /* ------------- Add & Edit ---------------- */
 
@@ -89,44 +90,20 @@
     width: 300px;
 }
 
-.material-form-child-header span {
-    color: orangered
-}
-
 .material-form-child-header {
     display: flex;
     flex-direction: row;
     justify-content: space-between
 }
 
-.material-form-child-input > input {
-    width: 100%;
+.material-form-child-header span {
+    color: orangered
 }
 
 .material-submit {
     border: none;
     border-radius: 4px;
     padding: 0.25rem 0;
-}
-
-.material-register-wrapper {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    margin-top: 0.5rem;
-}
-
-.material-register-wrapper > a {
-    text-decoration: none;
-    color: dodgerblue;
-}
-
-.material-register-wrapper > a:active {
-    color: dodgerblue;
-}
-
-.material-register-wrapper > a:hover {
-    text-decoration: underline;
 }
 
 .material-goback {
