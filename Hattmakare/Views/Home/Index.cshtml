@@ -1,9 +1,13 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using Hattmakare.Models.Home;
+
+@model HomeIndexViewModel;
+
+@{
+    ViewData["Title"] = "Startsidan";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Välkommen</h1>
+    <h1 class="display-4">Välkommen, @Model.LoggedInUser.FirstName!</h1>
 </div>
 
 <div id='calendar'></div>
