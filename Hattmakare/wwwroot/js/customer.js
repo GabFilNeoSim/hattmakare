@@ -2,6 +2,35 @@
     return confirm("Do you want to delete this costumer from the register?");
 }
 
+//landskod för telefonnummer 
+document.addEventListener("DOMContentLoaded", function () {
+    const visibleInput = document.querySelector("#visiblePhone");
+    const hiddenInput = document.querySelector("#fullPhone");
+
+    if (visibleInput && hiddenInput) {
+        const iti = window.intlTelInput(visibleInput, {
+            loadUtils: () => import("https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.1/build/js/utils.js"),
+            initialCountry: "se",
+            preferredCountries: ["se", "no", "fi", "dk"],
+            separateDialCode: true
+        });
+
+        // När pluginet laddats sätt värdet från databasen 
+        iti.promise.then(() => {
+            iti.setNumber(hiddenInput.value); 
+        });
+
+        // Uppdatera det dolda fältet med rätt nummer
+        const form = visibleInput.closest("form");
+        if (form) {
+            form.addEventListener("submit", function () {
+                hiddenInput.value = iti.getNumber(); 
+            });
+        }
+    }
+});
+
+
 
 
 //Ändra kundinfo
