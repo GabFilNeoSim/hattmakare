@@ -128,10 +128,99 @@
     background-color: #3faef3 !important;
 }
 
-.order {
-  position: relative;
+.order-info-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+.order-info-child {
+    width: max-content;
+    min-width: 100px;
+}
+.order-info-title {
+    background-color: #009dff;
+    color: #fff;
+    padding: 5px 15px;
+    border-radius: 4px;
+}
+.order-info-child p {
+    font-size: 14px;
+}
+.order-info-title.action {
+    background-color: transparent !important;
+    border: 2px solid #009dff;
+    color: #009dff;
+    padding: 4px 14px;
+}
 
-  #hatList {
+.order-hats-wrapper {
+    margin-top: 30px;
+}
+
+.order-hats-child {
+    border-bottom: 1px solid rgba(0,0,0,0.3);
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+}
+
+.order-hats-img {
+    width: 50px;
+}
+
+.order-hats-input {
+    margin-left: auto;
+    display: block;
+    width: max-content;
+}
+
+.order-hats-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+.order-info-prio {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 5px;
+}
+
+.form-check {
+    min-height: unset;
+}
+
+.order-info-child input {
+    font-size: 14px;
+    border: none;
+}
+
+.order-form-btns {
+    display: flex;
+    margin-top: 25px;
+    gap: 10px;
+}
+
+.order-save-btn {
+    margin-left: auto;
+    display: block;
+}
+
+.form-check-input {
+    background-color: lightgray;
+}
+
+
+.form-check-input:checked {
+
+}
+
+.order {
+    position: relative;
+    #hatList {
     width: 600px;
 
     #addNewHat{

@@ -32,3 +32,14 @@ $(".board-item").on("click", function () {
     });
 })
 
+$(document).on('submit', '#editOrderForm', function (e) {
+    e.preventDefault();
+
+    var form = $(this);
+    var url = form.attr('action');
+    var data = form.serialize();
+
+    $.post(url, data, function () {
+        location.reload();
+    });
+});

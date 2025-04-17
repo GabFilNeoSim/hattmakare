@@ -50,8 +50,8 @@ namespace Hattmakare.Data
                 .OnDelete(DeleteBehavior.NoAction);
 
             // Order hat
-            builder.Entity<OrderHat>()
-                .HasKey(x => new { x.HatId, x.OrderId, x.UserId });
+            //builder.Entity<OrderHat>()
+            //    .HasKey(x => new { x.HatId, x.OrderId, x.UserId });
 
             builder.Entity<OrderHat>()
                 .HasOne(x => x.Order)
@@ -72,7 +72,19 @@ namespace Hattmakare.Data
                 .HasData(new OrderStatus
                 {
                     Id = 1,
-                    Name = "Startad"
+                    Name = "Ej påbörjad"
+                });
+            builder.Entity<OrderStatus>()
+                .HasData(new OrderStatus
+                {
+                    Id = 2,
+                    Name = "Påbörjad"
+                });
+            builder.Entity<OrderStatus>()
+            .HasData(new OrderStatus
+                {
+                    Id = 3,
+                    Name = "Klar"
                 });
             builder.Entity<Order>()
                 .HasData(
