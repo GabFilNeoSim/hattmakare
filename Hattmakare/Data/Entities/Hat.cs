@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.ComponentModel.DataAnnotations;
 
 namespace Hattmakare.Data.Entities
 {
@@ -8,11 +9,13 @@ namespace Hattmakare.Data.Entities
 
         [Required]
         [MaxLength(100)]
-        public string Name { get; set; }
-        public int Price { get; set; }
+        public string? Name { get; set; }
+        public string? Comment { get; set; }
+        public string? ImageUrl { get; set; }
 
-        // Navigation props
-        public virtual ICollection<HatMaterial> HatMaterials { get; set; }
+        //Navigation props
         public virtual ICollection<OrderHat> OrderHats { get; set; }
+        public virtual ICollection<HatMaterial> HatMaterials { get; set; }
+
     }
 }

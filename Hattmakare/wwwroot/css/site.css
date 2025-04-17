@@ -29,3 +29,32 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+#confirm-background{
+  display: none;
+
+  #confirm-wrapper{
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0,0,0,0.3);
+    backdrop-filter: blur(4px);
+    
+    #confirm-modal{
+      padding: 16px;
+      border-radius: 8px;;
+      background-color: white;
+    }
+  }
+}
+
+.fc-daygrid-day-number, .fc-col-header-cell-cushion {
+    text-decoration: none !important;
+}
+
+.fc-col-header thead tr a, .fc-daygrid-day-number {
+    color: #2c3e50 !important;
+}

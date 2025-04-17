@@ -1,0 +1,26 @@
+﻿@using Hattmakare.Models.Home;
+
+@model List<CalendarPopupViewModel>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Order #</th>
+            <th>Kund</th>
+            <th>Startdatum</th>
+            <th>Slutdatum</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model)
+        {
+            <tr>
+                <td>@order.Id</td>
+                <td>@order.CustomerName</td>
+                <td>@order.StartDate</td>
+                <td>@order.EndDate</td>
+                <td><button class="btn btn-outline-primary btn-sm">Visa order</button></td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -4,6 +4,7 @@ using Castle.Core.Resource;
 using Hattmakare.Data;
 using Hattmakare.Data.Entities;
 using Hattmakare.Models.Customer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Hattmakare.Controllers;
 
+[Authorize]
 [Route("customers")]
 public class CustomerController : Controller
 {

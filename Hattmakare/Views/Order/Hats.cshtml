@@ -1,0 +1,44 @@
+﻿@using Hattmakare.Models.Order;
+
+@model OrderHatsViewModel;
+
+<div id="hat" class="order">
+  <div id="hatList">
+    <button id="addNewHat">
+      <div class="container">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 144L48 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l144 0 0 144c0 17.7 14.3 32 32 32s32-14.3 32-32l0-144 144 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-144 0 0-144z" /></svg>
+        <p>Skapa specialhatt</p>
+      </div>
+    </button>
+    @foreach (var hat in Model.Hats)
+    {
+      <div class="hatItem" data-name="@hat.Name" data-id="@hat.Id">
+        <img src="/assets/hats/@(hat.ImageUrl ?? "placeholder-image.png")" />
+        <h2 class="name">@hat.Name</h2>
+        <div class="details">
+          <div class="item">
+            <p>Storlek: </p>
+            <p class="size">10</p>
+          </div>
+          <div class="item">
+            <p>Pris: </p>
+            <p class="price">199:-</p>
+          </div>
+        </div>
+        <div class="counter">
+          <button class="count-remove">-</button>
+          <p class="count">0</p>
+          <button class="count-add">+</button>
+        </div>
+      </div>
+    }
+  </div>
+  <div id="cartContainer">
+    <div id="cart">
+    </div>
+    <p id="total">Total: 0:- </p>
+    <button>
+      go to order
+    </button>
+  </div>
+  </div>
