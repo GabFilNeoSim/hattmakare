@@ -50,8 +50,8 @@ namespace Hattmakare.Data
                 .OnDelete(DeleteBehavior.NoAction);
 
             // Order hat
-            builder.Entity<OrderHat>()
-                .HasKey(x => new { x.HatId, x.OrderId, x.UserId });
+            //builder.Entity<OrderHat>()
+            //    .HasKey(x => new { x.HatId, x.OrderId, x.UserId });
 
             builder.Entity<OrderHat>()
                 .HasOne(x => x.Order)
@@ -67,6 +67,48 @@ namespace Hattmakare.Data
                 .HasOne(x => x.User)
                 .WithMany(x => x.OrderHats)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<OrderStatus>()
+                .HasData(new OrderStatus
+                {
+                    Id = 1,
+                    Name = "Ej påbörjad"
+                });
+            builder.Entity<OrderStatus>()
+                .HasData(new OrderStatus
+                {
+                    Id = 2,
+                    Name = "Påbörjad"
+                });
+            builder.Entity<OrderStatus>()
+            .HasData(new OrderStatus
+                {
+                    Id = 3,
+                    Name = "Klar"
+                });
+            builder.Entity<Order>()
+                .HasData(
+                    new Order
+                    {
+                        Id = 1,
+                        CustomerId = 1,
+                        OrderStatusId = 1,
+                        StartDate = new DateOnly(2025, 04, 16),
+                        EndDate = new DateOnly(2025, 04, 17),
+                        Priority = false,
+                        Price = 500
+                    },
+                    new Order
+                    {
+                        Id = 2,
+                        CustomerId = 1,
+                        OrderStatusId = 1,
+                        StartDate = new DateOnly(2025, 04, 16),
+                        EndDate = new DateOnly(2025, 04, 17),
+                        Priority = true,
+                        Price = 600
+                    }
+                );
         }
     }
 }
