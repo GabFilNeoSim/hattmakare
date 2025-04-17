@@ -2,7 +2,7 @@
 
 @model OrderHatsViewModel;
 
-<div id="hat">
+<div id="hat" class="order">
   <div id="hatList">
     <button id="addNewHat">
       <div class="container">
@@ -13,26 +13,32 @@
     @foreach (var hat in Model.Hats)
     {
       <div class="hatItem" data-name="@hat.Name" data-id="@hat.Id">
-        <img src="/assets/500x500_placeholder.png"/>
-        <h2>@hat.Name</h2>
+        <img src="/assets/hats/@(hat.ImageUrl ?? "placeholder-image.png")" />
+        <h2 class="name">@hat.Name</h2>
+        <div class="details">
+          <div class="item">
+            <p>Storlek: </p>
+            <p class="size">10</p>
+          </div>
+          <div class="item">
+            <p>Pris: </p>
+            <p class="price">199:-</p>
+          </div>
+        </div>
         <div class="counter">
-          <form class="count-remove" asp-action="RemoveFromCart" asp-controller="Order" asp-route-id="@hat.Id">-</form>
+          <button class="count-remove">-</button>
           <p class="count">0</p>
-          <form class="count-add" asp-action="RemoveFromCart" asp-controller="Order" asp-route-hat="@hat">+</form>
+          <button class="count-add">+</button>
         </div>
       </div>
     }
+  </div>
+  <div id="cartContainer">
     <div id="cart">
-
     </div>
-
+    <p id="total">Total: 0:- </p>
     <button>
       go to order
-
-
     </button>
   </div>
-  <div id="hatPopup">
   </div>
-
-</div>

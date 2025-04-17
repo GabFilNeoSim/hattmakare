@@ -92,8 +92,9 @@ namespace Hattmakare.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Unit = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    PurchasePrice = table.Column<int>(type: "int", nullable: false),
-                    Supplier = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Supplier = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    IsDecoration = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
