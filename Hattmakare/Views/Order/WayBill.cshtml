@@ -1,0 +1,92 @@
+﻿@using Hattmakare.Data.Entities
+@using Hattmakare.Models.Order
+
+@model WayBilViewModel
+
+<div class="container my-5 border p-4 bg-white" id="waybill">
+    <div class="row">
+        <div class="col">
+            <h2 class="mb-4">Fraktsedel</h2>
+        </div>
+        <div class="col text-end">
+            <strong>Ordernummer:</strong> @Model.orderNumber<br />
+            <strong>Datum:</strong> @DateTime.Now.ToString("yyyy-MM-dd")
+        </div>
+    </div>
+
+    <hr />
+
+    <div class="row mb-4">
+        <div class="col">
+            <h5>Avsändare</h5>
+            <p>
+                @(Model.sender.FirstName + " " + Model.sender.LastName)<br />
+                @Html.Raw(Model.address)
+                @*   @Model.address.PostalCode @Model.address.City *@
+            </p>
+
+        </div>
+        <div class="col">
+            <h5>Mottagare</h5>
+            <p>
+                @(Model.reciver.FirstName + " " + Model.reciver.LastName)<br />
+                
+                @if (Model.reciver?.Address != null)
+                {
+                    <div>
+                        @Model.reciver.Address.DeliveryAddress<br />
+                        @Model.reciver.Address.PostalCode @Model.reciver.Address.City
+                    </div>
+                }
+                else
+                {
+                    <div class="text-danger">Adress saknas</div>
+                }
+                
+                @* @Model.reciver.Address.DeliveryAddress<br />
+                @Model.reciver.Address.PostalCode @Model.reciver.Address.City *@
+            </p>
+        </div>
+    </div>
+
+   
+    <table class="table table-bordered">
+        <thead class="table-light">
+            <tr>
+                <th>Produkt</th>
+                <th>Pris</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.OrderHats)
+            {
+                var standardHat = item.Hat as StandardHat;
+                <tr>
+                    <td>@item.Hat.Name</td>
+                    <td>@standardHat.Price.ToString("C")</td>
+                </tr>
+            }
+
+            <tr class="table-light">
+                <td><strong>Totalt vikt:</strong></td>
+                @*<td>
+                    Fält för att ändra vikten manuellt istället
+                    <input type="number" name="weight" value="@Model.weight" /> kg
+                </td> *@
+                <td>@Model.weight kg</td>
+            </tr>
+            <tr class="table-light">
+                <td><strong>Moms:</strong></td>
+                <td>@Model.tax.ToString("C")</td>
+            </tr>
+            <tr class="table-light">
+                <td><strong>Totalpris inkl. moms:</strong></td>
+                <td>@Model.totalPrice.ToString("C")</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<button class="btn btn-secondary mt-3" onclick="window.print()">Skriv ut fraktsedel</button>
+
+

@@ -20,6 +20,39 @@ public class OrderController : Controller
         _context = context;
     }
 
+    [HttpGet("waybill")]
+    public async Task<IActionResult> Waybill(int orderId)
+    {
+        var userEmail = User.Identity.Name;
+        var sender = await _context.Users.FirstOrDefaultAsync(u => u.Email == userEmail);
+
+        var order = await _context.Orders
+            .Include(o => o.Customer)
+            .ThenInclude(c => c.Address) 
+            .FirstOrDefaultAsync(o => o.Id == orderId);
+
+        decimal totalPrice = order.OrderHats
+        .Where(oh => oh.Hat is StandardHat) 
+        .Sum(oh => ((StandardHat)oh.Hat).Price);
+
+        if (order == null)
+        return Content($"No order found with ID {orderId}");
+
+        var model = new WayBilViewModel
+        {
+            orderNumber = order.Id,
+            address = "Hattmakarvägen 1<br />702 52 Örebro",
+            sender = sender,
+            reciver = order.Customer,
+            price = totalPrice,
+            weight = 2,
+            OrderHats = order.OrderHats.ToList()
+        };
+
+        return View(model);
+    }
+
+
     [HttpGet]
     public async Task<IActionResult> Index()
     {
