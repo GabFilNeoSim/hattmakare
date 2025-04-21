@@ -76,6 +76,19 @@ namespace Hattmakare.Data
                     FirstName = "Olof",
                     LastName = "Svensson",
                     PhoneNumber = "1234567890",
+                    AddressId = 1,
+                });
+            builder.Entity<Address>()
+                .HasData(new Address
+                {
+                    Id = 1,
+                    BillingAddress = "Adress 1",
+                    DeliveryAddress = "Adress 2",
+                    PostalCode = "12345",
+                    City = "Örebro",
+                    Country = "Sverige",
+                     
+
                 });
 
             builder.Entity<StandardHat>()
@@ -144,7 +157,8 @@ namespace Hattmakare.Data
                         StartDate = new DateOnly(2025, 04, 16),
                         EndDate = new DateOnly(2025, 04, 17),
                         Priority = false,
-                        Price = 500
+                        Price = 500,
+                        
                     },
                     new Order
                     {
@@ -155,6 +169,7 @@ namespace Hattmakare.Data
                         EndDate = new DateOnly(2025, 04, 17),
                         Priority = true,
                         Price = 600
+                        
                     }
                 );
         }
