@@ -47,7 +47,18 @@
     margin-top: 1px;
 }
 
+<<<<<<< HEAD
 #customer .formGroup{
+=======
+#customer form {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    
+}
+
+#customer .search form {
+>>>>>>> main
     display: flex;
     gap: 8px;
     width: 100%;   

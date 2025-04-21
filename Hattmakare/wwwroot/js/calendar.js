@@ -12,11 +12,23 @@
         eventClick: function (info) {
             const date = info.event.startStr;
             $.get('/Home/PopulateCalendarPopUp', { date: date }, function (data) {
-                $('#orderModalBody').html(data);
-                $('#orderModal').modal('show');
+                $('#orderCalendarModalBody').html(data);
+                $('#orderCalendarModal').modal('show');
             });
         }
     });
 
     calendar.render();
+
+    $(document).on("click", ".calendar-view-order", function () {
+        const itemId = $(this).data("item-id");
+
+        $('#orderCalendarModalBody').html("");
+        $('#orderCalendarModal').modal('hide');
+
+        $.get('/Order/edit', { oid: itemId }, function (data) {
+            $('#editOrderBody').html(data);
+            $('#editOrderModal').modal('show');
+        });
+    });
 })

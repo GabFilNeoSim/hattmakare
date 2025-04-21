@@ -1,0 +1,76 @@
+﻿@using Hattmakare.Models.Order;
+
+@model EditOrderViewModel
+<form id="editOrderForm" asp-controller="Order" asp-action="EditOrder" asp-route-oid="@Model.Id" method="post">
+    <div class="order-info-wrapper">
+        <div class="order-info-child">
+            <div class="order-info-title">Order #</div>
+            <p>#@Model.Id</p>
+        </div>
+        <div class="order-info-child">
+            <div class="order-info-title">Kundens namn</div>
+            <p>@Model.CustomerName</p>
+        </div>
+        <div class="order-info-child">
+            <div class="order-info-title">Kundens telnr.</div>
+            <p>@Model.CustomerPhone</p>
+        </div>
+        <div class="order-info-child">
+            <div class="order-info-title">Pris</div>
+            <p>@Model.Price SEK</p>
+        </div>
+        <div class="order-info-child">
+            <div class="order-info-title">Status</div>
+            <p>@Model.Status</p>
+        </div>
+        <div class="order-info-child">
+            <div class="order-info-title action">Startdatum</div>
+            <input asp-for="StartDate" id="order-startDate" value="@Model.StartDate" type="date" data-oid="@Model.Id" />
+        </div>
+        <div class="order-info-child">
+            <div class="order-info-title action">Slutdatum</div>
+            <input asp-for="EndDate" value="@Model.EndDate" type="date" />
+        </div>
+        <div class="order-info-child">
+            <div class="order-info-title action">Prioritet</div>
+            <div class="order-info-prio">
+                <p>⚡</p>
+                <div class="form-check form-switch">
+                    <input asp-for="Priority" class="form-check-input" type="checkbox" checked="@Model.Priority">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="order-hats-wrapper">
+        @if (Model.Hats.Count > 0)
+        {
+            <div class="order-hats-header">
+                <h5>Hattar</h5>
+                <button class="btn btn-outline-primary btn-sm">Ta på alla</button>
+            </div>
+            @for (int i = 0; i < Model.Hats.Count; i++)
+            {
+                <div class="order-hats-child">
+                    <img class="order-hats-img" src="@Model.Hats[i].HatImageUrl" />
+                    <p>@Model.Hats[i].HatName</p>
+                    <select class="form-select order-hats-input"
+                            asp-for="Hats[@i].UserId"
+                            asp-items="Model.Users">
+                        <option value="">Ingen</option>
+                    </select>
+                    <input type="hidden" asp-for="Hats[@i].HatId" />
+                </div>
+            }
+        } else
+        {
+            <i>No hats in this order.</i>
+        }
+    </div>
+    <div class="order-form-btns">
+        <button class="btn btn-danger btn-sm">Radera order</button>
+        <button class="order-save-btn btn btn-outline-primary btn-sm">Fraktsedel</button>
+        <button class="btn btn-outline-primary btn-sm">Materiallista</button>
+        <button class="btn btn-primary btn-sm">Spara order</button>
+    </div>
+</form>
+

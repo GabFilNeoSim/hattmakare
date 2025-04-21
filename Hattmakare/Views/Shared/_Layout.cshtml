@@ -1,4 +1,4 @@
-﻿
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,7 +15,10 @@
     <link rel="stylesheet" href="~/css/auth/login.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/material.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Hattmakare.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.1/build/css/intlTelInput.css">
     <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css' rel='stylesheet' />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
 </head>
 <body>
     <partial name="_ConfirmModal"/>
@@ -30,6 +33,12 @@
                     </button>
                     <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                         <ul class="navbar-nav flex-grow-1">
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Hem</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Order" asp-action="Index">Ordrar</a>
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Hat" asp-action="Index">Hattar</a>
                             </li>
@@ -51,6 +60,18 @@
         </header>
     }
     <div class="container">
+        <div class="modal fade" id="editOrderModal" tabindex="-1" aria-labelledby="editOrderLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editOrderLabel">Orderspecifikation</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="editOrderBody"></div>
+                </div>
+            </div>
+        </div>
+
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
@@ -65,11 +86,13 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/customer.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.1/build/js/intlTelInput.min.js"></script>
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js'></script>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/locales-all.global.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/hat.js" asp-append-version="true"></script>
     <script src="~/js/calendar.js" asp-append-version="true"></script>
+    <script src="~/js/orderboard.js" asp-append-version="true"></script>
     <script src="~/js/order.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

@@ -10,6 +10,7 @@ namespace Hattmakare.Data.Entities
         [Required]
         public DateOnly StartDate { get; set; }
         public DateOnly EndDate { get; set; }
+        public decimal Price { get; set; }
        
 
         // Foreign keys

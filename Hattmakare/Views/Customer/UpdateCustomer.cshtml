@@ -34,7 +34,9 @@
     <input asp-for="Email" type="text" id="email" >
 
     <label for="Phone">Telefonnummer: </label>
-    <input asp-for="Phone" type="tel" id="phone" >
+    <input type="tel" id="visiblePhone" />
+     <input asp-for="Phone" type="hidden" id="fullPhone"/>
+
 
     <button type="submit">Spara ändring</button>
 </form>

@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using Hattmakare.Models.Order;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using Hattmakare.Data.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Hattmakare.Controllers;
 [Authorize]
@@ -11,11 +14,122 @@ namespace Hattmakare.Controllers;
 public class OrderController : Controller 
 {
     private readonly AppDbContext _context;
-    private readonly List<StandardHatViewModel> Cart = [];
 
     public OrderController(AppDbContext context)
     {
         _context = context;
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Index()
+    {
+        var viewModel = await _context.OrderStatuses.Select(x => new OrderListViewModel
+        {
+            Id = x.Id,
+            Status = x.Name,
+            Orders = x.Orders.Select(y => new OrderViewModel
+            {
+                Id = y.Id,
+                Customer = y.Customer.FirstName + " " + y.Customer.LastName,
+                StartDate = y.StartDate,
+                EndDate = y.EndDate,
+                Price = y.Price,
+                Priority = y.Priority,
+                Status = y.OrderStatus.Name,
+                Managers = y.OrderHats
+                .Where(z => z.User != null)
+                .Select(z => $"{z.User.FirstName[0].ToString().ToUpper()}{z.User.LastName[0].ToString().ToUpper()}")
+                .Distinct()
+                .ToList(),
+            }).ToList()
+        }).ToListAsync();
+
+        return View(viewModel);
+    }
+
+    [HttpPost("{oid}/status")]
+    public async Task<IActionResult> EditOrderStatus(int oid, int sid)
+    {
+        var order = await _context.Orders.SingleOrDefaultAsync(x => x.Id == oid);
+        if (order == null)
+            return NotFound();
+
+        var status = await _context.OrderStatuses.SingleOrDefaultAsync(x => x.Id == sid);
+        if (status == null)
+            return NotFound();
+
+        order.OrderStatusId = sid;
+
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction("Index");
+    }
+
+    [HttpGet("edit")]
+    public async Task<IActionResult> PopulateEditOrderPopup(int oid)
+    {
+        var order = await _context.Orders.Where(x => x.Id == oid).FirstOrDefaultAsync();
+
+        if (order is null) return NotFound();
+
+        var users = await _context.Users
+            .Select(u => new SelectListItem
+            {
+                Value = u.Id,
+                Text = u.FirstName + " " + u.LastName
+            })
+            .ToListAsync();
+
+        var viewModel = new EditOrderViewModel
+        {
+            Id = order.Id,
+            CustomerName = order.Customer?.FirstName + " " + order.Customer?.LastName,
+            CustomerPhone = order.Customer?.PhoneNumber,
+            StartDate = order.StartDate,
+            EndDate = order.EndDate,
+            Price = order.Price,
+            Priority = order.Priority,
+            Status = order.OrderStatus?.Name,
+            Hats = order.OrderHats.Select(x => new EditOrderHatViewModel
+            {
+                HatId = x.HatId,
+                HatName = x.Hat.Name,
+                HatImageUrl = x.Hat.ImageUrl ?? "/assets/hats/placeholder-image.png",
+                UserId = x.UserId
+            }).ToList(),
+            Users = users
+        };
+
+
+        return PartialView("_EditOrderPopupPartial", viewModel);
+    }
+
+    [HttpPost("{oid}/edit")]
+    public async Task<IActionResult> EditOrder(int oid, EditOrderViewModel request)
+    {
+        var order = await _context.Orders.Where(x => x.Id == oid).FirstOrDefaultAsync();
+        if (order is null) return NotFound();
+
+        order.StartDate = request.StartDate;
+        order.EndDate = request.EndDate;
+        order.Priority = request.Priority;
+
+
+        if (request.Hats is not null)
+        {
+            foreach (var hat in request.Hats)
+            {
+                var orderHat = order.OrderHats.FirstOrDefault(oh => oh.HatId == hat.HatId);
+                if (orderHat != null)
+                {
+                    orderHat.UserId = hat.UserId;
+                }
+            }
+        }
+
+        await _context.SaveChangesAsync();
+
+        return Ok();
     }
 
     [HttpGet("new/hats")]
@@ -47,26 +161,5 @@ public class OrderController : Controller
         return View(model);
     }
 
-    [HttpPost]
-    public async Task<IActionResult> AddToCart(StandardHatViewModel hat)
-    {   
-        if (hat != null)
-        {
-            Cart.Add(hat);
-        }
-
-        return View();
-    }
-
-    [HttpPost("{id:int}")]
-    public async Task<IActionResult> RemoveFromCart(int id)
-    {
-        var hatToRemove = Cart.FirstOrDefault(hat => hat.Id == id);
-        if (hatToRemove != null)
-        {
-            Cart.Remove(hatToRemove);
-        }
-
-        return View();
-    }
+ 
 }

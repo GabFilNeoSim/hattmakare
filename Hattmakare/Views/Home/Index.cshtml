@@ -1,21 +1,25 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using Hattmakare.Models.Home;
+
+@model HomeIndexViewModel;
+
+@{
+    ViewData["Title"] = "Startsidan";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Välkommen</h1>
+    <h1 class="display-4">Välkommen, @Model.LoggedInUser.FirstName!</h1>
 </div>
 
 <div id='calendar'></div>
 
-<div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
+<div class="modal fade" id="orderCalendarModal" tabindex="-1" aria-labelledby="orderModalCalendarLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="orderModalLabel">Ordrar</h5>
+                <h5 class="modal-title" id="orderCalendarModalLabel">Ordrar</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body" id="orderModalBody"></div>
+            <div class="modal-body" id="orderCalendarModalBody"></div>
         </div>
     </div>
 </div>

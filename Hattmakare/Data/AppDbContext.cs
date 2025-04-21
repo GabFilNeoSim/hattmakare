@@ -50,8 +50,8 @@ namespace Hattmakare.Data
                 .OnDelete(DeleteBehavior.NoAction);
 
             // Order hat
-            builder.Entity<OrderHat>()
-                .HasKey(x => new { x.HatId, x.OrderId, x.UserId });
+            //builder.Entity<OrderHat>()
+            //    .HasKey(x => new { x.HatId, x.OrderId, x.UserId });
 
             builder.Entity<OrderHat>()
                 .HasOne(x => x.Order)
@@ -67,6 +67,96 @@ namespace Hattmakare.Data
                 .HasOne(x => x.User)
                 .WithMany(x => x.OrderHats)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<Customer>()
+                .HasData(new Customer
+                {
+                    Id = 1,
+                    Email = "testmejl",
+                    FirstName = "Olof",
+                    LastName = "Svensson",
+                    PhoneNumber = "1234567890",
+                });
+
+            builder.Entity<StandardHat>()
+                .HasData(new StandardHat
+                {
+                    Id = 1,
+                    Comment = "Testcomment",
+                    ImageUrl = null,
+                    IsDeleted = false,
+                    Name = "Studenthatt",
+                    Price = 5,
+                    Quantity = 2,
+                    Size = 10
+                }, new StandardHat
+                {
+                    Id = 2,
+                    Comment = "Testcomment",
+                    ImageUrl = null,
+                    IsDeleted = false,
+                    Name = "Kaptenshatt",
+                    Price = 52,
+                    Quantity = 5,
+                    Size = 8
+                });
+
+            builder.Entity<OrderHat>()
+                .HasData(new OrderHat
+                {
+                    Id = 1,
+                    HatId = 1,
+                    OrderId = 1,
+                    UserId = null,
+                }, new OrderHat
+                {
+                    Id = 2,
+                    HatId = 2,
+                    OrderId = 1,
+                    UserId = null
+                });
+
+            builder.Entity<OrderStatus>()
+                .HasData(new OrderStatus
+                {
+                    Id = 1,
+                    Name = "Ej påbörjad"
+                });
+            builder.Entity<OrderStatus>()
+                .HasData(new OrderStatus
+                {
+                    Id = 2,
+                    Name = "Påbörjad"
+                });
+            builder.Entity<OrderStatus>()
+            .HasData(new OrderStatus
+                {
+                    Id = 3,
+                    Name = "Klar"
+                });
+            builder.Entity<Order>()
+                .HasData(
+                    new Order
+                    {
+                        Id = 1,
+                        CustomerId = 1,
+                        OrderStatusId = 1,
+                        StartDate = new DateOnly(2025, 04, 16),
+                        EndDate = new DateOnly(2025, 04, 17),
+                        Priority = false,
+                        Price = 500
+                    },
+                    new Order
+                    {
+                        Id = 2,
+                        CustomerId = 1,
+                        OrderStatusId = 2,
+                        StartDate = new DateOnly(2025, 04, 16),
+                        EndDate = new DateOnly(2025, 04, 17),
+                        Priority = true,
+                        Price = 600
+                    }
+                );
         }
     }
 }

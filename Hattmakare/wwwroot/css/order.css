@@ -1,7 +1,226 @@
-.order {
-  position: relative;
+#order #hatList {
+    width: 600px;
+}
 
-  #hatList {
+#boards-container {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+#boards-container p {
+    margin-bottom: 0;
+}
+
+.boards-wrapper {
+    height: 700px;
+    background-color: #009dff;
+    border-radius: 12px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.boards-wrapper h3 {
+    text-align: center;
+    color: #fff;
+    margin: 15px 0;
+}
+
+.board {
+    height: calc(100% - 64px);
+    width: 400px;
+    background-color: #f3f3f3;
+    padding: 10px;
+    gap: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 0 0 12px 12px;
+    overflow-y: auto;
+}
+
+.board::-webkit-scrollbar {
+    height: 0;
+    width: 5px;
+}
+
+.board::-webkit-scrollbar-track {
+    background: none;
+}
+
+.board::-webkit-scrollbar-thumb {
+    background: #cdcdcd;
+}
+
+.board-item {
+    background-color: rgb(255, 255, 255);
+    width: 100%;
+    height: max-content;
+    user-select: none;
+    border-radius: 6px;
+    padding: 15px;
+    box-sizing: border-box;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    text-decoration: none;
+    color: unset;
+}
+
+.board-item:hover {
+    cursor: pointer;
+}
+
+.board-item:active {
+    cursor: grabbing;
+}
+
+.item-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.item-id {
+    background-color: #009dff;
+    color: #fff;
+    padding: 4px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.item-dates {
+    font-size: 12px;
+}
+
+.item-prio {
+    position: absolute;
+    top: -12px;
+    right: -15px;
+    font-size: 26px;
+}
+
+.item-managers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    flex-direction: row-reverse;
+}
+
+.item-manager {
+    background-color: #009dff;
+    width: 35px;
+    height: 35px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 12px;
+}
+
+.item-manager:nth-child(even) {
+    background-color: #3faef3 !important;
+}
+
+.order-info-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+.order-info-child {
+    width: max-content;
+    min-width: 100px;
+}
+.order-info-title {
+    background-color: #009dff;
+    color: #fff;
+    padding: 5px 15px;
+    border-radius: 4px;
+}
+.order-info-child p {
+    font-size: 14px;
+}
+.order-info-title.action {
+    background-color: transparent !important;
+    border: 2px solid #009dff;
+    color: #009dff;
+    padding: 4px 14px;
+}
+
+.order-hats-wrapper {
+    margin-top: 30px;
+}
+
+.order-hats-child {
+    border-bottom: 1px solid rgba(0,0,0,0.3);
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+}
+
+.order-hats-img {
+    width: 50px;
+}
+
+.order-hats-input {
+    margin-left: auto;
+    display: block;
+    width: max-content;
+}
+
+.order-hats-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+.order-info-prio {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 5px;
+}
+
+.form-check {
+    min-height: unset;
+}
+
+.order-info-child input {
+    font-size: 14px;
+    border: none;
+}
+
+.order-form-btns {
+    display: flex;
+    margin-top: 25px;
+    gap: 10px;
+}
+
+.order-save-btn {
+    margin-left: auto;
+    display: block;
+}
+
+.form-check-input {
+    background-color: lightgray;
+}
+
+
+.form-check-input:checked {
+
+}
+
+.order {
+    position: relative;
+    #hatList {
     width: 600px;
 
     #addNewHat{
