@@ -4,41 +4,66 @@
     ViewData["Title"] = "Index";
 }
 
-<div id="updateCustomer">
+<div id="customer" class="update">
     <h2>Uppdatera kund</h2>
 
+  <div class="customerFields">
     <form asp-controller="Customer" asp-action="UpdateCustomer" asp-route-customerId="@Model.Id">
 
-    <label for="FirstName">Förnamn: </label>
-    <input asp-for="FirstName" type="text" id="firstName">
+    <div class="formGroup">
+      <div class="formItem">
+        <label for="FirstName">Förnamn: </label>
+        <input type="text" id="firstName" name="firstName" asp-for="FirstName">
+      </div>
 
-    <label for="LastName">Efternamn: </label>
-    <input asp-for="LastName" type="text" id="lastName" >
+      <div class="formItem">
+        <label for="LastName">Efternamn: </label>
+        <input type="text" id="lastName" name="lastName" asp-for="LastName">
+      </div>
+    </div>
 
-    <label for="BillingAddress">Faktueringsadress: </label>
-    <input asp-for="BillingAddress" type="text" id="billingAddress" >
+      <div class="formItem">
+        <label for="BillingAddress">Faktureringsadress: </label>
+        <input type="text" id="billingAddress" name="billingAddress" asp-for="BillingAddress">
+      </div>
 
-    <label for="DeliveryAddress">Leveransadress: </label>
-    <input asp-for="DeliveryAddress" type="text" id="deliveryAddress">
+      <div class="formItem">
+        <label for="DeliveryAddress">Leveransadress: </label>
+        <input type="text" id="deliveryAddress" name="deliveryAddress" asp-for="DeliveryAddress">
+      </div>
 
-    <label for="City">Stad: </label>
-    <input asp-for="City" type="text" id="city">
+      <div class="formGroup">
+        <div class="formItem">
+          <label for="City">Stad: </label>
+          <input type="text" id="city" name="city" asp-for="City">
+        </div>
 
-    <label for="PostalCode">Postnummer: </label>
-    <input asp-for="PostalCode" type="text" id="postalCode" >
+        <div class="formItem">
+          <label for="PostalCode">Postnummer: </label>
+          <input type="text" id="postalCode" name="postalCode" asp-for="PostalCode">
+        </div>
 
-    <label for="Country">Land: </label>
-    <input asp-for="Country" type="text" id="country" >
+        <div class="formItem">
+          <label for="Country">Land: </label>
+          <input type="text" id="country" name="country" asp-for="Country">
+        </div>
+      </div>
+      <div class="formItem">
+        <label for="Email">Email: </label>
+        <input type="text" id="email" name="email" asp-for="Email">
+      </div>
 
-    <label for="Email">Email: </label>
-    <input asp-for="Email" type="text" id="email" >
+      <div class="phoneNumber">
+        <label for="Phone">Telefonnummer: </label>
+        <input type="tel" id="visiblePhone" />
+        <input type="hidden" id="fullPhone" name="phone" asp-for="Phone" />
+      </div>
 
-    <label for="Phone">Telefonnummer: </label>
-    <input type="tel" id="visiblePhone" />
-     <input asp-for="Phone" type="hidden" id="fullPhone"/>
 
-
-    <button type="submit">Spara ändring</button>
+      <button type="submit" id="customerAdd">
+        <p>Spara ändringar</p>
+      </button>
 </form>
+</div>
 
 </div>
