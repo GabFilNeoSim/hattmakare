@@ -2,8 +2,6 @@
 #customer {
     display: flex;
    justify-content: space-between;
-   
- 
 }
 
 #customer #customerAdd svg {
@@ -49,36 +47,70 @@
     margin-top: 1px;
 }
 
-#customer .customerFields input {
-    width: 180%;
-    
-}
-
-#customer form {
-    width: 45%;
-    
-}
-
-#customer .search form {
+#customer .formGroup{
     display: flex;
+    gap: 8px;
+    width: 100%;   
+    box-sizing: border-box;
 }
 
+#customer .formGroup > *{
+    flex: 1;
+}
 
-#customer .search {
+#customer .formItem{
     display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    min-width: 0;
+}
+
+#customer #search {
+  margin-bottom: 4px;
+  width: 80%;
+  display: flex;
+  border: 1px solid black;
+  border-radius: 16px;
+  padding: 2px 8px;
+
+  input{
+    flex: 1;
+    padding: 0px;
     border: none;
+  }
+
+  input:focus{
+    outline: none;
+    border: none;
+    box-shadow: none;
+  }
+
+  button {
+    padding: 0px;
+    background-color: transparent;
+    border: none;
+
+    svg{
+      height: 100%;
+      width: 32px;
+      padding: 8px;
+    }
+  }
 }
 
-#customer .search input {
-    border: 1px solid-black;
-    width: 95%;
-}
+#customer #resetSearch{
+    margin-left: 4px;
+    p{
+        font-weight: 400;
+        font-size: 14px;
+        margin-bottom: 0px;
+        color: hsl(0,0%, 20%);
+    }
+    button{
+        border-bottom: 1px solid hsl(0,0%, 50%);
 
-#customer .search svg {
-    height: 18px;
-    margin: 5px;
+    }
 }
-
 #updateCustomer form {
     display: flex;
     flex-direction: column;
