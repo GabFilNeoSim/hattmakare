@@ -332,13 +332,23 @@ namespace Hattmakare.Migrations
                         name: "FK_OrderHats_Orders_OrderId",
                         column: x => x.OrderId,
                         principalTable: "Orders",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
                 table: "Addresses",
                 columns: new[] { "Id", "BillingAddress", "City", "Country", "DeliveryAddress", "PostalCode" },
                 values: new object[] { 1, "Adress 1", "Örebro", "Sverige", "Adress 2", "12345" });
+
+            migrationBuilder.InsertData(
+                table: "Hats",
+                columns: new[] { "Id", "Comment", "Depth", "ImageUrl", "IsDeleted", "IsSpecial", "Length", "Name", "Price", "Quantity", "Size", "Width" },
+                values: new object[,]
+                {
+                    { 1, "Testcomment", 0.0, null, false, false, 0.0, "Studenthatt", 5m, 2, 10, 0.0 },
+                    { 2, "Testcomment", 0.0, null, false, false, 0.0, "Kaptenshatt", 52m, 5, 8, 0.0 }
+                });
 
             migrationBuilder.InsertData(
                 table: "OrderStatuses",
@@ -362,6 +372,15 @@ namespace Hattmakare.Migrations
                 {
                     { 1, 1, new DateOnly(2025, 4, 17), 1, 500m, false, new DateOnly(2025, 4, 16) },
                     { 2, 1, new DateOnly(2025, 4, 17), 2, 600m, true, new DateOnly(2025, 4, 16) }
+                });
+
+            migrationBuilder.InsertData(
+                table: "OrderHats",
+                columns: new[] { "Id", "HatId", "OrderId", "UserId" },
+                values: new object[,]
+                {
+                    { 1, 1, 1, null },
+                    { 2, 2, 1, null }
                 });
 
             migrationBuilder.CreateIndex(
