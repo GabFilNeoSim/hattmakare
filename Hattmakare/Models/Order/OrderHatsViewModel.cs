@@ -4,6 +4,6 @@ namespace Hattmakare.Models.Order;
 
 public class OrderHatsViewModel
 {
-    public List<StandardHatViewModel> Hats { get; set; }
-    public List<StandardHatViewModel> SpecialHats { get; set; } // Ändra till SpecialHatViewModel
+    public List<HatViewModel> Hats { get; set; }
+    public List<HatViewModel> SpecialHats { get; set; } // Ändra till SpecialHatViewModel
 }

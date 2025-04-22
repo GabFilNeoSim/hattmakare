@@ -35,7 +35,12 @@ public class CustomerController : Controller
             customers = customers.Where(c =>
                 (c.FirstName + " " + c.LastName).ToLower().Contains(query) ||
                 c.FirstName.ToLower().Contains(query) ||
-                c.LastName.ToLower().Contains(query));
+                c.LastName.ToLower().Contains(query) && c.IsDeleted == false);
+        }
+
+        else
+        {
+            customers = _context.Customers.Where(c => c.IsDeleted == false);
         }
 
         var result = await customers.ToListAsync();
@@ -97,8 +102,9 @@ public class CustomerController : Controller
     {
         var customer = await _context.Customers.FirstOrDefaultAsync(c => c.Id == customerId);
 
-        _context.Customers.Remove(customer);
+        //_context.Customers.Remove(customer);
 
+        customer.IsDeleted = true;
 
         try
         {

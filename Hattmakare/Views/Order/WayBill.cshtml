@@ -60,7 +60,7 @@
         <tbody>
             @foreach (var item in Model.OrderHats)
             {
-                var standardHat = item.Hat as StandardHat;
+                var standardHat = item.Hat as Hat;
                 <tr>
                     <td>@item.Hat.Name</td>
                     <td>@standardHat.Price.ToString("C")</td>

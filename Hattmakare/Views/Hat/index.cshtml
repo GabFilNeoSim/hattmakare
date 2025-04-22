@@ -1,6 +1,6 @@
 ﻿@using Hattmakare.Models.Hats
 
-@model List<StandardHatViewModel>
+@model List<HatViewModel>
 
 <div id="hat">
     <form asp-controller="Hat" asp-action="SearchHat" method="get" id="search">
@@ -16,7 +16,7 @@
         <span> Lägg till ny hatt </span>
       </div>
     </a>
-    @foreach (StandardHatViewModel hat in Model)
+    @foreach (HatViewModel hat in Model)
     {
         <div class="hatItem">
             <img src="/assets/hats/@(hat.ImageUrl ?? "placeholder-image.png")" />
