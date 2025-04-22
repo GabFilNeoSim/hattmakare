@@ -1,13 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
-using Hattmakare.Data;
 using Hattmakare.Data.Entities;
 using Hattmakare.Models.Auth;
-using Microsoft.AspNetCore.Authorization;
+using Hattmakare.Models.User;
 
 namespace Hattmakare.Controllers;
 
-//[Authorize]
 [Route("auth")]
 public class AuthController : Controller
 {
@@ -21,10 +19,14 @@ public class AuthController : Controller
     }
 
     [HttpGet("register")]
-    public IActionResult Register() => View(new RegisterViewModel());
+    public async Task<IActionResult> Register()
+    {
+        var model = new AddUserViewModel();
+        return View(model);
+    }
 
     [HttpPost("register")]
-    public async Task<IActionResult> Register(RegisterViewModel model)
+    public async Task<IActionResult> Register(AddUserViewModel model)
     {
         if (!ModelState.IsValid)
         {
@@ -36,7 +38,7 @@ public class AuthController : Controller
             FirstName = model.FirstName,
             LastName = model.LastName,
             UserName = model.Email,
-            Email = model.Email,
+            Email = model.Email
         };
 
         var result = await _userManager.CreateAsync(newUser, model.Password);
@@ -47,6 +49,11 @@ public class AuthController : Controller
                 ModelState.AddModelError(string.Empty, error.Description);
             }
             return View(model);
+        }
+
+        if (model.IsAdmin)
+        {
+            await _userManager.AddToRoleAsync(newUser, "Admin");
         }
 
         await _signInManager.SignInAsync(newUser, isPersistent: false);

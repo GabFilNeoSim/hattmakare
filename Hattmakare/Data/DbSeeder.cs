@@ -6,39 +6,24 @@ namespace Hattmakare.Data;
 
 public static class DbSeeder
 {
-    public static async Task SeedAllAsync(AppDbContext context, UserManager<User> userManager)
+    public static async Task SeedAllAsync(
+        AppDbContext context,
+        UserManager<User> userManager,
+        RoleManager<IdentityRole> roleManager
+    )
     {
-        await AddUsers(userManager);
+        await AddRoles(roleManager);
         await AddMaterials(context);
         await AddDecorations(context);
 
         await context.SaveChangesAsync();
     }
 
-    private static async Task AddUsers(UserManager<User> userManager)
+    private static async Task AddRoles(RoleManager<IdentityRole> roleManager)
     {
-        string password = "password";
-
-        if (await userManager.FindByEmailAsync("otto@hattmakare.se") == null)
+        if (!await roleManager.RoleExistsAsync("Admin"))
         {
-            await userManager.CreateAsync(new User
-            {
-                FirstName = "Otto",
-                LastName = "Ottosson",
-                UserName = "otto@hattmakare.se",
-                Email = "otto@hattmakare.se"
-            }, password);
-        }
-
-        if (await userManager.FindByEmailAsync("judiths@hattmakare.se") == null)
-        {
-            await userManager.CreateAsync(new User
-            {
-                FirstName = "Judiths",
-                LastName = "Judithsdottir",
-                UserName = "judiths@hattmakare.se",
-                Email = "judiths@hattmakare.se"
-            }, password);
+            await roleManager.CreateAsync(new IdentityRole("Admin"));
         }
     }
 
