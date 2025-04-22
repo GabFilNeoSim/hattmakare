@@ -165,10 +165,10 @@ public class OrderController : Controller
         return Ok();
     }
 
-    [HttpGet("new/hats")]
-    public async Task<IActionResult> Hats()
+    [HttpGet("new")]
+    public async Task<IActionResult> New()
     {
-        var model = new OrderHatsViewModel
+        var model = new NewOrderViewModel
         {
             Hats = await _context.Hats.Where(h => h.IsDeleted == false).Select(x =>
                 new HatViewModel
@@ -176,15 +176,6 @@ public class OrderController : Controller
                     Id = x.Id,
                     Name = x.Name,
                     Price = x.Price,
-                    Comment = x.Comment,
-                    ImageUrl = x.ImageUrl
-                }
-            ).ToListAsync(),
-            SpecialHats = await _context.Hats.Select(x =>
-                new HatViewModel
-                {
-                    Id = x.Id,
-                    Name = x.Name,
                     Comment = x.Comment,
                     ImageUrl = x.ImageUrl
                 }

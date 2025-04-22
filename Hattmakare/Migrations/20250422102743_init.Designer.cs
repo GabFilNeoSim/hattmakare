@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hattmakare.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250422090826_nyHatt")]
-    partial class nyHatt
+    [Migration("20250422102743_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
