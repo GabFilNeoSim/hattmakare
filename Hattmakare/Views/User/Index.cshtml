@@ -6,14 +6,30 @@
     ViewBag.Title = "Användare";
 }
 
-<a asp-controller="User" asp-action="AddUser" class="btn btn-primary">Lägg till en användare</a>
-<table class="table">
+<style>
+    #users-table svg {
+        height: 16px;
+        transition: all 0.25s;
+    }
+
+    #users-table svg:hover {
+        transform: scale(1.075);
+    }
+
+    #users-table button {
+        border: none;
+        background: transparent;
+    }
+</style>
+
+<a asp-controller="User" asp-action="AddUser" class="btn btn-primary mb-1">Lägg till en användare</a>
+<table id="users-table" class="table">
     <thead>
         <tr>
-            <th scope="col">Förnamn</th>
-            <th scope="col">Efternamn</th>
-            <th scope="col">Epost</th>
-            <th scope="col">Roll</th>
+            <th>Förnamn</th>
+            <th>Efternamn</th>
+            <th>Epost</th>
+            <th>Roll</th>
         </tr>
     </thead>
     <tbody>
