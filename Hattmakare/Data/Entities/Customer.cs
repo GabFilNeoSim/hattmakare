@@ -23,6 +23,9 @@ namespace Hattmakare.Data.Entities
         [MaxLength(20)]
         public string PhoneNumber { get; set; }
 
+        public bool IsDeleted { get; set; } = false;
+        public double HeadMeasurements { get; set; }
+
         // Foreign keys
         public int? AddressId { get; set; }
 
