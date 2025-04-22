@@ -656,7 +656,7 @@ namespace Hattmakare.Migrations
                     b.HasOne("Hattmakare.Data.Entities.Order", "Order")
                         .WithMany("OrderHats")
                         .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Hattmakare.Data.Entities.User", "User")

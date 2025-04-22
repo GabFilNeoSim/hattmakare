@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hattmakare.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250422102743_init")]
+    [Migration("20250422123126_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -659,7 +659,7 @@ namespace Hattmakare.Migrations
                     b.HasOne("Hattmakare.Data.Entities.Order", "Order")
                         .WithMany("OrderHats")
                         .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Hattmakare.Data.Entities.User", "User")
