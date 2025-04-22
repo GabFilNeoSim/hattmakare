@@ -176,6 +176,7 @@ public class OrderController : Controller
                     Id = x.Id,
                     Name = x.Name,
                     Price = x.Price,
+                    Size = x.Size,
                     Comment = x.Comment,
                     ImageUrl = x.ImageUrl
                 }

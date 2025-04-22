@@ -11,7 +11,7 @@
     justify-content: center;
     align-items: center;
     width: 250px;
-    height: 350px;
+    height: 360px;
     transition: all ease-in-out 300ms;
     border-radius: 8px;
     text-decoration: none;
@@ -34,6 +34,7 @@
   }
 
   .hatItem {
+    position: relative;
     border-radius: 8px;
     overflow: hidden;
     display: flex;
@@ -42,15 +43,16 @@
     align-items: center;
     box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
     width: 250px;
-    height: 350px;
+    height: 360px;
     img {
-      object-fit: cover;
+      object-fit: contain;
       width: 100%;
       height: 180px;
     }
 
     .settings{   
-      margin-left: auto;
+      position: absolute;
+      right: 0px;
       padding: 4px 8px;
       display: flex;
       gap: 12px;
@@ -65,6 +67,56 @@
       }
       svg:hover{
         cursor: pointer;
+      }
+    }
+
+    .details{
+      width: 90%;
+      .top{
+        display: flex;
+        justify-content: space-between;
+      }
+      .bottom{
+        display: flex;
+        margin-top: auto;
+        align-items: flex-end;
+        justify-content: space-between;
+        padding-right: 30px;
+        margin-top: 10px;
+
+        .price{
+          font-size: 24px;
+          font-weight: 600;
+        }
+        .measurements{
+          position: relative;
+          img{
+            width: 75px;
+            height: 75px;
+          }
+
+          p{
+            text-align: center;
+            width: max-content;
+            font-size: 12px;
+          }
+
+          .width{
+            position: absolute;
+            left: 15px;
+            bottom: -15px;
+          }
+          .length{
+            position: absolute;
+            left: 63px;
+            bottom: -4px;
+          }
+          .depth{
+            position: absolute;
+            left: 70px;
+            top: 20px;
+          }
+        }
       }
     }
     }
