@@ -29,6 +29,20 @@
         <span asp-validation-for="Size" class="text-danger small"></span>
     </div>
 
+    <div class="form-group mb-3">
+        <label asp-for="Length" class="form-label fw-bold">Längd</label>
+        <input asp-for="Length" class="form-control" placeholder="Ange storlek (Längd)" required />
+        <span asp-validation-for="Length" class="text-danger small"></span>
+
+        <label asp-for="Depth" class="form-label fw-bold">Djup</label>
+        <input asp-for="Depth" class="form-control" placeholder="Ange storlek (Djup)" required />
+        <span asp-validation-for="Depth" class="text-danger small"></span>
+
+        <label asp-for="Width" class="form-label fw-bold">Bredd</label>
+        <input asp-for="Width" class="form-control" placeholder="Ange storlek (Bredd)" required />
+        <span asp-validation-for="Width" class="text-danger small"></span>
+    </div>
+
 
     <div class="form-group mb-4">
         <label asp-for="Image" class="form-label fw-bold">Ladda upp bild</label>

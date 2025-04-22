@@ -30,7 +30,7 @@
               </div>
             <h2>@hat.Name</h2>
                 <div class="counter">
-                    @if (hat.Quantity > 0)
+                    @if (hat.Size > 0)
                     {
                         <p>Storlek: @hat.Size</p>
                     }
@@ -44,6 +44,25 @@
                     {
                         <p>Pris: @hat.Price</p>
                     }
+                    @if (hat.Length > 0 || hat.Depth > 0 || hat.Width > 0)
+                    {
+                        <p>Mått(LxDxB): @hat.Length x @hat.Depth x @hat.Width</p>
+                    }
+                    @* @if (hat.Length > 0)
+                    {
+                        <p>Längd: @hat.Length</p>
+                    }
+
+                    @if (hat.Depth > 0)
+                    {
+                        <p>Djup: @hat.Depth</p>
+                    }
+
+                    @if (hat.Width > 0)
+                    {
+                        <p>Bredd: @hat.Width</p>
+                    } *@
+
                 </div>
 
         </div>

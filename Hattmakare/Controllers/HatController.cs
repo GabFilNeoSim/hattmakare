@@ -36,6 +36,9 @@ public class HatController : Controller
             Price = x.Price,
             Quantity = x.Quantity,
             Size = x.Size,
+            Length = x.Length,
+            Depth = x.Depth,
+            Width = x.Width,
             ImageUrl = x.ImageUrl,
             Id = x.Id,
             
@@ -71,9 +74,13 @@ public class HatController : Controller
         var hat = new Hat();
         hat.Name = newHat.Name;
         hat.Size = newHat.Size;
+        hat.Length = newHat.Length;
+        hat.Depth = newHat.Depth;
+        hat.Width = newHat.Width;
         hat.Quantity = newHat.Quantity;
         hat.Price = newHat.Price;
-        
+
+
         var image = await _imageService.UploadImageAsync(newHat.Image);
         hat.ImageUrl = image;
 
@@ -95,6 +102,9 @@ public class HatController : Controller
             Name = hat.Name,
             Price = hat.Price,
             Size = hat.Size,
+            Length = hat.Length,
+            Depth = hat.Depth,
+            Width = hat.Width,
             Quantity = hat.Quantity
         };
 
@@ -108,6 +118,9 @@ public class HatController : Controller
         hat.Name = selectedHat.Name;
         hat.Price = selectedHat.Price;
         hat.Size = selectedHat.Size;
+        hat.Length = selectedHat.Length;
+        hat.Depth = selectedHat.Depth;
+        hat.Width = selectedHat.Width;
         hat.Quantity = selectedHat.Quantity;
 
         if (selectedHat.Image != null)
