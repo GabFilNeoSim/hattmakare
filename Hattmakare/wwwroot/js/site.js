@@ -1,32 +1,37 @@
-﻿//$(".deleteHat").on("click", function (event) {
-//    event.preventDefault();
-//    const text = $(this).data("text");
-//    currentConfirmationForm = $(this).parent().attr("class");
-//    currentFormDataId = $(this).parent().data("id");
+﻿var confirmCallback = null;
 
-//    showConfirmModal(text);
-//});
+$(document).on("click", ".confirm-btn", function (e) {
+    e.preventDefault();
+    const button = $(this);
+    showConfirmModal(function () {
+        button.closest("form").submit();
+    });
+});
 
-//$("#confirm-yes").on("click", function (event) {
-//    event.preventDefault();
-//    console.log("Confirmed")
-//    console.log(currentConfirmationForm);
-//    $(`.${currentConfirmationForm}[data-id="${currentFormDataId}"]`).submit();
-//});
+function showConfirmModal(callback) {
+    confirmCallback = callback;
+    $("#confirm-background").show();
+}
+function closeConfirmModal() {
+    $("#confirm-background").hide();
+    confirmCallback = null;
+}
 
-//function showConfirmModal(text) {
-//    $("#confirm-background").show();
-//    $("#confirm-text").html(text);
-//}
+$("#confirm-no").on("click", function () {
+    closeConfirmModal();
+});
 
-//function closeConfirmModal() {
-//    $("#confirm-background").hide();
-//    currentConfirmationForm = "";
-//}
+$("#confirm-yes").on("click", function (e) {
+    e.preventDefault();
+    if (typeof confirmCallback === 'function') {
+        confirmCallback();
+    }
+    closeConfirmModal();
+});
 
-//$("#confirm-no").on("click", function () {
-//    closeConfirmModal();
-//});
-
-
-
+$("#confirm-wrapper").on("click", function (e) {
+    const wrapper = $("#confirm-wrapper")
+    if (e.target === $("#confirm-wrapper")[0]) {
+        closeConfirmModal();
+    }
+});

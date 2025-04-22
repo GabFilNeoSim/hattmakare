@@ -95,7 +95,10 @@ public class OrderController : Controller
 
         await _context.SaveChangesAsync();
 
-        return RedirectToAction("Index");
+        TempData["NotifyType"] = "success";
+        TempData["NotifyMessage"] = "Done";
+
+        return Ok();
     }
 
     [HttpGet("edit")]
@@ -162,7 +165,25 @@ public class OrderController : Controller
 
         await _context.SaveChangesAsync();
 
+        TempData["NotifyType"] = "success";
+        TempData["NotifyMessage"] = "Ändringarna för ordern sparades.";
+
         return Ok();
+    }
+
+    [HttpPost("{oid}")]
+    public async Task<IActionResult> DeleteOrder(int oid, EditOrderViewModel request)
+    {
+        var order = await _context.Orders.Where(x => x.Id == oid).FirstOrDefaultAsync();
+        if (order is null) return NotFound();
+
+        _context.Orders.Remove(order);
+        await _context.SaveChangesAsync();
+
+        TempData["NotifyType"] = "success";
+        TempData["NotifyMessage"] = "Ordern togs bort.";
+
+        return RedirectToAction("Index");
     }
 
     [HttpGet("new/hats")]

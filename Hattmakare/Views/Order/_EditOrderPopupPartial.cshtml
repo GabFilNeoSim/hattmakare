@@ -1,5 +1,11 @@
 ﻿@using Hattmakare.Models.Order;
 
+@using System.Security.Claims
+
+@{
+    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+}
+
 @model EditOrderViewModel
 <form id="editOrderForm" asp-controller="Order" asp-action="EditOrder" asp-route-oid="@Model.Id" method="post">
     <div class="order-info-wrapper">
@@ -46,7 +52,7 @@
         {
             <div class="order-hats-header">
                 <h5>Hattar</h5>
-                <button class="btn btn-outline-primary btn-sm">Ta på alla</button>
+                <button data-userId="@userId" id="order-hat-all" class="btn btn-outline-primary btn-sm">Ta på alla</button>
             </div>
             @for (int i = 0; i < Model.Hats.Count; i++)
             {
@@ -67,10 +73,12 @@
         }
     </div>
     <div class="order-form-btns">
-        <button class="btn btn-danger btn-sm">Radera order</button>
         <a href="/order/waybill?orderId=@Model.Id" class="order-save-btn btn btn-outline-primary btn-sm">Fraktsedel</a>
         <button class="btn btn-outline-primary btn-sm">Materiallista</button>
         <button class="btn btn-primary btn-sm">Spara order</button>
     </div>
+</form>
+<form asp-controller="Order" asp-action="DeleteOrder" asp-route-oid="@Model.Id" method="post">
+    <button class="order-delete btn btn-danger btn-sm confirm-btn">Radera order</button>
 </form>
 

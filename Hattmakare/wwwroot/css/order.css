@@ -218,6 +218,11 @@
 
 }
 
+.order-delete {
+    position: absolute;
+    bottom: 15px;
+}
+
 .order {
     position: relative;
     #hatList {
