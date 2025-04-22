@@ -12,8 +12,6 @@ namespace Hattmakare.Data
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Hat> Hats { get; set; }
-        public DbSet<StandardHat> StandardHats { get; set; }
-        public DbSet<SpecialHat> SpecialHats { get; set; }
         public DbSet<HatMaterial> HatsMaterial { get; set; }
         public DbSet<Material> Materials { get; set; }
         public DbSet<Order> Orders { get; set; }
@@ -29,11 +27,6 @@ namespace Hattmakare.Data
                 .HasOne(x => x.Address)
                 .WithMany(x => x.Customers)
                 .OnDelete(DeleteBehavior.NoAction);
-
-            // Hat inheritance
-            builder.Entity<Hat>().ToTable("Hats"); 
-            builder.Entity<StandardHat>().ToTable("StandardHats");
-            builder.Entity<SpecialHat>().ToTable("SpecialHats");
 
             // Hat material
             builder.Entity<HatMaterial>()
@@ -56,7 +49,7 @@ namespace Hattmakare.Data
             builder.Entity<OrderHat>()
                 .HasOne(x => x.Order)
                 .WithMany(x => x.OrderHats)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<OrderHat>()
                 .HasOne(x => x.Hat)
@@ -91,44 +84,6 @@ namespace Hattmakare.Data
 
                 });
 
-            builder.Entity<StandardHat>()
-                .HasData(new StandardHat
-                {
-                    Id = 1,
-                    Comment = "Testcomment",
-                    ImageUrl = null,
-                    IsDeleted = false,
-                    Name = "Studenthatt",
-                    Price = 5,
-                    Quantity = 2,
-                    Size = 10
-                }, new StandardHat
-                {
-                    Id = 2,
-                    Comment = "Testcomment",
-                    ImageUrl = null,
-                    IsDeleted = false,
-                    Name = "Kaptenshatt",
-                    Price = 52,
-                    Quantity = 5,
-                    Size = 8
-                });
-
-            builder.Entity<OrderHat>()
-                .HasData(new OrderHat
-                {
-                    Id = 1,
-                    HatId = 1,
-                    OrderId = 1,
-                    UserId = null,
-                }, new OrderHat
-                {
-                    Id = 2,
-                    HatId = 2,
-                    OrderId = 1,
-                    UserId = null
-                });
-
             builder.Entity<OrderStatus>()
                 .HasData(new OrderStatus
                 {
@@ -147,6 +102,45 @@ namespace Hattmakare.Data
                     Id = 3,
                     Name = "Klar"
                 });
+
+            builder.Entity<Hat>()
+               .HasData(new Hat
+               {
+                   Id = 1,
+                   Comment = "Testcomment",
+                   ImageUrl = null,
+                   IsDeleted = false,
+                   Name = "Studenthatt",
+                   Price = 5,
+                   Quantity = 2,
+                   Size = 10
+               }, new Hat
+               {
+                   Id = 2,
+                   Comment = "Testcomment",
+                   ImageUrl = null,
+                   IsDeleted = false,
+                   Name = "Kaptenshatt",
+                   Price = 52,
+                   Quantity = 5,
+                   Size = 8
+               });
+
+            builder.Entity<OrderHat>()
+                .HasData(new OrderHat
+                {
+                    Id = 1,
+                    HatId = 1,
+                    OrderId = 1,
+                    UserId = null,
+                }, new OrderHat
+                {
+                    Id = 2,
+                    HatId = 2,
+                    OrderId = 1,
+                    UserId = null
+                });
+
             builder.Entity<Order>()
                 .HasData(
                     new Order

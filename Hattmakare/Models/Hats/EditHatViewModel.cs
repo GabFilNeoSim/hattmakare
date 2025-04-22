@@ -10,12 +10,14 @@ namespace Hattmakare.Models.Hats
         [MaxLength(100)]
         public string Name { get; set; }
         public int? Size { get; set; }
+        public double Length { get; set; }
+        public double Width { get; set; }
+        public double Depth { get; set; }
+
+        [Required(ErrorMessage = "Please enter a price")]
+        [Range(0, double.MaxValue, ErrorMessage = "The price must be 0 or higher")]
         public decimal Price { get; set; }
         public int? Quantity { get; set; }
-
-        //[Required(ErrorMessage = "Please enter a price")]
-        //[Range(0, double.MaxValue, ErrorMessage = "The price must be 0 or higher")]
-        //public decimal Price {  get; set; }
 
         [Required(ErrorMessage = "Please upload an image")]
         public IFormFile Image { get; set; }

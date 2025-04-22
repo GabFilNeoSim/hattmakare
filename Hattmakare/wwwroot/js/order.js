@@ -1,5 +1,13 @@
 ﻿const cart = {};
 
+$(document).ready(function () {
+  let obj = localStorage.getItem("cart") ? JSON.parse(localStorage.getItem("cart")) : {}; // Load cart from local storage")
+  Object.entries(obj).forEach(([key, value]) => {
+    cart[key] = value;
+  })
+  updateCartItems();
+})
+
 document.querySelectorAll('.hatItem').forEach(hatItem => {
   const plusBtn = hatItem.querySelector('.count-add');
   const minusBtn = hatItem.querySelector('.count-remove');
@@ -18,24 +26,19 @@ document.querySelectorAll('.hatItem').forEach(hatItem => {
       Amount: (cart[id]?.Amount || 0) + 1
 
     }
-    // Sets the counterElement value to the amount of cart[id]
-    counterElement.textContent = cart[id].Amount;
-    console.log(cart);
     updateCartItems();
   });
 
   minusBtn.addEventListener('click', () => {
     if (cart[id].Amount > 0) {
       cart[id].Amount -= 1;
-      counterElement.textContent = cart[id].Amount;
-      console.log(cart);
       updateCartItems();
     }
   });
 });
 
 function updateCartItems() {
-  console.log("Updated cart")
+  localStorage.setItem("cart", JSON.stringify(cart)); // Save cart to local storage
   const cartEl = $("#cart")
   cartEl.empty(); // Clear previous entries
   Object.entries(cart).forEach(([key, value]) => {
@@ -51,6 +54,14 @@ function updateCartItems() {
 
     cartEl.append(html);
   });
+
+  // Update amount texts
+  document.querySelectorAll('.hatItem').forEach(hatItem => {
+    const counterElement = hatItem.querySelector('.count');
+    const id = hatItem.getAttribute('data-id');
+    counterElement.textContent = cart[id].Amount;
+  })
+
   const priceEl = $("#total")
   const price = calculatePrice()
   priceEl.text("Total: " + price + ":-")
@@ -63,3 +74,9 @@ function calculatePrice() {
   });
   return price;
 }
+
+$(document).on('click', '#order-hat-all', function (e) {
+    e.preventDefault();
+    let userId = $(this).attr("data-userId");
+    $(".order-hats-input").val(userId);
+});

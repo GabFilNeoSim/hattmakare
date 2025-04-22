@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Hattmakare.Migrations
 {
     /// <inheritdoc />
-    public partial class test : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -79,7 +79,15 @@ namespace Hattmakare.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Comment = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    IsSpecial = table.Column<bool>(type: "bit", nullable: false),
+                    Size = table.Column<int>(type: "int", nullable: true),
+                    Quantity = table.Column<int>(type: "int", nullable: true),
+                    Length = table.Column<double>(type: "float", nullable: false),
+                    Width = table.Column<double>(type: "float", nullable: false),
+                    Depth = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -126,6 +134,8 @@ namespace Hattmakare.Migrations
                     LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    HeadMeasurements = table.Column<double>(type: "float", nullable: false),
                     AddressId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -245,47 +255,6 @@ namespace Hattmakare.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SpecialHats",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false),
-                    Length = table.Column<double>(type: "float", nullable: false),
-                    Width = table.Column<double>(type: "float", nullable: false),
-                    Depth = table.Column<double>(type: "float", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SpecialHats", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_SpecialHats_Hats_Id",
-                        column: x => x.Id,
-                        principalTable: "Hats",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "StandardHats",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    Size = table.Column<int>(type: "int", nullable: true),
-                    Quantity = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_StandardHats", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_StandardHats_Hats_Id",
-                        column: x => x.Id,
-                        principalTable: "Hats",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "HatsMaterial",
                 columns: table => new
                 {
@@ -363,21 +332,22 @@ namespace Hattmakare.Migrations
                         name: "FK_OrderHats_Orders_OrderId",
                         column: x => x.OrderId,
                         principalTable: "Orders",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
-                table: "Customers",
-                columns: new[] { "Id", "AddressId", "Email", "FirstName", "LastName", "PhoneNumber" },
-                values: new object[] { 1, null, "testmejl", "Olof", "Svensson", "1234567890" });
+                table: "Addresses",
+                columns: new[] { "Id", "BillingAddress", "City", "Country", "DeliveryAddress", "PostalCode" },
+                values: new object[] { 1, "Adress 1", "Örebro", "Sverige", "Adress 2", "12345" });
 
             migrationBuilder.InsertData(
                 table: "Hats",
-                columns: new[] { "Id", "Comment", "ImageUrl", "Name" },
+                columns: new[] { "Id", "Comment", "Depth", "ImageUrl", "IsDeleted", "IsSpecial", "Length", "Name", "Price", "Quantity", "Size", "Width" },
                 values: new object[,]
                 {
-                    { 1, "Testcomment", null, "Studenthatt" },
-                    { 2, "Testcomment", null, "Kaptenshatt" }
+                    { 1, "Testcomment", 0.0, null, false, false, 0.0, "Studenthatt", 5m, 2, 10, 0.0 },
+                    { 2, "Testcomment", 0.0, null, false, false, 0.0, "Kaptenshatt", 52m, 5, 8, 0.0 }
                 });
 
             migrationBuilder.InsertData(
@@ -391,21 +361,17 @@ namespace Hattmakare.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Customers",
+                columns: new[] { "Id", "AddressId", "Email", "FirstName", "HeadMeasurements", "IsDeleted", "LastName", "PhoneNumber" },
+                values: new object[] { 1, 1, "testmejl", "Olof", 0.0, false, "Svensson", "1234567890" });
+
+            migrationBuilder.InsertData(
                 table: "Orders",
                 columns: new[] { "Id", "CustomerId", "EndDate", "OrderStatusId", "Price", "Priority", "StartDate" },
                 values: new object[,]
                 {
                     { 1, 1, new DateOnly(2025, 4, 17), 1, 500m, false, new DateOnly(2025, 4, 16) },
                     { 2, 1, new DateOnly(2025, 4, 17), 2, 600m, true, new DateOnly(2025, 4, 16) }
-                });
-
-            migrationBuilder.InsertData(
-                table: "StandardHats",
-                columns: new[] { "Id", "IsDeleted", "Price", "Quantity", "Size" },
-                values: new object[,]
-                {
-                    { 1, false, 5m, 2, 10 },
-                    { 2, false, 52m, 5, 8 }
                 });
 
             migrationBuilder.InsertData(
@@ -517,12 +483,6 @@ namespace Hattmakare.Migrations
                 name: "OrderHats");
 
             migrationBuilder.DropTable(
-                name: "SpecialHats");
-
-            migrationBuilder.DropTable(
-                name: "StandardHats");
-
-            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
@@ -532,10 +492,10 @@ namespace Hattmakare.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Orders");
+                name: "Hats");
 
             migrationBuilder.DropTable(
-                name: "Hats");
+                name: "Orders");
 
             migrationBuilder.DropTable(
                 name: "Customers");

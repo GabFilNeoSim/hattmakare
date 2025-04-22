@@ -28,14 +28,17 @@ public class HatController : Controller
     [HttpGet]
     public async Task<IActionResult> Index()
     {
-        var hats = await _context.StandardHats
+        var hats = await _context.Hats
              .Where(x => !x.IsDeleted)
-             .Select(x => new StandardHatViewModel
+             .Select(x => new HatViewModel
              {
             Name = x.Name,
             Price = x.Price,
             Quantity = x.Quantity,
             Size = x.Size,
+            Length = x.Length,
+            Depth = x.Depth,
+            Width = x.Width,
             ImageUrl = x.ImageUrl,
             Id = x.Id,
             
@@ -68,12 +71,16 @@ public class HatController : Controller
     [HttpPost("AddHat")]
     public async Task<IActionResult> AddHat(AddHatViewModel newHat)
     {
-        var hat = new StandardHat();
+        var hat = new Hat();
         hat.Name = newHat.Name;
         hat.Size = newHat.Size;
+        hat.Length = newHat.Length;
+        hat.Depth = newHat.Depth;
+        hat.Width = newHat.Width;
         hat.Quantity = newHat.Quantity;
         hat.Price = newHat.Price;
-        
+
+
         var image = await _imageService.UploadImageAsync(newHat.Image);
         hat.ImageUrl = image;
 
@@ -88,13 +95,16 @@ public class HatController : Controller
     [HttpGet("EditHat/{hid}")]
     public async Task<IActionResult> EditHat(int Hid)
     {
-        var hat = await _context.StandardHats.FirstOrDefaultAsync(x => x.Id == Hid);
+        var hat = await _context.Hats.FirstOrDefaultAsync(x => x.Id == Hid);
 
         var model = new EditHatViewModel
         {
             Name = hat.Name,
             Price = hat.Price,
             Size = hat.Size,
+            Length = hat.Length,
+            Depth = hat.Depth,
+            Width = hat.Width,
             Quantity = hat.Quantity
         };
 
@@ -104,10 +114,13 @@ public class HatController : Controller
     [HttpPost("EditHat/{hid}")]
     public async Task<IActionResult> EditHat(EditHatViewModel selectedHat)
     {
-        var hat = await _context.StandardHats.FirstOrDefaultAsync(x => x.Id == selectedHat.Hid);
+        var hat = await _context.Hats.FirstOrDefaultAsync(x => x.Id == selectedHat.Hid);
         hat.Name = selectedHat.Name;
         hat.Price = selectedHat.Price;
         hat.Size = selectedHat.Size;
+        hat.Length = selectedHat.Length;
+        hat.Depth = selectedHat.Depth;
+        hat.Width = selectedHat.Width;
         hat.Quantity = selectedHat.Quantity;
 
         if (selectedHat.Image != null)
@@ -126,7 +139,7 @@ public class HatController : Controller
     public async Task<IActionResult> RemoveHat(int hid)
     {
         _logger.LogWarning("Failed to find: {a}", hid);
-        var hat = await _context.StandardHats.FirstOrDefaultAsync(x => x.Id == hid);
+        var hat = await _context.Hats.FirstOrDefaultAsync(x => x.Id == hid);
         if (hat is null)
         {
             return View("asd");
@@ -150,7 +163,7 @@ public class HatController : Controller
     public IActionResult SearchHat(string searchTerm)
     {
         
-        var allHats = _context.StandardHats.AsEnumerable();  
+        var allHats = _context.Hats.AsEnumerable();  
 
        
         allHats = allHats.Where(h => !h.IsDeleted);
@@ -162,7 +175,7 @@ public class HatController : Controller
         }
 
         
-        var model = allHats.Select(hat => new StandardHatViewModel
+        var model = allHats.Select(hat => new HatViewModel
         {
             Id = hat.Id,
             Name = hat.Name,
