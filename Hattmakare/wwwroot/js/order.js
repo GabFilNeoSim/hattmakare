@@ -63,3 +63,9 @@ function calculatePrice() {
   });
   return price;
 }
+
+$(document).on('click', '#order-hat-all', function (e) {
+    e.preventDefault();
+    let userId = $(this).attr("data-userId");
+    $(".order-hats-input").val(userId);
+});

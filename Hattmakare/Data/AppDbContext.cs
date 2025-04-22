@@ -49,7 +49,7 @@ namespace Hattmakare.Data
             builder.Entity<OrderHat>()
                 .HasOne(x => x.Order)
                 .WithMany(x => x.OrderHats)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<OrderHat>()
                 .HasOne(x => x.Hat)
