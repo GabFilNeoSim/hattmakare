@@ -46,3 +46,12 @@ button.accept-policy {
   white-space: nowrap;
   line-height: 60px;
 }
+
+.nav-item.logout {
+    margin-left: auto;
+}
+.nav-item.logout form button {
+    background: none;
+    border: none;
+    outline: none;
+}

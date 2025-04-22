@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using Hattmakare.Data;
 using Hattmakare.Data.Entities;
+using Hattmakare.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +33,8 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequiredLength = 1;
     options.Password.RequiredUniqueChars = 1;
 });
+
+builder.Services.AddScoped<IImageService, ImageService>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

@@ -20,7 +20,7 @@
                         <span class="login-error" asp-validation-for="Email"></span>
                     </div>
                     <div class="login-form-child-input">
-                        <input type="text" asp-for="Email">
+                        <input class="form-control" type="text" asp-for="Email">
                     </div>
                 </div>
                 <div class="login-form-child">
@@ -29,11 +29,11 @@
                         <span class="login-error" asp-validation-for="Password"></span>
                     </div>
                     <div class="login-form-child-input">
-                        <input type="password" asp-for="Password">
+                        <input class="form-control" type="password" asp-for="Password">
                     </div>
                 </div>
                 <div class="login-form-checkbox">
-                    <input type="checkbox" asp-for="RememberMe">
+                    <input class="checkbox" type="checkbox" asp-for="RememberMe">
                     <label asp-for="RememberMe">Kom ihåg mig</label>
                 </div>
                 <button id="login-submit" type="submit">Logga in</button>

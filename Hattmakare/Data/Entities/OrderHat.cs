@@ -4,10 +4,11 @@ namespace Hattmakare.Data.Entities
 {
     public class OrderHat
     {
+        public int Id { get; set; }
         // Foreign keys
         public int HatId { get; set; }
         public int OrderId { get; set; }
-        public string UserId { get; set; }
+        public string? UserId { get; set; }
 
         // Navigation props
         [ForeignKey(nameof(HatId))]

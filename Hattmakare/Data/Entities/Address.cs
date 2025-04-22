@@ -8,7 +8,11 @@ namespace Hattmakare.Data.Entities
 
         [Required]
         [MaxLength(100)]
-        public string StreetAddress { get; set; }
+        public string BillingAddress { get; set; }
+
+        [Required]
+        [MaxLength(100)]
+        public string DeliveryAddress { get; set; }
 
         [Required]
         [MaxLength(20)]
@@ -16,7 +20,7 @@ namespace Hattmakare.Data.Entities
 
         [Required]
         [MaxLength (100)]
-        public string City { get; set; }
+        public string? City { get; set; }
 
         [Required]
         [MaxLength(100)]

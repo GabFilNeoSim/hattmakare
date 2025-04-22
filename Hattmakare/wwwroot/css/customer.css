@@ -1,0 +1,141 @@
+﻿#customer {
+  display: flex;
+  justify-content: space-between;
+}
+
+#customer.update{
+  align-items: center;
+  flex-direction: column;
+  gap: 24px;
+}
+
+  #customer #customerAdd svg {
+    height: 20px;
+    fill: white;
+  }
+
+  #customer #customerAdd {
+    margin: 0 auto;
+    margin-top: 24px;
+    border: 0;
+    background-color: hsl(0,0%,20%);
+    color: white;
+    display: flex;
+    width: 300px;
+    font-size: 25px;
+    width: fit-content;
+    padding: 8px 24px;
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  #customer #edit svg {
+    display: block;
+  }
+
+
+  #customer .customerList svg {
+    height: 15px;
+  }
+
+  #customer .customerList button {
+    border: 0;
+    background-color: transparent;
+    padding: 0px;
+  }
+
+
+  #customer .customerList {
+    display: flex;
+    flex-direction: column;
+    width: 45%;
+  }
+
+  #customer .customerFields {
+    width: 45%;
+    font-size: 20px;
+    margin-top: 1px;
+    box-shadow: 0px 0px 16px 0px hsla(0,0%,50%, 0.2);
+    border-radius: 8px;
+    padding: 16px;
+  }
+
+  #customer .customerFields form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  #customer .formGroup {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+    #customer .formGroup > * {
+      flex: 1;
+    }
+
+  #customer .formItem {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    min-width: 0;
+  }
+
+  #customer #search {
+    margin-bottom: 4px;
+    width: 80%;
+    display: flex;
+    border: 1px solid black;
+    border-radius: 16px;
+    padding: 2px 8px;
+    input
+
+{
+  flex: 1;
+  padding: 0px;
+  border: none;
+}
+
+input:focus {
+  outline: none;
+  border: none;
+  box-shadow: none;
+}
+
+button {
+  padding: 0px;
+  background-color: transparent;
+  border: none;
+  svg
+
+{
+  height: 100%;
+  width: 32px;
+  padding: 8px;
+}
+
+}
+}
+
+#customer #resetSearch {
+  margin-left: 4px;
+  p
+
+{
+  font-weight: 400;
+  font-size: 14px;
+  margin-bottom: 0px;
+  color: hsl(0,0%, 20%);
+}
+
+button {
+  border-bottom: 1px solid hsl(0,0%, 50%);
+}
+
+}
+

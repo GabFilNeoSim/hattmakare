@@ -11,13 +11,31 @@
         <span asp-validation-for="Name" class="text-danger small"></span>
     </div>
 
-
-    @*   <div class="form-group mb-4">
-        <label asp-for="ImageFile" class="form-label fw-bold">Ladda upp bild</label>
-        <input asp-for="ImageFile" type="file" class="form-control" />
-        <span asp-validation-for="ImageFile" class="text-danger small"></span>
+    <div class="form-group mb-3">
+        <label asp-for="Price" class="form-label fw-bold">Pris</label>
+        <input asp-for="Price" type="number" class="form-control" placeholder="Ange pris i SEK" required />
+        <span asp-validation-for="Price" class="text-danger small"></span>
     </div>
- *@
+
+    <div class="form-group mb-3">
+        <label asp-for="Quantity" class="form-label fw-bold">Antal i lager</label>
+        <input asp-for="Quantity" type="number" class="form-control" placeholder="Hur många finns i lager?" required />
+        <span asp-validation-for="Quantity" class="text-danger small"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="Size" class="form-label fw-bold">Storlek</label>
+        <input asp-for="Size" class="form-control" placeholder="Ange storlek (t.ex. S, M, L, 58cm...)" required />
+        <span asp-validation-for="Size" class="text-danger small"></span>
+    </div>
+
+
+    <div class="form-group mb-4">
+        <label asp-for="Image" class="form-label fw-bold">Ladda upp bild</label>
+        <input asp-for="Image" type="file" class="form-control" />
+        <span asp-validation-for="Image" class="text-danger small"></span>
+    </div>
+
     <div class="text-end">
         <button type="submit" class="btn btn-dark px-4">➕ Spara ändringar</button>
     </div>

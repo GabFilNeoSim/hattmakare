@@ -1,72 +1,81 @@
-using System.Diagnostics;
+using System.Security.Claims;
 using Hattmakare.Data;
+using Hattmakare.Data.Entities;
 using Hattmakare.Models;
 using Hattmakare.Models.Home;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace Hattmakare.Controllers
+namespace Hattmakare.Controllers;
+
+[Authorize]
+public class HomeController : Controller
 {
-    //[Authorize]
-    public class HomeController : Controller
+    private readonly UserManager<User> _userManager;
+    private readonly AppDbContext _appDbContext;
+    public HomeController(AppDbContext appDbContext, UserManager<User> userManager)
     {
-        private readonly ILogger<HomeController> _logger;
-        private readonly AppDbContext _appDbContext;
-        public HomeController(ILogger<HomeController> logger, AppDbContext appDbContext)
+        _userManager = userManager;
+        _appDbContext = appDbContext;
+    }
+
+    public async Task<IActionResult> Index()
+    {
+        string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (userId == null)
         {
-            _logger = logger;
-            _appDbContext = appDbContext;
+            return RedirectToAction("Login", "Auth");
         }
 
-        public IActionResult Index()
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null)
         {
-            return View();
+            return RedirectToAction("Login", "Auth");
         }
 
-        [HttpGet]
-        public JsonResult PopulateCalendar()
+        var model = new HomeIndexViewModel
         {
-
-            // Todo: lägg till villkor där den inloggde användarens ordrar visas
-            var events = _appDbContext.Orders
-                .GroupBy(o => o.EndDate)
-                .Select(g => new
-                {
-                    Title = $"{g.Count()} ordrar",
-                    Start = g.Key.ToString("yyyy-MM-dd")
-                }).ToList();
-
-            return Json(events);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> PopulateCalendarPopUp(DateOnly date)
-        {
-            // Todo: samma som ovan
-            var orders = await _appDbContext.Orders
-            .Where(o => o.EndDate == date)
-            .Select(x => new CalendarPopupViewModel
+            LoggedInUser = new UserViewModel
             {
-                Id = x.Id,
-                CustomerName = $"{x.Customer.FirstName} {x.Customer.LastName}",
-                StartDate = x.StartDate,
-                EndDate = x.EndDate,
-            })
-            .ToListAsync();
+                FirstName = user.FirstName
+            }
+        };
 
-            return PartialView("_CalendarOrdersPopupPartial", orders);
-        }
+        return View(model);
+    }
 
-        public IActionResult Privacy()
+    [HttpGet]
+    public JsonResult PopulateCalendar()
+    {
+        // Todo: lägg till villkor där den inloggde användarens ordrar visas
+        var events = _appDbContext.Orders
+            .GroupBy(o => o.EndDate)
+            .Select(g => new
+            {
+                Title = $"{g.Count()} ordrar",
+                Start = g.Key.ToString("yyyy-MM-dd")
+            }).ToList();
+
+        return Json(events);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> PopulateCalendarPopUp(DateOnly date)
+    {
+        // Todo: samma som ovan
+        var orders = await _appDbContext.Orders
+        .Where(o => o.EndDate == date)
+        .Select(x => new CalendarPopupViewModel
         {
-            return View();
-        }
+            Id = x.Id,
+            CustomerName = $"{x.Customer.FirstName} {x.Customer.LastName}",
+            StartDate = x.StartDate,
+            EndDate = x.EndDate,
+        })
+        .ToListAsync();
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+        return PartialView("_CalendarOrdersPopupPartial", orders);
     }
 }

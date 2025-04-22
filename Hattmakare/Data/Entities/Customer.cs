@@ -9,7 +9,7 @@ namespace Hattmakare.Data.Entities
 
         [Required]
         [MaxLength(50)]
-        public string FirstName { get; set; }
+        public string? FirstName { get; set; }
 
         [Required]
         [MaxLength(50)]
@@ -24,7 +24,7 @@ namespace Hattmakare.Data.Entities
         public string PhoneNumber { get; set; }
 
         // Foreign keys
-        public int AddressId { get; set; }
+        public int? AddressId { get; set; }
 
         // Navigation props
         [ForeignKey(nameof(AddressId))]

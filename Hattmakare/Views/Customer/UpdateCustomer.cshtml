@@ -1,0 +1,69 @@
+﻿@model Hattmakare.Models.Customer.UpdateCustomerViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div id="customer" class="update">
+    <h2>Uppdatera kund</h2>
+
+  <div class="customerFields">
+    <form asp-controller="Customer" asp-action="UpdateCustomer" asp-route-customerId="@Model.Id">
+
+    <div class="formGroup">
+      <div class="formItem">
+        <label for="FirstName">Förnamn: </label>
+        <input type="text" id="firstName" name="firstName" asp-for="FirstName">
+      </div>
+
+      <div class="formItem">
+        <label for="LastName">Efternamn: </label>
+        <input type="text" id="lastName" name="lastName" asp-for="LastName">
+      </div>
+    </div>
+
+      <div class="formItem">
+        <label for="BillingAddress">Faktureringsadress: </label>
+        <input type="text" id="billingAddress" name="billingAddress" asp-for="BillingAddress">
+      </div>
+
+      <div class="formItem">
+        <label for="DeliveryAddress">Leveransadress: </label>
+        <input type="text" id="deliveryAddress" name="deliveryAddress" asp-for="DeliveryAddress">
+      </div>
+
+      <div class="formGroup">
+        <div class="formItem">
+          <label for="City">Stad: </label>
+          <input type="text" id="city" name="city" asp-for="City">
+        </div>
+
+        <div class="formItem">
+          <label for="PostalCode">Postnummer: </label>
+          <input type="text" id="postalCode" name="postalCode" asp-for="PostalCode">
+        </div>
+
+        <div class="formItem">
+          <label for="Country">Land: </label>
+          <input type="text" id="country" name="country" asp-for="Country">
+        </div>
+      </div>
+      <div class="formItem">
+        <label for="Email">Email: </label>
+        <input type="text" id="email" name="email" asp-for="Email">
+      </div>
+
+      <div class="phoneNumber">
+        <label for="Phone">Telefonnummer: </label>
+        <input type="tel" id="visiblePhone" />
+        <input type="hidden" id="fullPhone" name="phone" asp-for="Phone" />
+      </div>
+
+
+      <button type="submit" id="customerAdd">
+        <p>Spara ändringar</p>
+      </button>
+</form>
+</div>
+
+</div>

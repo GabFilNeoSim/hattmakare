@@ -1,6 +1,8 @@
-﻿@using Hattmakare.Models.Hats
+﻿@using Hattmakare.Models.Order;
 
-<div id="hat">
+@model OrderHatsViewModel;
+
+<div id="hat" class="order">
   <div id="hatList">
     <button id="addNewHat">
       <div class="container">
@@ -8,11 +10,21 @@
         <p>Skapa specialhatt</p>
       </div>
     </button>
-    @foreach (HatViewModel hat in Model.Hats)
+    @foreach (var hat in Model.Hats)
     {
-      <div class="hatItem" data-name="@hat.Name">
-        <img src="/assets/@hat.ImageUrl" />
-        <h2>@hat.Name</h2>
+      <div class="hatItem" data-name="@hat.Name" data-id="@hat.Id">
+        <img src="/assets/hats/@(hat.ImageUrl ?? "placeholder-image.png")" />
+        <h2 class="name">@hat.Name</h2>
+        <div class="details">
+          <div class="item">
+            <p>Storlek: </p>
+            <p class="size">10</p>
+          </div>
+          <div class="item">
+            <p>Pris: </p>
+            <p class="price">199:-</p>
+          </div>
+        </div>
         <div class="counter">
           <button class="count-remove">-</button>
           <p class="count">0</p>
@@ -21,7 +33,12 @@
       </div>
     }
   </div>
-  <div id="hatPopup">
+  <div id="cartContainer">
+    <div id="cart">
+    </div>
+    <p id="total">Total: 0:- </p>
+    <button>
+      go to order
+    </button>
   </div>
-
-</div>
+  </div>

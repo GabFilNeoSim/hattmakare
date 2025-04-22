@@ -1,0 +1,42 @@
+﻿@using Hattmakare.Models.Order
+
+@model List<OrderListViewModel>
+
+<div id="boards-container">
+    @foreach(var board in Model) {
+        <div class="boards-wrapper">
+            <h3>@board.Status</h3>
+            <div class="board" data-board-id="@board.Id" ondragover="dragoverHandler(event)" ondrop="dropHandler(event)">
+                @foreach (var order in board.Orders)
+                {
+                    @* <a asp-controller="Order" asp-action="EditOrder" asp-route-oid="@order.Id" class="board-item" data-item-id="@order.Id" draggable="true" ondragstart="dragstartHandler(event)"> *@
+                    <a class="board-item" data-item-id="@order.Id" draggable="true" ondragstart="dragstartHandler(event)">
+                        @if (order.Priority)
+                        {
+                            <div class="item-prio">⚡</div>
+                        }
+                        <div class="item-header">
+                            <div class="item-id">Order #@order.Id</div>
+                            <div class="item-dates">@order.StartDate - @order.EndDate</div>
+                        </div>
+                        <div class="item-managers">
+                            @if (order.Managers.Count > 0)
+                            {
+                                @foreach (var name in order.Managers)
+                                {
+                                    <div class="item-manager">
+                                        <p>@name</p>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <i>Inga hanterare</i>
+                            }
+                        </div>
+                    </a>
+                }
+            </div>
+        </div>
+    }
+</div>
