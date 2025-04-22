@@ -18,49 +18,6 @@ public class AuthController : Controller
         _signInManager = signInManager; 
     }
 
-    [HttpGet("register")]
-    public async Task<IActionResult> Register()
-    {
-        var model = new AddUserViewModel();
-        return View(model);
-    }
-
-    [HttpPost("register")]
-    public async Task<IActionResult> Register(AddUserViewModel model)
-    {
-        if (!ModelState.IsValid)
-        {
-            return View(model);
-        }
-
-        var newUser = new User
-        {
-            FirstName = model.FirstName,
-            LastName = model.LastName,
-            UserName = model.Email,
-            Email = model.Email
-        };
-
-        var result = await _userManager.CreateAsync(newUser, model.Password);
-        if (!result.Succeeded)
-        {
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError(string.Empty, error.Description);
-            }
-            return View(model);
-        }
-
-        if (model.IsAdmin)
-        {
-            await _userManager.AddToRoleAsync(newUser, "Admin");
-        }
-
-        await _signInManager.SignInAsync(newUser, isPersistent: false);
-
-        return RedirectToAction("Index", "Home");
-    }
-
     [HttpGet("login")]
     public IActionResult Login() => View(new LoginViewModel());
 
