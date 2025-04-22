@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hattmakare.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250422090826_nyHatt")]
-    partial class nyHatt
+    [Migration("20250422125518_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -659,7 +659,7 @@ namespace Hattmakare.Migrations
                     b.HasOne("Hattmakare.Data.Entities.Order", "Order")
                         .WithMany("OrderHats")
                         .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Hattmakare.Data.Entities.User", "User")
