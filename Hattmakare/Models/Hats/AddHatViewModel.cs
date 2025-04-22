@@ -9,7 +9,10 @@ public class AddHatViewModel
     [MaxLength(100)]
     public string Name { get; set; }
     public int Size { get; set; }
-   
+    public double Length { get; set; }
+    public double Width { get; set; }
+    public double Depth { get; set; }
+
     [Required(ErrorMessage = "Please enter a price")]
     [Range(1, double.MaxValue, ErrorMessage = "The price must be 0 or higher")]
     public decimal Price { get; set; }
