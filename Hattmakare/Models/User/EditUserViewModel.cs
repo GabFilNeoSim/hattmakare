@@ -1,9 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Hattmakare.Models.Auth;
+namespace Hattmakare.Models.User;
 
-public class RegisterViewModel
+public class EditUserViewModel
 {
+    public string Id { get; set; }
+
     [Required(ErrorMessage = "Skriv in ett förnamn")]
     [RegularExpression("^[a-zA-ZåäöÅÄÖ]+$", ErrorMessage = "Endast bokstäver är tillåtna")]
     [StringLength(50)]
@@ -19,12 +21,5 @@ public class RegisterViewModel
     [DataType(DataType.EmailAddress)]
     public string Email { get; set; }
 
-    [Required(ErrorMessage = "Skriv in ett lösenord")]
-    [DataType(DataType.Password)]
-    public string Password { get; set; }
-
-    [Required(ErrorMessage = "Skriv in ett bekräftelselösenord")]
-    [DataType(DataType.Password)]
-    [Compare("Password", ErrorMessage = "Båda lösenorden måste matcha")]
-    public string ConfirmPassword { get; set; }
+    public bool IsAdmin { get; set; } = false;
 }
