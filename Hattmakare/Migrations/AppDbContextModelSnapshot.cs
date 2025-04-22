@@ -128,6 +128,17 @@ namespace Hattmakare.Migrations
                             IsDeleted = false,
                             LastName = "Svensson",
                             PhoneNumber = "1234567890"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AddressId = 1,
+                            Email = "testmejl",
+                            FirstName = "Jan",
+                            HeadMeasurements = 0.0,
+                            IsDeleted = false,
+                            LastName = "Jansson",
+                            PhoneNumber = "1234567890"
                         });
                 });
 
@@ -309,7 +320,7 @@ namespace Hattmakare.Migrations
                         new
                         {
                             Id = 2,
-                            CustomerId = 1,
+                            CustomerId = 2,
                             EndDate = new DateOnly(2025, 4, 17),
                             OrderStatusId = 2,
                             Price = 600m,

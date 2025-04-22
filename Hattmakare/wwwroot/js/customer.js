@@ -31,8 +31,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-
-
 //Ändra kundinfo
 document.querySelectorAll('.edit-btn').forEach(button => {
     button.addEventListener('click', function () {
@@ -49,3 +47,5 @@ document.querySelectorAll('.edit-btn').forEach(button => {
 
     });
 });
+
+

@@ -8,6 +8,7 @@
     <h2>Uppdatera kund</h2>
 
   <div class="customerFields">
+        <div asp-validation-summary="All" class="text-danger"></div>
     <form asp-controller="Customer" asp-action="UpdateCustomer" asp-route-customerId="@Model.Id">
 
     <div class="formGroup">
@@ -19,6 +20,11 @@
       <div class="formItem">
         <label for="LastName">Efternamn: </label>
         <input type="text" id="lastName" name="lastName" asp-for="LastName">
+      </div>
+
+      <div class="formItem">
+        <label for="HeadMeasurements">Huvudmått</label>
+        <input type="number" id="headMesaurements" name="headMeasurements" asp-for="HeadMesurements" />
       </div>
     </div>
 

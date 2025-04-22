@@ -4,39 +4,44 @@ namespace Hattmakare.Models.Customer;
 
 public class AddCustomerViewModel
 {   
-    [Required(ErrorMessage = "Please enter a firstname")]
+    [Required(ErrorMessage = "Vänligen ange ett förnamn")]
     [MaxLength(50)]
     public string FirstName { get; set; }
 
-    [Required(ErrorMessage = "Please enter a lastname")]
+    [Required(ErrorMessage = "Vänligen ange ett efternamn")]
     [MaxLength(50)]
     public string LastName { get; set; }
 
-    [Required(ErrorMessage = "Please enter a billing address")]
+    [Required(ErrorMessage = "Vänligen ange ett huvudmått")]
+    public double HeadMeasurements { get; set; }
+
+
+
+    [Required(ErrorMessage = "Vänligen ange en faktureringsadress")]
     [MaxLength(100)]
     public string BillingAddress { get; set; }
 
-    [Required(ErrorMessage = "Please enter a delivery address")]
+    [Required(ErrorMessage = "Vänligen ange en leveransadress ")]
     [MaxLength(100)]
     public string DeliveryAddress { get; set; }
 
-    [Required(ErrorMessage = "Please enter a city")]
+    [Required(ErrorMessage = "Vänligen ange ett land")]
     [MaxLength(100)]
     public string? City { get; set; }
 
-    [Required(ErrorMessage = "Please enter a postal code")]
+    [Required(ErrorMessage = "Vänligen ange en postnummer")]
     [MaxLength(20)]
     public string PostalCode { get; set; }
 
-    [Required(ErrorMessage = "Please enter a country")]
+    [Required(ErrorMessage = "Vänligen ange ett land")]
     [MaxLength(100)]
     public string Country { get; set; }
 
-    [Required(ErrorMessage = "Please enter an email")]
-    [EmailAddress]
+    [Required(ErrorMessage = "Vänligen ange en epost")]
+    [EmailAddress(ErrorMessage = "Epost har ett ogiltigt format")]
     public string Email { get; set; }
 
-    [Required(ErrorMessage = "Please enter a phone number")]
+    [Required(ErrorMessage = "Vänligen ange ett telefonnummer")]
     [Phone]
     public string Phone { get; set; }
 }

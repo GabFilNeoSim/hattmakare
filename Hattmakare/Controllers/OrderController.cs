@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Hattmakare.Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Hattmakare.Controllers;
 [Authorize]
@@ -54,31 +55,72 @@ public class OrderController : Controller
 
 
     [HttpGet]
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string searchQuery)
     {
-        var viewModel = await _context.OrderStatuses.Select(x => new OrderListViewModel
+        IQueryable<OrderListViewModel> ordersQuery;
+
+        if (!string.IsNullOrWhiteSpace(searchQuery))
         {
-            Id = x.Id,
-            Status = x.Name,
-            Orders = x.Orders.Select(y => new OrderViewModel
-            {
-                Id = y.Id,
-                Customer = y.Customer.FirstName + " " + y.Customer.LastName,
-                StartDate = y.StartDate,
-                EndDate = y.EndDate,
-                Price = y.Price,
-                Priority = y.Priority,
-                Status = y.OrderStatus.Name,
-                Managers = y.OrderHats
-                .Where(z => z.User != null)
-                .Select(z => $"{z.User.FirstName[0].ToString().ToUpper()}{z.User.LastName[0].ToString().ToUpper()}")
-                .Distinct()
-                .ToList(),
-            }).ToList()
-        }).ToListAsync();
+            
+            ordersQuery = _context.OrderStatuses
+                .Select(x => new OrderListViewModel
+                {
+                    Id = x.Id,
+                    Status = x.Name,
+                    Orders = x.Orders
+                        .Where(y => y.Customer.FirstName.Contains(searchQuery) || y.Customer.LastName.Contains(searchQuery)) 
+                        .Select(y => new OrderViewModel
+                        {
+                            Id = y.Id,
+                            Customer = y.Customer.FirstName + " " + y.Customer.LastName,
+                            StartDate = y.StartDate,
+                            EndDate = y.EndDate,
+                            Price = y.Price,
+                            Priority = y.Priority,
+                            Status = y.OrderStatus.Name,
+                            Managers = y.OrderHats
+                                .Where(z => z.User != null)
+                                .Select(z => $"{z.User.FirstName[0].ToString().ToUpper()}{z.User.LastName[0].ToString().ToUpper()}")
+                                .Distinct()
+                                .ToList(),
+                        }).ToList()
+                });
+        }
+        else
+        {
+            
+            ordersQuery = _context.OrderStatuses
+                .Select(x => new OrderListViewModel
+                {
+                    Id = x.Id,
+                    Status = x.Name,
+                    Orders = x.Orders
+                        .Select(y => new OrderViewModel
+                        {
+                            Id = y.Id,
+                            Customer = y.Customer.FirstName + " " + y.Customer.LastName,
+                            StartDate = y.StartDate,
+                            EndDate = y.EndDate,
+                            Price = y.Price,
+                            Priority = y.Priority,
+                            Status = y.OrderStatus.Name,
+                            Managers = y.OrderHats
+                                .Where(z => z.User != null)
+                                .Select(z => $"{z.User.FirstName[0].ToString().ToUpper()}{z.User.LastName[0].ToString().ToUpper()}")
+                                .Distinct()
+                                .ToList(),
+                        }).ToList()
+                });
+        }
+
+       
+        var viewModel = await ordersQuery.ToListAsync();
 
         return View(viewModel);
     }
+
+
+
 
     [HttpPost("{oid}/status")]
     public async Task<IActionResult> EditOrderStatus(int oid, int sid)
@@ -193,6 +235,29 @@ public class OrderController : Controller
 
         return View(model);
     }
+
+
+
+    //[HttpGet]
+    //public IActionResult SearchOrders(string searchQuery)
+    //{
+    //    var orders = _context.Orders
+    //        .Where(o => o.Customer.FirstName.Contains(searchQuery) || o.Customer.LastName.Contains(searchQuery))
+    //        .Include(o => o.Customer)
+    //        .ToList();
+
+    //    var model = orders.Select(o => new OrderViewModel
+    //    {
+    //        Id = o.Id,
+    //        Status = o.OrderStatus?.Name,
+    //        StartDate = o.StartDate,
+    //        EndDate = o.EndDate,
+            
+
+    //    }).ToList();
+    //    return View("Index", model);
+    //}
+
 
  
 }

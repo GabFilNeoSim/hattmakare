@@ -279,6 +279,34 @@
         line-height: 10px;
       }
 
+}
     }
   }
+    
+#search{
+    display: flex; 
+    margin: 10px;
+    
+}
+
+.form-control {
+    width: 30%;
+}
+
+
+.searchReset #resetSearch {
+    margin-left: 4px;
+    font-weight: 400;
+    font-size: 14px;
+}
+
+.searchReset p {
+    color: hsl(0,0%, 20%);
+}
+
+.searchReset button {
+    border: none;
+    background-color: transparent;
+    border-bottom: 1px solid hsl(0,0%, 50%);
+    margin-bottom: 7px; 
 }
