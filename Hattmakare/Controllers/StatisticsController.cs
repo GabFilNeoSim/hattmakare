@@ -20,7 +20,7 @@ namespace Hattmakare.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Index(int? customerId)
+        public async Task<ActionResult> Index(int? customerId, int? hatId)
         {
             var orders = await _context.Orders
                 .Include(o => o.Customer)
@@ -36,11 +36,20 @@ namespace Hattmakare.Controllers
             }
 
             var customerList = await _context.Customers
-                .Where(c => !c.IsDeleted)
+                //.Where(c => !c.IsDeleted)
                 .Select(c => new SelectListItem
                 {
                     Value = c.Id.ToString(),
                     Text = c.FirstName + " " + c.LastName
+                })
+                .ToListAsync();
+
+            var hatList = await _context.Hats
+                //.Where(h => !h.IsDeleted)
+                .Select(h => new SelectListItem
+                {
+                    Value = h.Id.ToString(),
+                    Text = h.Name
                 })
                 .ToListAsync();
 
@@ -55,12 +64,37 @@ namespace Hattmakare.Controllers
                 })
                 .ToList();
 
+            var today = DateTime.Today;
+            var startDate = new DateTime(today.Year, today.Month, 1);
+            var endDate = startDate.AddMonths(1).AddDays(-1);
+
+            // Daglig försäljning för linjediagrammet
+            var dailySales = Enumerable.Range(0, (endDate - startDate).Days + 1)
+                .Select(i =>
+                {
+                    var date = startDate.AddDays(i).Date;
+                    return new
+                    {
+                        Date = date.ToString("yyyy-MM-dd"),
+                        Total = orders
+                            .SelectMany(o => o.OrderHats)
+                            .Where(oh => oh.Order.StartDate == DateOnly.FromDateTime(date))
+                            .Count()
+                    };
+                })
+                .ToList();
+
             var model = new StatisticsViewModel
             {
                 CustomerId = customerId,
                 Customers = customerList,
+                HatId = hatId,
+                Hats = hatList,
                 HatNames = result.Select(r => r.HatName).ToList(),
-                Sales = result.Select(r => r.TotalSold).ToList()
+                Sales = result.Select(r => r.TotalSold).ToList(),
+
+                DailyLabels = dailySales.Select(d => d.Date).ToList(),
+                DailySales = dailySales.Select(d => d.Total).ToList()
             };
 
             return View(model);

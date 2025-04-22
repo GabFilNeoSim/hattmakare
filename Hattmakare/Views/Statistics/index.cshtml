@@ -14,10 +14,38 @@
     </select>
 </form>
 
-<canvas id="hatChart"
-        width="400"
-        height="200"
-        data-hatnames='@Html.Raw(JsonSerializer.Serialize(Model.HatNames))'
-        data-sales='@Html.Raw(JsonSerializer.Serialize(Model.Sales))'>
-</canvas>
+<form method="get">
+    <label for="HatId">Välj hatt:</label>
+    <select asp-for="HatId"
+            asp-items="Model.Hats"
+            class="form-control">
+        <option value="">Alla hattar</option>
+    </select>
+</form>
 
+<div class="btn-group mb-3" role="group">
+    <button type="button" class="btn btn-outline-primary range-btn active" data-range="month">Månad</button>
+    <button type="button" class="btn btn-outline-primary range-btn" data-range="quarter">Kvartal</button>
+    <button type="button" class="btn btn-outline-primary range-btn" data-range="year">År</button>
+</div>
+
+<div class="chart-container">
+    <canvas id="hatChart"
+        data-hatnames='@Html.Raw(JsonSerializer.Serialize(Model.HatNames))'
+        data-sales='@Html.Raw(JsonSerializer.Serialize(Model.Sales))'
+        data-dailylabels='@Html.Raw(JsonSerializer.Serialize(Model.DailyLabels))'
+        data-dailysales='@Html.Raw(JsonSerializer.Serialize(Model.DailySales))'>
+    </canvas>
+</div>
+
+<div class="btn-group mb-3" role="group" aria-label="Diagramtyp">
+    <button type="button" class="btn btn-outline-primary chart-btn active" data-type="bar" title="Stapeldiagram">
+        Stapeldiagram
+    </button>
+    <button type="button" class="btn btn-outline-primary chart-btn" data-type="pie" title="Cirkeldiagram">
+        Cirkeldiagram
+    </button>
+    <button type="button" class="btn btn-outline-primary chart-btn" data-type="line" title="Linjediagram">
+        Linjediagram
+    </button>
+</div>

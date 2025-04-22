@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hattmakare.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250422125518_init")]
+    [Migration("20250422145942_init")]
     partial class init
     {
         /// <inheritdoc />
