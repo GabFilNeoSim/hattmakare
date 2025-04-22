@@ -1,0 +1,23 @@
+﻿@using System.Text.Json;
+@using Hattmakare.Models.Statistics
+
+@model StatisticsViewModel;
+
+<h2>Försäljningsstatistik</h2>
+
+<form method="get">
+    <label for="CustomerId">Välj kund:</label>
+    <select asp-for="CustomerId"
+            asp-items="Model.Customers"
+            class="form-control">
+        <option value="">Alla kunder</option>
+    </select>
+</form>
+
+<canvas id="hatChart"
+        width="400"
+        height="200"
+        data-hatnames='@Html.Raw(JsonSerializer.Serialize(Model.HatNames))'
+        data-sales='@Html.Raw(JsonSerializer.Serialize(Model.Sales))'>
+</canvas>
+

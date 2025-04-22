@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hattmakare.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250422085417_init")]
+    [Migration("20250422112630_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -180,6 +180,36 @@ namespace Hattmakare.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Hats");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Comment = "Testcomment",
+                            Depth = 0.0,
+                            IsDeleted = false,
+                            IsSpecial = false,
+                            Length = 0.0,
+                            Name = "Studenthatt",
+                            Price = 5m,
+                            Quantity = 2,
+                            Size = 10,
+                            Width = 0.0
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Comment = "Testcomment",
+                            Depth = 0.0,
+                            IsDeleted = false,
+                            IsSpecial = false,
+                            Length = 0.0,
+                            Name = "Kaptenshatt",
+                            Price = 52m,
+                            Quantity = 5,
+                            Size = 8,
+                            Width = 0.0
+                        });
                 });
 
             modelBuilder.Entity("Hattmakare.Data.Entities.HatMaterial", b =>
@@ -317,6 +347,20 @@ namespace Hattmakare.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("OrderHats");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            HatId = 1,
+                            OrderId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            HatId = 2,
+                            OrderId = 1
+                        });
                 });
 
             modelBuilder.Entity("Hattmakare.Data.Entities.OrderStatus", b =>

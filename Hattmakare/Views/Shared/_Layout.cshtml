@@ -48,6 +48,9 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-controller="Material" asp-action="Index">Material</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Statistics" asp-action="Index">Statistik</a>
+                            </li>
                             <li class="nav-item logout">
                                 <form class="nav-link text-dark" asp-controller="Auth" asp-action="Logout" method="post">
                                     <button>Logga ut</button>
@@ -89,11 +92,13 @@
     <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.1/build/js/intlTelInput.min.js"></script>
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js'></script>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/locales-all.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/hat.js" asp-append-version="true"></script>
     <script src="~/js/calendar.js" asp-append-version="true"></script>
     <script src="~/js/orderboard.js" asp-append-version="true"></script>
     <script src="~/js/order.js" asp-append-version="true"></script>
+    <script src="~/js/statistics.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

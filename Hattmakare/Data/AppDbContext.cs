@@ -102,6 +102,45 @@ namespace Hattmakare.Data
                     Id = 3,
                     Name = "Klar"
                 });
+
+            builder.Entity<Hat>()
+               .HasData(new Hat
+               {
+                   Id = 1,
+                   Comment = "Testcomment",
+                   ImageUrl = null,
+                   IsDeleted = false,
+                   Name = "Studenthatt",
+                   Price = 5,
+                   Quantity = 2,
+                   Size = 10
+               }, new Hat
+               {
+                   Id = 2,
+                   Comment = "Testcomment",
+                   ImageUrl = null,
+                   IsDeleted = false,
+                   Name = "Kaptenshatt",
+                   Price = 52,
+                   Quantity = 5,
+                   Size = 8
+               });
+
+            builder.Entity<OrderHat>()
+                .HasData(new OrderHat
+                {
+                    Id = 1,
+                    HatId = 1,
+                    OrderId = 1,
+                    UserId = null,
+                }, new OrderHat
+                {
+                    Id = 2,
+                    HatId = 2,
+                    OrderId = 1,
+                    UserId = null
+                });
+
             builder.Entity<Order>()
                 .HasData(
                     new Order
