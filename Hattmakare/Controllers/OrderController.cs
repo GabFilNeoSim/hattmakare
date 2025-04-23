@@ -8,18 +8,20 @@ using Microsoft.AspNetCore.Authorization;
 using Hattmakare.Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Hattmakare.Services;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-
 namespace Hattmakare.Controllers;
 [Authorize]
 [Route("order")]
 public class OrderController : Controller 
 {
     private readonly AppDbContext _context;
+    private readonly IImageService _imageService;
 
-    public OrderController(AppDbContext context)
+    public OrderController(AppDbContext context, IImageService imageService)
     {
         _context = context;
+        _imageService = imageService;
     }
 
     [HttpGet("waybill")]
@@ -247,11 +249,11 @@ public class OrderController : Controller
     }
 
     [HttpGet("new")]
-    public async Task<IActionResult> Hats()
+    public async Task<IActionResult> New()
     {
         var model = new NewOrderViewModel
         {
-            Hats = await _context.Hats.Where(h => h.IsDeleted == false).Select(x =>
+            Hats = await _context.Hats.Where(h => h.IsDeleted == false && h.HatType.Name == "StandardHatt").Select(x =>
                 new HatViewModel
                 {
                     Id = x.Id,
@@ -261,14 +263,40 @@ public class OrderController : Controller
                     Comment = x.Comment,
                     ImageUrl = x.ImageUrl
                 }
-            ).ToListAsync(),
-        };
 
+            ).ToListAsync(),
+            Customers = await _context.Customers
+            .Select(c => new SelectListItem
+            {
+                Value = c.Id.ToString(),
+                Text = c.FirstName + " " + c.LastName
+            }).ToListAsync()
+        };
         return View(model);
     }
+  [HttpPost("AddSpecialHat")]
+  public async Task<IActionResult> AddSpecialHat([FromForm] AddHatViewModel newHat)
+  {
+    var hat = new Hat();
+    hat.Name = newHat.Name;
+    hat.Size = newHat.Size ?? 0;
+    hat.Length = newHat.Length ?? 0;
+    hat.Depth = newHat.Depth ?? 0;
+    hat.Width = newHat.Width ?? 0;
+    hat.Quantity = newHat.Quantity;
+    hat.Price = newHat.Price ?? 0;
+    hat.Comment = newHat.Comment ?? "";
+    hat.HatType = await _context.HatTypes
+        .FirstOrDefaultAsync(x => x.Name == "SpecialHatt");
 
 
+    var image = await _imageService.UploadImageAsync(newHat.Image);
+    
+    hat.ImageUrl = image;
 
+    await _context.Hats.AddAsync(hat);
+    await _context.SaveChangesAsync();
 
-
+    return Ok(hat.Id);
+  }
 }
