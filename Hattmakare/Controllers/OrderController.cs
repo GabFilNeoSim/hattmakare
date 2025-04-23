@@ -98,8 +98,8 @@ public class OrderController : Controller
                     {
                         Id = y.Id,
                         Customer = y.Customer.FirstName + " " + y.Customer.LastName,
-                        StartDate = y.StartDate,
-                        EndDate = y.EndDate,
+                        StartDate = y.StartDate.ToString("MM/dd/yyyy"),
+                        EndDate = y.EndDate.ToString("MM/dd/yyyy"),
                         Price = y.Price,
                         Priority = y.Priority,
                         Status = y.OrderStatus.Name,
@@ -170,8 +170,8 @@ public class OrderController : Controller
             Id = order.Id,
             CustomerName = order.Customer?.FirstName + " " + order.Customer?.LastName,
             CustomerPhone = order.Customer?.PhoneNumber,
-            StartDate = order.StartDate,
-            EndDate = order.EndDate,
+            StartDate = order.StartDate.ToString("MM/dd/yyyy"),
+            EndDate = order.EndDate.ToString("MM/dd/yyyy"),
             Price = order.Price,
             Priority = order.Priority,
             Status = order.OrderStatus?.Name,
@@ -206,8 +206,8 @@ public class OrderController : Controller
         var order = await _context.Orders.Where(x => x.Id == oid).FirstOrDefaultAsync();
         if (order is null) return NotFound();
 
-        order.StartDate = request.StartDate;
-        order.EndDate = request.EndDate;
+        order.StartDate = DateTime.Parse(request.StartDate);
+        order.EndDate = DateTime.Parse(request.EndDate);
         order.Priority = request.Priority;
 
 

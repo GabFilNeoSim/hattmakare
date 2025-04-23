@@ -8,8 +8,8 @@ namespace Hattmakare.Data.Entities
         public int Id { get; set; }
         public bool Priority { get; set; } = false;
         [Required]
-        public DateOnly StartDate { get; set; }
-        public DateOnly EndDate { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
         public decimal Price { get; set; }
        
 

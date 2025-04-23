@@ -170,7 +170,22 @@ namespace Hattmakare.Data
                     HatId = 2,
                     OrderId = 1,
                     UserId = null
-                });
+                },
+                new OrderHat
+                {
+                    Id = 3,
+                    HatId = 2,
+                    OrderId = 2,
+                    UserId = null
+                },
+                new OrderHat
+                {
+                    Id = 4,
+                    HatId = 2,
+                    OrderId = 3,
+                    UserId = null
+                }
+                );
 
             //builder.Entity<HatMaterial>()
             //    .HasData(
@@ -207,8 +222,8 @@ namespace Hattmakare.Data
                         Id = 1,
                         CustomerId = 1,
                         OrderStatusId = 1,
-                        StartDate = new DateOnly(2025, 04, 16),
-                        EndDate = new DateOnly(2025, 04, 17),
+                        StartDate = new DateTime(2025, 04, 16),
+                        EndDate = new DateTime(2025, 04, 17),
                         Priority = false,
                         Price = 500,
                         
@@ -218,11 +233,22 @@ namespace Hattmakare.Data
                         Id = 2,
                         CustomerId = 2,
                         OrderStatusId = 2,
-                        StartDate = new DateOnly(2025, 04, 16),
-                        EndDate = new DateOnly(2025, 04, 17),
+                        StartDate = new DateTime(2025, 04, 16),
+                        EndDate = new DateTime(2025, 04, 17),
                         Priority = true,
                         Price = 600
                         
+                    },
+                    new Order
+                    {
+                        Id = 3,
+                        CustomerId = 2,
+                        OrderStatusId = 2,
+                        StartDate = new DateTime(2025, 04, 16),
+                        EndDate = new DateTime(2025, 04, 17),
+                        Priority = true,
+                        Price = 600
+
                     }
                 );
         }
