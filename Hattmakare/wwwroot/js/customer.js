@@ -1,8 +1,4 @@
-﻿function confirmDelete() {
-    return confirm("Do you want to delete this costumer from the register?");
-}
-
-//landskod för telefonnummer 
+﻿//landskod för telefonnummer 
 document.addEventListener("DOMContentLoaded", function () {
     const visibleInput = document.querySelector("#visiblePhone");
     const hiddenInput = document.querySelector("#fullPhone");
@@ -31,8 +27,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-
-
 //Ändra kundinfo
 document.querySelectorAll('.edit-btn').forEach(button => {
     button.addEventListener('click', function () {
@@ -49,3 +43,5 @@ document.querySelectorAll('.edit-btn').forEach(button => {
 
     });
 });
+
+

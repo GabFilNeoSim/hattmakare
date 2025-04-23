@@ -1,5 +1,6 @@
 ﻿using Hattmakare.Data;
 using Hattmakare.Models.Hats;
+using Hattmakare.Models.Material;
 using Microsoft.AspNetCore.Mvc;
 using Hattmakare.Models.Order;
 using Microsoft.EntityFrameworkCore;
@@ -7,7 +8,11 @@ using Microsoft.AspNetCore.Authorization;
 using Hattmakare.Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
+<<<<<<< HEAD
 using Hattmakare.Services;
+=======
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+>>>>>>> main
 
 namespace Hattmakare.Controllers;
 [Authorize]
@@ -47,6 +52,7 @@ public class OrderController : Controller
             address = "Hattmakarvägen 1<br />702 52 Örebro",
             sender = sender,
             reciver = order.Customer,
+            IsPriority = order.Priority,
             price = totalPrice,
             weight = 2,
             OrderHats = order.OrderHats.ToList()
@@ -57,33 +63,79 @@ public class OrderController : Controller
 
 
     [HttpGet]
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string searchQuery, int? HatId)
     {
-        var viewModel = await _context.OrderStatuses.Select(x => new OrderListViewModel
+        var hatNameList = await _context.HatTypes
+         .Select(x => new SelectListItem
+         {
+             Value = x.Id.ToString(),
+             Text = x.Name,
+         })
+         .ToListAsync();
+
+
+        var filteredOrders = _context.Orders
+      .Include(o => o.Customer)
+      .Include(o => o.OrderStatus)
+      .Include(o => o.OrderHats).ThenInclude(oh => oh.Hat)
+      .Include(o => o.OrderHats).ThenInclude(oh => oh.User)
+      .AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(searchQuery))
         {
-            Id = x.Id,
-            Status = x.Name,
-            Orders = x.Orders.Select(y => new OrderViewModel
+            filteredOrders = filteredOrders.Where(o =>
+                (o.Customer.FirstName + " " + o.Customer.LastName).ToLower().Contains(searchQuery.ToLower()));
+        }
+
+        if (HatId.HasValue)
+        {
+            filteredOrders = filteredOrders.Where(o =>
+                o.OrderHats.Any(h => h.Hat.HatTypeId == HatId));
+        }
+
+        var ordersQuery = await _context.OrderStatuses
+            .Select(s => new OrderListViewModel
             {
-                Id = y.Id,
-                Customer = y.Customer.FirstName + " " + y.Customer.LastName,
-                StartDate = y.StartDate,
-                EndDate = y.EndDate,
-                Price = y.Price,
-                Priority = y.Priority,
-                Status = y.OrderStatus.Name,
-                Managers = y.OrderHats
-                .Where(z => z.User != null)
-                .Select(z => $"{z.User.FirstName[0].ToString().ToUpper()}{z.User.LastName[0].ToString().ToUpper()}")
-                .Distinct()
-                .ToList(),
-            }).ToList()
-        }).ToListAsync();
+                Id = s.Id,
+                Status = s.Name,
+                Orders = filteredOrders
+                    .Where(o => o.OrderStatusId == s.Id)
+                    .Select(y => new OrderViewModel
+                    {
+                        Id = y.Id,
+                        Customer = y.Customer.FirstName + " " + y.Customer.LastName,
+                        StartDate = y.StartDate.ToString("MM/dd/yyyy"),
+                        EndDate = y.EndDate.ToString("MM/dd/yyyy"),
+                        Price = y.Price,
+                        Priority = y.Priority,
+                        Status = y.OrderStatus.Name,
+                        Managers = y.OrderHats
+                            .Where(z => z.User != null)
+                            .Select(z => $"{z.User.FirstName[0].ToString().ToUpper()}{z.User.LastName[0].ToString().ToUpper()}")
+                            .Distinct()
+                            .ToList(),
+                    }).ToList()
+            })
+            .ToListAsync();
+
+
+        var viewModel = new OrderIndexViewModel
+        {
+            HatNames = hatNameList,
+            HatId = HatId ?? 0,
+            OrderItems = ordersQuery
+        };
 
         return View(viewModel);
     }
 
-    [HttpPost("{oid}/status")]
+
+
+
+
+
+
+        [HttpPost("{oid}/status")]
     public async Task<IActionResult> EditOrderStatus(int oid, int sid)
     {
         var order = await _context.Orders.SingleOrDefaultAsync(x => x.Id == oid);
@@ -124,8 +176,8 @@ public class OrderController : Controller
             Id = order.Id,
             CustomerName = order.Customer?.FirstName + " " + order.Customer?.LastName,
             CustomerPhone = order.Customer?.PhoneNumber,
-            StartDate = order.StartDate,
-            EndDate = order.EndDate,
+            StartDate = order.StartDate.ToString("MM/dd/yyyy"),
+            EndDate = order.EndDate.ToString("MM/dd/yyyy"),
             Price = order.Price,
             Priority = order.Priority,
             Status = order.OrderStatus?.Name,
@@ -134,7 +186,18 @@ public class OrderController : Controller
                 HatId = x.HatId,
                 HatName = x.Hat.Name,
                 HatImageUrl = x.Hat.ImageUrl ?? "/assets/hats/placeholder-image.png",
-                UserId = x.UserId
+                UserId = x.UserId,
+                Depth = x.Hat.Depth,
+                Length = x.Hat.Length,
+                Price = x.Hat.Price,
+                Size = x.Hat.Size,
+                Width = x.Hat.Width,
+                Materials = x.Hat.HatMaterials.Select(y => new OrderHatMaterialViewModel
+                {
+                    Name = y.Material.Name,
+                    Unit = y.Material.Unit,
+                    Amount = y.Quantity
+                }).ToList()
             }).ToList(),
             Users = users
         };
@@ -149,8 +212,8 @@ public class OrderController : Controller
         var order = await _context.Orders.Where(x => x.Id == oid).FirstOrDefaultAsync();
         if (order is null) return NotFound();
 
-        order.StartDate = request.StartDate;
-        order.EndDate = request.EndDate;
+        order.StartDate = DateTime.Parse(request.StartDate);
+        order.EndDate = DateTime.Parse(request.EndDate);
         order.Priority = request.Priority;
 
 
@@ -216,6 +279,7 @@ public class OrderController : Controller
         return View(model);
     }
 
+<<<<<<< HEAD
   [HttpPost("AddSpecialHat")]
   public async Task<IActionResult> AddSpecialHat([FromForm] AddHatViewModel newHat)
   {
@@ -241,3 +305,10 @@ public class OrderController : Controller
     return Ok(hat.Id);
   }
   }
+=======
+
+
+
+
+}
+>>>>>>> main

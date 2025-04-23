@@ -18,16 +18,23 @@ namespace Hattmakare.Data.Entities
         [Column(TypeName = "decimal(18,2)")]
         public decimal Price { get; set; }
         public bool IsDeleted { get; set; } = false;
-        public bool IsSpecial { get; set; } = false;
         public int? Size { get; set; }
         public int? Quantity { get; set; }
         public double Length { get; set; }
         public double Width { get; set; }
         public double Depth { get; set; }
 
+        //Foreign key
+        public int? HatTypeId { get; set; }
+
         //Navigation props
         public virtual ICollection<OrderHat> OrderHats { get; set; }
         public virtual ICollection<HatMaterial> HatMaterials { get; set; }
+
+        [ForeignKey(nameof(HatTypeId))]
+        public virtual HatType HatType { get; set; }
+
+
 
     }
 }
