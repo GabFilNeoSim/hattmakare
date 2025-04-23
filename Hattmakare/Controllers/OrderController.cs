@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Hattmakare.Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Hattmakare.Services;
 
 namespace Hattmakare.Controllers;
 [Authorize]
@@ -14,10 +15,12 @@ namespace Hattmakare.Controllers;
 public class OrderController : Controller 
 {
     private readonly AppDbContext _context;
+    private readonly IImageService _imageService;
 
-    public OrderController(AppDbContext context)
+    public OrderController(AppDbContext context, IImageService imageService)
     {
         _context = context;
+        _imageService = imageService;
     }
 
     [HttpGet("waybill")]
@@ -187,11 +190,11 @@ public class OrderController : Controller
     }
 
     [HttpGet("new")]
-    public async Task<IActionResult> Hats()
+    public async Task<IActionResult> New()
     {
         var model = new NewOrderViewModel
         {
-            Hats = await _context.Hats.Where(h => h.IsDeleted == false).Select(x =>
+            Hats = await _context.Hats.Where(h => h.IsDeleted == false && !h.IsSpecial).Select(x =>
                 new HatViewModel
                 {
                     Id = x.Id,
@@ -207,5 +210,30 @@ public class OrderController : Controller
         return View(model);
     }
 
- 
+    [HttpPost("AddSpecialHat")]
+    public async Task<IActionResult> AddSpecialHat(AddSpecialHatViewModel newHat)
+    {
+        var hat = new Hat();
+        hat.Name = newHat.Name;
+        hat.Size = newHat.Size;
+        hat.Length = newHat.Length;
+        hat.Depth = newHat.Depth;
+        hat.Width = newHat.Width;
+        hat.Quantity = newHat.Quantity;
+        hat.Comment = newHat.Comment;
+        hat.Price = newHat.Price;
+        hat.IsSpecial = true;
+        hat.ImageUrl = "placeholder.png";
+
+
+        //var image = await _imageService.UploadImageAsync(newHat.Image);
+        //hat.ImageUrl = image;
+
+        await _context.Hats.AddAsync(hat);
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction("New");
+    }
+
+
 }

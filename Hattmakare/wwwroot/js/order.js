@@ -80,3 +80,35 @@ $(document).on('click', '#order-hat-all', function (e) {
     let userId = $(this).attr("data-userId");
     $(".order-hats-input").val(userId);
 });
+
+//$(document).ready(function () {
+//    $("#SpecialHat").on("click", function () {
+//        // 1. Collect values from inputs
+//        const specialHat = {
+//            Name: $("#Name").val(),
+//            Comment: $("#Comment").val(),
+//            /*ImageUrl: $("#imageUrl").val(),*/
+//            Price: parseDecimal($("#Price").val()),
+//            Size: parseInt($("#Size").val()),
+//            Quantity: parseInt($("#Quantity").val()),
+//            Length: parseDouble($("#Length").val()),
+//            Width: parseDouble($("#Width").val()),
+//            Depth: parseDouble($("#Depth").val())
+//        };
+
+//        // 2. POST the hat to the controller
+//        $.ajax({
+//            url: '/Order/AddSpecialHat',
+//            method: 'POST',
+//            contentType: 'application/json',
+//            data: JSON.stringify(specialHat),
+//            success: function () {
+//                console.log("Post completed");
+//            },
+//            error: function (xhr, status, error) {
+//                console.error("Error posting hat:", error);
+//            }
+//        });
+//    });
+//});
+
