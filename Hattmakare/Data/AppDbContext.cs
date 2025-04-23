@@ -18,6 +18,7 @@ namespace Hattmakare.Data
         public DbSet<OrderHat> OrderHats { get; set; }
         public DbSet<OrderStatus> OrderStatuses { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<HatType> HatTypes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -136,6 +137,23 @@ namespace Hattmakare.Data
                    Quantity = 5,
                    Size = 8
                });
+
+            builder.Entity<HatType>()
+                .HasData(new HatType
+                {
+                    Id = 1,
+                    Name = "Standardhatt"
+
+                }, new HatType
+                {
+                    Id = 2,
+                    Name = "Standardhatt med tillägg"
+                }, new HatType
+                {
+                    Id = 3,
+                    Name = "Speicalhatt"
+
+                });
 
             builder.Entity<OrderHat>()
                 .HasData(new OrderHat

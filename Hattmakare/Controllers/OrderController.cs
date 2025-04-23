@@ -65,11 +65,12 @@ public class OrderController : Controller
             ordersQuery = _context.OrderStatuses
                 .Select(x => new OrderListViewModel
                 {
-                    Id = x.Id,
-                    Status = x.Name,
-                    Orders = x.Orders
-                        .Where(y => y.Customer.FirstName.Contains(searchQuery) || y.Customer.LastName.Contains(searchQuery)) 
-                        .Select(y => new OrderViewModel
+                  Id = x.Id,
+                  Status = x.Name,
+                  Orders = x.Orders
+                  .Where(y =>
+                        (y.Customer.FirstName + " " + y.Customer.LastName).Contains(searchQuery.ToLower()))
+                        .Select(y => new OrderViewModel 
                         {
                             Id = y.Id,
                             Customer = y.Customer.FirstName + " " + y.Customer.LastName,
@@ -118,6 +119,8 @@ public class OrderController : Controller
 
         return View(viewModel);
     }
+
+
 
 
 
@@ -251,26 +254,25 @@ public class OrderController : Controller
 
 
 
-    //[HttpGet]
-    //public IActionResult SearchOrders(string searchQuery)
-    //{
-    //    var orders = _context.Orders
-    //        .Where(o => o.Customer.FirstName.Contains(searchQuery) || o.Customer.LastName.Contains(searchQuery))
-    //        .Include(o => o.Customer)
-    //        .ToList();
+    [HttpGet("dropdown-hats")]
+    public async Task<IActionResult> DropdownHats()
+    {
+        var hats = await _context.Hats
+            .Include(h => h.HatType)
+            .Where(h => !h.IsDeleted)
+            .Select(h => new HatViewModel
+            {
+                Id = h.Id,
+                Name = h.Name,
+                HatTypeName = h.HatType.Name
+            })
+            .ToListAsync();
 
-    //    var model = orders.Select(o => new OrderViewModel
-    //    {
-    //        Id = o.Id,
-    //        Status = o.OrderStatus?.Name,
-    //        StartDate = o.StartDate,
-    //        EndDate = o.EndDate,
-            
-
-    //    }).ToList();
-    //    return View("Index", model);
-    //}
+        return PartialView("_DropdownHatsPartial", hats);
+    }
 
 
- 
+
+
+
 }
