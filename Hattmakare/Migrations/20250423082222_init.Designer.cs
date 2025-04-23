@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hattmakare.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250422145942_init")]
+    [Migration("20250423082222_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -275,8 +275,8 @@ namespace Hattmakare.Migrations
                     b.Property<int?>("CustomerId")
                         .HasColumnType("int");
 
-                    b.Property<DateOnly>("EndDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<int?>("OrderStatusId")
                         .HasColumnType("int");
@@ -287,8 +287,8 @@ namespace Hattmakare.Migrations
                     b.Property<bool>("Priority")
                         .HasColumnType("bit");
 
-                    b.Property<DateOnly>("StartDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -303,21 +303,21 @@ namespace Hattmakare.Migrations
                         {
                             Id = 1,
                             CustomerId = 1,
-                            EndDate = new DateOnly(2025, 4, 17),
+                            EndDate = new DateTime(2025, 4, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             OrderStatusId = 1,
                             Price = 500m,
                             Priority = false,
-                            StartDate = new DateOnly(2025, 4, 16)
+                            StartDate = new DateTime(2025, 4, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 2,
                             CustomerId = 1,
-                            EndDate = new DateOnly(2025, 4, 17),
+                            EndDate = new DateTime(2025, 4, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             OrderStatusId = 2,
                             Price = 600m,
                             Priority = true,
-                            StartDate = new DateOnly(2025, 4, 16)
+                            StartDate = new DateTime(2025, 4, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
 

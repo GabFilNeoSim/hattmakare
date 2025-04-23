@@ -4,6 +4,7 @@ using Hattmakare.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hattmakare.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250423091442_hatt2")]
+    partial class hatt2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -128,17 +131,6 @@ namespace Hattmakare.Migrations
                             IsDeleted = false,
                             LastName = "Svensson",
                             PhoneNumber = "1234567890"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            AddressId = 1,
-                            Email = "testmejl2",
-                            FirstName = "Folo",
-                            HeadMeasurements = 0.0,
-                            IsDeleted = false,
-                            LastName = "Nossnevs",
-                            PhoneNumber = "1234567891"
                         });
                 });
 
@@ -326,16 +318,6 @@ namespace Hattmakare.Migrations
                             Price = 600m,
                             Priority = true,
                             StartDate = new DateTime(2025, 4, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CustomerId = 2,
-                            EndDate = new DateTime(2025, 4, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            OrderStatusId = 2,
-                            Price = 600m,
-                            Priority = true,
-                            StartDate = new DateTime(2025, 4, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
 
@@ -384,12 +366,6 @@ namespace Hattmakare.Migrations
                             Id = 3,
                             HatId = 2,
                             OrderId = 2
-                        },
-                        new
-                        {
-                            Id = 4,
-                            HatId = 2,
-                            OrderId = 3
                         });
                 });
 

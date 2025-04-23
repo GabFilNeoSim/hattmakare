@@ -1,24 +1,18 @@
 ﻿@using System.Text.Json;
 @using Hattmakare.Models.Statistics
 
-@model StatisticsViewModel;
+@model StatisticsViewModel
 
 <h2>Försäljningsstatistik</h2>
 
-<form method="get">
+<form method="get" class="mb-3">
     <label for="CustomerId">Välj kund:</label>
-    <select asp-for="CustomerId"
-            asp-items="Model.Customers"
-            class="form-control">
+    <select asp-for="CustomerId" asp-items="Model.Customers" class="form-control">
         <option value="">Alla kunder</option>
     </select>
-</form>
 
-<form method="get">
-    <label for="HatId">Välj hatt:</label>
-    <select asp-for="HatId"
-            asp-items="Model.Hats"
-            class="form-control">
+    <label for="HatId" class="mt-2">Välj hatt:</label>
+    <select asp-for="HatId" asp-items="Model.Hats" class="form-control">
         <option value="">Alla hattar</option>
     </select>
 </form>
@@ -29,23 +23,11 @@
     <button type="button" class="btn btn-outline-primary range-btn" data-range="year">År</button>
 </div>
 
-<div class="chart-container">
+<div class="chart-container" style="height:400px;">
     <canvas id="hatChart"
-        data-hatnames='@Html.Raw(JsonSerializer.Serialize(Model.HatNames))'
-        data-sales='@Html.Raw(JsonSerializer.Serialize(Model.Sales))'
-        data-dailylabels='@Html.Raw(JsonSerializer.Serialize(Model.DailyLabels))'
-        data-dailysales='@Html.Raw(JsonSerializer.Serialize(Model.DailySales))'>
+            data-dailylabels='@Html.Raw(JsonSerializer.Serialize(Model.DailyLabels))'
+            data-dailysales='@Html.Raw(JsonSerializer.Serialize(Model.DailySales))'
+            data-quarterlysales='@Html.Raw(JsonSerializer.Serialize(Model.QuarterlySales))'
+            data-monthlysales='@Html.Raw(JsonSerializer.Serialize(Model.MonthlySales))'>
     </canvas>
-</div>
-
-<div class="btn-group mb-3" role="group" aria-label="Diagramtyp">
-    <button type="button" class="btn btn-outline-primary chart-btn active" data-type="bar" title="Stapeldiagram">
-        Stapeldiagram
-    </button>
-    <button type="button" class="btn btn-outline-primary chart-btn" data-type="pie" title="Cirkeldiagram">
-        Cirkeldiagram
-    </button>
-    <button type="button" class="btn btn-outline-primary chart-btn" data-type="line" title="Linjediagram">
-        Linjediagram
-    </button>
 </div>

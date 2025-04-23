@@ -36,7 +36,6 @@ namespace Hattmakare.Controllers
             }
 
             var customerList = await _context.Customers
-                //.Where(c => !c.IsDeleted)
                 .Select(c => new SelectListItem
                 {
                     Value = c.Id.ToString(),
@@ -45,7 +44,6 @@ namespace Hattmakare.Controllers
                 .ToListAsync();
 
             var hatList = await _context.Hats
-                //.Where(h => !h.IsDeleted)
                 .Select(h => new SelectListItem
                 {
                     Value = h.Id.ToString(),
@@ -55,14 +53,14 @@ namespace Hattmakare.Controllers
 
             var allOrderHats = orders.SelectMany(o => o.OrderHats);
 
-            var result = allOrderHats
-                .GroupBy(oh => oh.Hat.Name)
-                .Select(g => new
-                {
-                    HatName = g.Key,
-                    TotalSold = g.Count()
-                })
-                .ToList();
+            //var result = allOrderHats
+            //    .GroupBy(oh => oh.Hat.Name)
+            //    .Select(g => new
+            //    {
+            //        HatName = g.Key,
+            //        TotalSold = g.Count()
+            //    })
+            //    .ToList();
 
             var today = DateTime.Today;
             var startDate = new DateTime(today.Year, today.Month, 1);
@@ -78,11 +76,26 @@ namespace Hattmakare.Controllers
                         Date = date.ToString("yyyy-MM-dd"),
                         Total = orders
                             .SelectMany(o => o.OrderHats)
-                            .Where(oh => oh.Order.StartDate == DateOnly.FromDateTime(date))
+                            .Where(oh => oh.Order.EndDate.Date == date)
                             .Count()
                     };
                 })
                 .ToList();
+
+            var quarterlySales = new int[4];
+            foreach (var oh in orders.SelectMany(o => o.OrderHats))
+            {
+                var month = oh.Order.EndDate.Month;
+                int quarter = (month - 1) / 3;
+                quarterlySales[quarter]++;
+            }
+
+            var monthlySales = new int[12];
+            foreach (var oh in orders.SelectMany(o => o.OrderHats))
+            {
+                var month = oh.Order.EndDate.Month;
+                monthlySales[month - 1]++;
+            }
 
             var model = new StatisticsViewModel
             {
@@ -90,11 +103,13 @@ namespace Hattmakare.Controllers
                 Customers = customerList,
                 HatId = hatId,
                 Hats = hatList,
-                HatNames = result.Select(r => r.HatName).ToList(),
-                Sales = result.Select(r => r.TotalSold).ToList(),
+                //HatNames = result.Select(r => r.HatName).ToList(),
+                //Sales = result.Select(r => r.TotalSold).ToList(),
 
                 DailyLabels = dailySales.Select(d => d.Date).ToList(),
-                DailySales = dailySales.Select(d => d.Total).ToList()
+                DailySales = dailySales.Select(d => d.Total).ToList(),
+                QuarterlySales = quarterlySales.ToList(),
+                MonthlySales = monthlySales.ToList()
             };
 
             return View(model);

@@ -62,7 +62,7 @@ public class HomeController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> PopulateCalendarPopUp(DateOnly date)
+    public async Task<IActionResult> PopulateCalendarPopUp(DateTime date)
     {
         // Todo: samma som ovan
         var orders = await _appDbContext.Orders
@@ -71,8 +71,8 @@ public class HomeController : Controller
         {
             Id = x.Id,
             CustomerName = $"{x.Customer.FirstName} {x.Customer.LastName}",
-            StartDate = x.StartDate,
-            EndDate = x.EndDate,
+            StartDate = x.StartDate.ToString("MM/dd/yyyy"),
+            EndDate = x.EndDate.ToString("MM/dd/yyyy"),
         })
         .ToListAsync();
 

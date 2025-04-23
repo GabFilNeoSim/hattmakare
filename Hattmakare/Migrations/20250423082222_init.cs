@@ -284,8 +284,8 @@ namespace Hattmakare.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Priority = table.Column<bool>(type: "bit", nullable: false),
-                    StartDate = table.Column<DateOnly>(type: "date", nullable: false),
-                    EndDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     CustomerId = table.Column<int>(type: "int", nullable: true),
                     OrderStatusId = table.Column<int>(type: "int", nullable: true)
@@ -370,8 +370,8 @@ namespace Hattmakare.Migrations
                 columns: new[] { "Id", "CustomerId", "EndDate", "OrderStatusId", "Price", "Priority", "StartDate" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateOnly(2025, 4, 17), 1, 500m, false, new DateOnly(2025, 4, 16) },
-                    { 2, 1, new DateOnly(2025, 4, 17), 2, 600m, true, new DateOnly(2025, 4, 16) }
+                    { 1, 1, new DateTime(2025, 4, 17, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, 500m, false, new DateTime(2025, 4, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 2, 1, new DateTime(2025, 4, 17, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, 600m, true, new DateTime(2025, 4, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) }
                 });
 
             migrationBuilder.InsertData(

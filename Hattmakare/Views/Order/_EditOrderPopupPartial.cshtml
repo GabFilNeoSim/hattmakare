@@ -31,11 +31,11 @@
         </div>
         <div class="order-info-child">
             <div class="order-info-title action">Startdatum</div>
-            <input asp-for="StartDate" id="order-startDate" value="@Model.StartDate" type="date" data-oid="@Model.Id" />
+            <input asp-for="StartDate" id="order-startDate" value="@DateOnly.Parse(Model.StartDate)" type="date" data-oid="@Model.Id" />
         </div>
         <div class="order-info-child">
             <div class="order-info-title action">Slutdatum</div>
-            <input asp-for="EndDate" value="@Model.EndDate" type="date" />
+            <input asp-for="EndDate" value="@DateOnly.Parse(Model.EndDate)" type="date" />
         </div>
         <div class="order-info-child">
             <div class="order-info-title action">Prioritet</div>
