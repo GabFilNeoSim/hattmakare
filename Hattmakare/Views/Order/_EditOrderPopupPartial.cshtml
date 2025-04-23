@@ -67,6 +67,51 @@
                 <div class="order-hats-child">
                     <img class="order-hats-img" src="@Model.Hats[i].HatImageUrl" />
                     <p>@Model.Hats[i].HatName</p>
+                   <div class="order-hats-name">
+                        <i class="fa-solid fa-circle-info"></i>
+                        <div class="order-hats-details">
+                            <h3>Studenthatt</h3>
+                            <img src="@Model.Hats[i].HatImageUrl" />
+                            <h4>Information</h4>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Pris</th>
+                                        <th>Storlek</th>
+                                        <th>Längd</th>
+                                        <th>Bredd</th>
+                                        <th>Djup</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>@Model.Hats[i].Price</td>
+                                        <td>@Model.Hats[i].Size</td>
+                                        <td>@Model.Hats[i].Length</td>
+                                        <td>@Model.Hats[i].Width</td>
+                                        <td>@Model.Hats[i].Depth</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <h4>Material</h4>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Namn</th>
+                                        <th>Mängd</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var material in Model.Hats[i].Materials) {
+                                        <tr>
+                                            <td>@material.Name</td>
+                                            <td>@material.Amount @material.Unit</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                   </div>
                     <select class="form-select order-hats-input"
                             asp-for="Hats[@i].UserId"
                             asp-items="Model.Users">
