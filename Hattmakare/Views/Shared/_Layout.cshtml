@@ -18,6 +18,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.1/build/css/intlTelInput.css">
     <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css' rel='stylesheet' />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/notify.js" asp-append-version="true"></script>
 
 </head>
 <body>
@@ -104,6 +106,22 @@
     <script src="~/js/orderboard.js" asp-append-version="true"></script>
     <script src="~/js/order.js" asp-append-version="true"></script>
     <script src="~/js/customerValidation.js"></script>
+
+    <script src="~/js/notify.js" asp-append-version="true"></script>
+
+    @{
+        var notifyType = TempData["NotifyType"] as string;
+        var notifyMessage = TempData["NotifyMessage"] as string;
+    }
+
+    @if (!string.IsNullOrEmpty(notifyMessage) && !string.IsNullOrEmpty(notifyType))
+    {
+        <script>
+            window.addEventListener('DOMContentLoaded', () => {
+                notify({ type: "@notifyType", text: "@notifyMessage" });
+            });
+        </script>
+    }
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
