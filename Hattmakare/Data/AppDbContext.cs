@@ -18,6 +18,7 @@ namespace Hattmakare.Data
         public DbSet<OrderHat> OrderHats { get; set; }
         public DbSet<OrderStatus> OrderStatuses { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<HatType> HatTypes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -70,7 +71,18 @@ namespace Hattmakare.Data
                     LastName = "Svensson",
                     PhoneNumber = "1234567890",
                     AddressId = 1,
-                });
+                },
+                new Customer
+                {
+                    Id = 2,
+                    Email = "testmejl",
+                    FirstName = "Jan",
+                    LastName = "Jansson",
+                    PhoneNumber = "1234567890",
+                    AddressId = 1,
+                }
+            );
+
             builder.Entity<Address>()
                 .HasData(new Address
                 {
@@ -126,6 +138,23 @@ namespace Hattmakare.Data
                    Size = 8
                });
 
+            builder.Entity<HatType>()
+                .HasData(new HatType
+                {
+                    Id = 1,
+                    Name = "Standardhatt"
+
+                }, new HatType
+                {
+                    Id = 2,
+                    Name = "Standardhatt med tillägg"
+                }, new HatType
+                {
+                    Id = 3,
+                    Name = "Speicalhatt"
+
+                });
+
             builder.Entity<OrderHat>()
                 .HasData(new OrderHat
                 {
@@ -157,7 +186,7 @@ namespace Hattmakare.Data
                     new Order
                     {
                         Id = 2,
-                        CustomerId = 1,
+                        CustomerId = 2,
                         OrderStatusId = 2,
                         StartDate = new DateOnly(2025, 04, 16),
                         EndDate = new DateOnly(2025, 04, 17),

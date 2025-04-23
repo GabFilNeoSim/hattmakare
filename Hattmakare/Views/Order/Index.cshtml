@@ -2,6 +2,26 @@
 
 @model List<OrderListViewModel>
 
+    <div class="search"> 
+        <form asp-controller="Order" asp-action="Index" method="get" id="search">
+        <input type="text" name="searchQuery" value="@Context.Request.Query["query"]" placeholder="Sök kund..." class="form-control"/>
+        <button type="submit" class="btn btn-primary btn-sm">Sök</button>
+        </form>
+    </div>
+
+    <div class="searchReset">
+<form asp-controller="Order" asp-action="Index" method="get" id="resetSearch">
+    <button type="submit">
+        <p>Rensa filtrering </p>
+    </button>
+</form>
+</div>  
+
+
+
+
+
+ 
 <div id="boards-container">
     @foreach(var board in Model) {
         <div class="boards-wrapper">

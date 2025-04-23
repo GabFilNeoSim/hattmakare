@@ -12,10 +12,11 @@ public class HatViewModel
     [Column(TypeName = "decimal(18,2)")]
     public decimal Price { get; set; }
     public bool IsDeleted { get; set; } = false;
-    public bool IsSpecial { get; set; } = false;
     public int? Size { get; set; }
     public int? Quantity { get; set; }
     public double Length { get; set; }
     public double Width { get; set; }
     public double Depth { get; set; }
+    public int HatTypeId { get; set; }
+    public string HatTypeName { get; set; }
 }

@@ -74,6 +74,7 @@ public class CustomerController : Controller
         {
             FirstName = newCustomer.FirstName,
             LastName = newCustomer.LastName,
+            HeadMeasurements = newCustomer.HeadMeasurements,
             Email = newCustomer.Email,
             PhoneNumber = newCustomer.Phone,
 
@@ -101,8 +102,6 @@ public class CustomerController : Controller
     public async Task<IActionResult> RemoveCustomer(int customerId)
     {
         var customer = await _context.Customers.FirstOrDefaultAsync(c => c.Id == customerId);
-
-        //_context.Customers.Remove(customer);
 
         customer.IsDeleted = true;
 
@@ -136,6 +135,7 @@ public class CustomerController : Controller
 
         customer.FirstName = updateCustomer.FirstName;
         customer.LastName = updateCustomer.LastName;
+        customer.HeadMeasurements = updateCustomer.HeadMesurements;
         customer.PhoneNumber = updateCustomer.Phone;
         customer.Email = updateCustomer.Email;
 
@@ -166,6 +166,7 @@ public class CustomerController : Controller
             Id = customer.Id,
             FirstName = customer.FirstName,
             LastName = customer.LastName,
+            HeadMesurements = customer.HeadMeasurements,
             Email = customer.Email,
             Phone = customer.PhoneNumber,
             BillingAddress = customer.Address?.BillingAddress,

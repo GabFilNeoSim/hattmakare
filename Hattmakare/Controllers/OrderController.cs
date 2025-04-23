@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Hattmakare.Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Hattmakare.Controllers;
 [Authorize]
@@ -55,31 +56,75 @@ public class OrderController : Controller
 
 
     [HttpGet]
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string searchQuery)
     {
-        var viewModel = await _context.OrderStatuses.Select(x => new OrderListViewModel
+        IQueryable<OrderListViewModel> ordersQuery;
+
+        if (!string.IsNullOrWhiteSpace(searchQuery))
         {
-            Id = x.Id,
-            Status = x.Name,
-            Orders = x.Orders.Select(y => new OrderViewModel
-            {
-                Id = y.Id,
-                Customer = y.Customer.FirstName + " " + y.Customer.LastName,
-                StartDate = y.StartDate,
-                EndDate = y.EndDate,
-                Price = y.Price,
-                Priority = y.Priority,
-                Status = y.OrderStatus.Name,
-                Managers = y.OrderHats
-                .Where(z => z.User != null)
-                .Select(z => $"{z.User.FirstName[0].ToString().ToUpper()}{z.User.LastName[0].ToString().ToUpper()}")
-                .Distinct()
-                .ToList(),
-            }).ToList()
-        }).ToListAsync();
+            
+            ordersQuery = _context.OrderStatuses
+                .Select(x => new OrderListViewModel
+                {
+                  Id = x.Id,
+                  Status = x.Name,
+                  Orders = x.Orders
+                  .Where(y =>
+                        (y.Customer.FirstName + " " + y.Customer.LastName).Contains(searchQuery.ToLower()))
+                        .Select(y => new OrderViewModel 
+                        {
+                            Id = y.Id,
+                            Customer = y.Customer.FirstName + " " + y.Customer.LastName,
+                            StartDate = y.StartDate,
+                            EndDate = y.EndDate,
+                            Price = y.Price,
+                            Priority = y.Priority,
+                            Status = y.OrderStatus.Name,
+                            Managers = y.OrderHats
+                                .Where(z => z.User != null)
+                                .Select(z => $"{z.User.FirstName[0].ToString().ToUpper()}{z.User.LastName[0].ToString().ToUpper()}")
+                                .Distinct()
+                                .ToList(),
+                        }).ToList()
+                });
+        }
+        else
+        {
+            
+            ordersQuery = _context.OrderStatuses
+                .Select(x => new OrderListViewModel
+                {
+                    Id = x.Id,
+                    Status = x.Name,
+                    Orders = x.Orders
+                        .Select(y => new OrderViewModel
+                        {
+                            Id = y.Id,
+                            Customer = y.Customer.FirstName + " " + y.Customer.LastName,
+                            StartDate = y.StartDate,
+                            EndDate = y.EndDate,
+                            Price = y.Price,
+                            Priority = y.Priority,
+                            Status = y.OrderStatus.Name,
+                            Managers = y.OrderHats
+                                .Where(z => z.User != null)
+                                .Select(z => $"{z.User.FirstName[0].ToString().ToUpper()}{z.User.LastName[0].ToString().ToUpper()}")
+                                .Distinct()
+                                .ToList(),
+                        }).ToList()
+                });
+        }
+
+       
+        var viewModel = await ordersQuery.ToListAsync();
 
         return View(viewModel);
     }
+
+
+
+
+
 
     [HttpPost("{oid}/status")]
     public async Task<IActionResult> EditOrderStatus(int oid, int sid)
@@ -208,5 +253,27 @@ public class OrderController : Controller
         return View(model);
     }
 
- 
+
+
+    [HttpGet("dropdown-hats")]
+    public async Task<IActionResult> DropdownHats()
+    {
+        var hats = await _context.Hats
+            .Include(h => h.HatType)
+            .Where(h => !h.IsDeleted)
+            .Select(h => new HatViewModel
+            {
+                Id = h.Id,
+                Name = h.Name,
+                HatTypeName = h.HatType.Name
+            })
+            .ToListAsync();
+
+        return PartialView("_DropdownHatsPartial", hats);
+    }
+
+
+
+
+
 }
