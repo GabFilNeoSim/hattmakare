@@ -137,7 +137,10 @@ public class OrderController : Controller
 
         await _context.SaveChangesAsync();
 
-        return RedirectToAction("Index");
+        TempData["NotifyType"] = "success";
+        TempData["NotifyMessage"] = "Done";
+
+        return Ok();
     }
 
     [HttpGet("edit")]
@@ -204,13 +207,31 @@ public class OrderController : Controller
 
         await _context.SaveChangesAsync();
 
+        TempData["NotifyType"] = "success";
+        TempData["NotifyMessage"] = "Ändringarna för ordern sparades.";
+
         return Ok();
     }
 
-    [HttpGet("new/hats")]
+    [HttpPost("{oid}")]
+    public async Task<IActionResult> DeleteOrder(int oid, EditOrderViewModel request)
+    {
+        var order = await _context.Orders.Where(x => x.Id == oid).FirstOrDefaultAsync();
+        if (order is null) return NotFound();
+
+        _context.Orders.Remove(order);
+        await _context.SaveChangesAsync();
+
+        TempData["NotifyType"] = "success";
+        TempData["NotifyMessage"] = "Ordern togs bort.";
+         
+        return RedirectToAction("Index");
+    }
+
+    [HttpGet("new")]
     public async Task<IActionResult> Hats()
     {
-        var model = new OrderHatsViewModel
+        var model = new NewOrderViewModel
         {
             Hats = await _context.Hats.Where(h => h.IsDeleted == false).Select(x =>
                 new HatViewModel
@@ -218,15 +239,7 @@ public class OrderController : Controller
                     Id = x.Id,
                     Name = x.Name,
                     Price = x.Price,
-                    Comment = x.Comment,
-                    ImageUrl = x.ImageUrl
-                }
-            ).ToListAsync(),
-            SpecialHats = await _context.Hats.Select(x =>
-                new HatViewModel
-                {
-                    Id = x.Id,
-                    Name = x.Name,
+                    Size = x.Size,
                     Comment = x.Comment,
                     ImageUrl = x.ImageUrl
                 }

@@ -7,7 +7,7 @@ namespace Hattmakare.Models.Order;
 public class WayBilViewModel
 {
     public string address { get; set; }
-    public User sender { get; set; }
+    public Data.Entities.User sender { get; set; }
     public Data.Entities.Customer reciver { get; set; }
     public int Export { get; set; }
     public decimal price { get; set; }

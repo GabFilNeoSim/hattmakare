@@ -1,42 +1,56 @@
 ﻿@using Hattmakare.Models.Order;
 
+@using System.Security.Claims
+
+@{
+    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+}
+
 @model EditOrderViewModel
 <form id="editOrderForm" asp-controller="Order" asp-action="EditOrder" asp-route-oid="@Model.Id" method="post">
     <div class="order-info-wrapper">
         <div class="order-info-child">
-            <div class="order-info-title">Order #</div>
-            <p>#@Model.Id</p>
+            <p>Order #</p>
+            <div class="order-info-title">#@Model.Id</div>
         </div>
         <div class="order-info-child">
-            <div class="order-info-title">Kundens namn</div>
-            <p>@Model.CustomerName</p>
+            <p>Kundens namn</p>
+            <div class="order-info-title">@Model.CustomerName</div>
         </div>
         <div class="order-info-child">
-            <div class="order-info-title">Kundens telnr.</div>
-            <p>@Model.CustomerPhone</p>
+            <p>Kundens telnr.</p>
+            <div class="order-info-title">@Model.CustomerPhone</div>
         </div>
         <div class="order-info-child">
-            <div class="order-info-title">Pris</div>
-            <p>@Model.Price SEK</p>
+            <p>Pris</p>
+            <div class="order-info-title">@Model.Price SEK</div>
         </div>
         <div class="order-info-child">
-            <div class="order-info-title">Status</div>
-            <p>@Model.Status</p>
+            <p>Status</p>
+            <div class="order-info-title">@Model.Status</div>
         </div>
         <div class="order-info-child">
-            <div class="order-info-title action">Startdatum</div>
-            <input asp-for="StartDate" id="order-startDate" value="@Model.StartDate" type="date" data-oid="@Model.Id" />
+            <p>Startdatum</p>
+            <div class="order-info-title action">
+                <input asp-for="StartDate" id="order-startDate" value="@Model.StartDate" type="date" data-oid="@Model.Id" />
+            </div>
         </div>
         <div class="order-info-child">
-            <div class="order-info-title action">Slutdatum</div>
-            <input asp-for="EndDate" value="@Model.EndDate" type="date" />
+            <p>Slutdatum</p>
+            <div class="order-info-title action">
+                <input asp-for="EndDate" value="@Model.EndDate" type="date" />
+            </div>
         </div>
         <div class="order-info-child">
-            <div class="order-info-title action">Prioritet</div>
-            <div class="order-info-prio">
+            <div class="order-info-pro-title">
+                <p>Prioritet</p>
                 <p>⚡</p>
-                <div class="form-check form-switch">
-                    <input asp-for="Priority" class="form-check-input" type="checkbox" checked="@Model.Priority">
+            </div>
+            <div class="action">
+                <div class="order-info-prio">
+                    <div class="form-check form-switch">
+                        <input asp-for="Priority" class="form-check-input" type="checkbox" checked="@Model.Priority">
+                    </div>
                 </div>
             </div>
         </div>
@@ -46,7 +60,7 @@
         {
             <div class="order-hats-header">
                 <h5>Hattar</h5>
-                <button class="btn btn-outline-primary btn-sm">Ta på alla</button>
+                <button data-userId="@userId" id="order-hat-all" class="btn btn-outline-primary btn-sm">Välj alla</button>
             </div>
             @for (int i = 0; i < Model.Hats.Count; i++)
             {
@@ -67,10 +81,12 @@
         }
     </div>
     <div class="order-form-btns">
-        <button class="btn btn-danger btn-sm">Radera order</button>
         <a href="/order/waybill?orderId=@Model.Id" class="order-save-btn btn btn-outline-primary btn-sm">Fraktsedel</a>
         <button class="btn btn-outline-primary btn-sm">Materiallista</button>
         <button class="btn btn-primary btn-sm">Spara order</button>
     </div>
+</form>
+<form asp-controller="Order" asp-action="DeleteOrder" asp-route-oid="@Model.Id" method="post">
+    <button class="order-delete btn btn-danger btn-sm confirm-btn">Radera order</button>
 </form>
 

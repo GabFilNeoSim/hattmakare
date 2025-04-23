@@ -1,0 +1,57 @@
+﻿@using Hattmakare.Models.User;
+
+@model AddUserViewModel;
+
+@{
+    ViewBag.Title = "Lägg till en användare";
+}
+
+<style>
+    #add-user-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #add-user-summary ul {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        list-style-type: none;
+    }
+</style>
+
+<div id="add-user-container">
+    <h2 class="display-10 text-center mb-3">Lägg till en användare</h2>
+    <div id="add-user-summary" asp-validation-summary="All"></div>
+    <form asp-controller="User" asp-action="AddUser" class="form-group col-md-4 mb-2">
+        <div class="form-group mb-3">
+            <label class="fw-bold" asp-for="FirstName">Förnamn</label>
+            <input type="text" class="form-control" asp-for="FirstName" placeholder="Skriv ett förnamn">
+        </div>
+        <div class="form-group mb-3">
+            <label class="fw-bold" asp-for="LastName">Efternamn</label>
+            <input type="text" class="form-control" asp-for="LastName" placeholder="Skriv ett efternamn">
+        </div>
+        <div class="form-group mb-3">
+            <label class="fw-bold" asp-for="Email">Epost</label>
+            <input type="email" class="form-control" aria-describedby="emailHelp" asp-for="Email" placeholder="Skriv en epost">
+        </div>
+        <div class="form-group mb-3">
+            <label class="fw-bold" asp-for="Password">Lösenord</label>
+            <input type="password" class="form-control" asp-for="Password" placeholder="Lösenord">
+        </div>
+        <div class="form-group mb-3">
+            <label class="fw-bold" asp-for="ConfirmPassword">Bekräfta lösenord</label>
+            <input type="password" class="form-control" asp-for="ConfirmPassword" placeholder="Lösenord">
+        </div>
+        <div class="form-check mb-3">
+            <input type="checkbox" class="form-check-input" asp-for="IsAdmin">
+            <label class="form-check-label" asp-for="IsAdmin">Markera som administratör</label>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Lägg till</button>
+    </form>
+    <a asp-controller="User" asp-action="Index" class="btn btn-link">Tillbaka</a>
+</div>

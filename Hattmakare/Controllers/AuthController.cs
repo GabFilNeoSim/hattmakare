@@ -1,13 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
-using Hattmakare.Data;
 using Hattmakare.Data.Entities;
 using Hattmakare.Models.Auth;
-using Microsoft.AspNetCore.Authorization;
+using Hattmakare.Models.User;
 
 namespace Hattmakare.Controllers;
 
-//[Authorize]
 [Route("auth")]
 public class AuthController : Controller
 {
@@ -18,40 +16,6 @@ public class AuthController : Controller
     {
         _userManager = userManager;
         _signInManager = signInManager; 
-    }
-
-    [HttpGet("register")]
-    public IActionResult Register() => View(new RegisterViewModel());
-
-    [HttpPost("register")]
-    public async Task<IActionResult> Register(RegisterViewModel model)
-    {
-        if (!ModelState.IsValid)
-        {
-            return View(model);
-        }
-
-        var newUser = new User
-        {
-            FirstName = model.FirstName,
-            LastName = model.LastName,
-            UserName = model.Email,
-            Email = model.Email,
-        };
-
-        var result = await _userManager.CreateAsync(newUser, model.Password);
-        if (!result.Succeeded)
-        {
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError(string.Empty, error.Description);
-            }
-            return View(model);
-        }
-
-        await _signInManager.SignInAsync(newUser, isPersistent: false);
-
-        return RedirectToAction("Index", "Home");
     }
 
     [HttpGet("login")]
