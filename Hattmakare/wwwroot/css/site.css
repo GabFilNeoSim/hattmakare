@@ -36,8 +36,9 @@ p {
 
 #confirm-background{
   display: none;
+}
 
-  #confirm-wrapper{
+#confirm-wrapper {
     position: fixed;
     width: 100vw;
     height: 100vh;
@@ -46,13 +47,68 @@ p {
     align-items: center;
     background: rgba(0,0,0,0.3);
     backdrop-filter: blur(4px);
-    
-    #confirm-modal{
-      padding: 16px;
-      border-radius: 8px;;
-      background-color: white;
-    }
-  }
+    z-index: 1000000000;
+}
+
+#confirm-modal {
+    padding: 20px;
+    border-radius: 8px;
+    background-color: white;
+}
+
+#confirm-btns {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+#confirm-btns button {
+    padding: 5px 15px;
+}
+
+/* Notify */
+#notify-wrapper {
+    position: fixed;
+    left: 0;
+    top: 100px;
+    right: 0;
+    bottom: 0;
+    opacity: 1;
+    pointer-events: none;
+    z-index: 10000000000000;
+}
+
+.notify-parent {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    right: -16.15vw;
+    top: 0;
+    margin: 0.8vw;
+    gap: 10px;
+}
+
+.notify-child {
+    display: flex;
+    flex-direction: row;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 0.26vw;
+    font-weight: bold;
+    min-width: 300px;
+    user-select: none;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.notify-icon {
+    margin: auto 20px auto 0;
+    font-size: 20px;
+}
+
+.notify-text {
+    font-size: 16px;
+    margin: auto 0;
 }
 
 .fc-daygrid-day-number, .fc-col-header-cell-cushion {

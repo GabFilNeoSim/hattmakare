@@ -1,7 +1,6 @@
 ﻿var notifyId = 0;
 
 function notify(notifyText) {
-    console.log("NOW");
     notifyId++;
     const notifyIcon = notifyText.type == "success" ? "&#10003;" : "&#10006;";
     const notifyBackground = notifyText.type == "success" ? "#009dff" : "linear-gradient(140deg, rgba(241,58,86,1) 0%, rgba(226,45,73,1) 28%, rgba(210,29,56,1) 64%, rgba(189,12,39,1) 100%)";
