@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hattmakare.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250423082222_init")]
+    [Migration("20250423120823_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -131,6 +131,17 @@ namespace Hattmakare.Migrations
                             IsDeleted = false,
                             LastName = "Svensson",
                             PhoneNumber = "1234567890"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AddressId = 1,
+                            Email = "testmejl",
+                            FirstName = "Jan",
+                            HeadMeasurements = 0.0,
+                            IsDeleted = false,
+                            LastName = "Jansson",
+                            PhoneNumber = "1234567890"
                         });
                 });
 
@@ -148,13 +159,13 @@ namespace Hattmakare.Migrations
                     b.Property<double>("Depth")
                         .HasColumnType("float");
 
+                    b.Property<int?>("HatTypeId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsSpecial")
                         .HasColumnType("bit");
 
                     b.Property<double>("Length")
@@ -179,6 +190,8 @@ namespace Hattmakare.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("HatTypeId");
+
                     b.ToTable("Hats");
 
                     b.HasData(
@@ -187,8 +200,8 @@ namespace Hattmakare.Migrations
                             Id = 1,
                             Comment = "Testcomment",
                             Depth = 0.0,
+                            HatTypeId = 1,
                             IsDeleted = false,
-                            IsSpecial = false,
                             Length = 0.0,
                             Name = "Studenthatt",
                             Price = 5m,
@@ -202,7 +215,6 @@ namespace Hattmakare.Migrations
                             Comment = "Testcomment",
                             Depth = 0.0,
                             IsDeleted = false,
-                            IsSpecial = false,
                             Length = 0.0,
                             Name = "Kaptenshatt",
                             Price = 52m,
@@ -228,6 +240,41 @@ namespace Hattmakare.Migrations
                     b.HasIndex("MaterialId");
 
                     b.ToTable("HatsMaterial");
+                });
+
+            modelBuilder.Entity("Hattmakare.Data.Entities.HatType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("HatTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Standardhatt"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Standardhatt med tillägg"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Speicalhatt"
+                        });
                 });
 
             modelBuilder.Entity("Hattmakare.Data.Entities.Material", b =>
@@ -312,7 +359,17 @@ namespace Hattmakare.Migrations
                         new
                         {
                             Id = 2,
-                            CustomerId = 1,
+                            CustomerId = 2,
+                            EndDate = new DateTime(2025, 4, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            OrderStatusId = 2,
+                            Price = 600m,
+                            Priority = true,
+                            StartDate = new DateTime(2025, 4, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CustomerId = 2,
                             EndDate = new DateTime(2025, 4, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             OrderStatusId = 2,
                             Price = 600m,
@@ -360,6 +417,18 @@ namespace Hattmakare.Migrations
                             Id = 2,
                             HatId = 2,
                             OrderId = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            HatId = 2,
+                            OrderId = 2
+                        },
+                        new
+                        {
+                            Id = 4,
+                            HatId = 2,
+                            OrderId = 3
                         });
                 });
 
@@ -614,6 +683,15 @@ namespace Hattmakare.Migrations
                     b.Navigation("Address");
                 });
 
+            modelBuilder.Entity("Hattmakare.Data.Entities.Hat", b =>
+                {
+                    b.HasOne("Hattmakare.Data.Entities.HatType", "HatType")
+                        .WithMany("Hats")
+                        .HasForeignKey("HatTypeId");
+
+                    b.Navigation("HatType");
+                });
+
             modelBuilder.Entity("Hattmakare.Data.Entities.HatMaterial", b =>
                 {
                     b.HasOne("Hattmakare.Data.Entities.Hat", "Hat")
@@ -740,6 +818,11 @@ namespace Hattmakare.Migrations
                     b.Navigation("HatMaterials");
 
                     b.Navigation("OrderHats");
+                });
+
+            modelBuilder.Entity("Hattmakare.Data.Entities.HatType", b =>
+                {
+                    b.Navigation("Hats");
                 });
 
             modelBuilder.Entity("Hattmakare.Data.Entities.Material", b =>

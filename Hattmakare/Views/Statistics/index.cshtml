@@ -5,14 +5,15 @@
 
 <h2>Försäljningsstatistik</h2>
 
+
 <form method="get" class="mb-3">
     <label for="CustomerId">Välj kund:</label>
-    <select asp-for="CustomerId" asp-items="Model.Customers" class="form-control" id="customerSelect" @* onchange="document.getElementById('filterForm').submit();" *@>
+    <select asp-for="CustomerId" asp-items="Model.Customers" class="form-control select2" id="customerSelect" @* onchange="document.getElementById('filterForm').submit();" *@>
         <option value="">Alla kunder</option>
     </select>
 
     <label for="HatId" class="mt-2">Välj hatt:</label>
-    <select asp-for="HatId" asp-items="Model.Hats" class="form-control" id="hatSelect" @* onchange="document.getElementById('filterForm').submit();" *@>
+    <select asp-for="HatId" asp-items="Model.Hats" class="form-control select2" id="hatSelect" @* onchange="document.getElementById('filterForm').submit();" *@>
         <option value="">Alla hattar</option>
     </select>
 </form>

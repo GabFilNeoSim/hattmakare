@@ -4,6 +4,17 @@ let quarterlySales = [];
 let monthlySales = [];
 
 document.addEventListener("DOMContentLoaded", function () {
+    $('.select2').select2({
+        width: '100%',
+        placeholder: 'Välj eller sök...',
+        allowClear: true,
+        language: {
+            noResults: function () {
+                return "Inga resultat";
+            }
+        }
+    });
+
     const canvas = document.getElementById("hatChart");
     const ctx = canvas.getContext("2d");
     const rangeButtons = document.querySelectorAll(".range-btn");
