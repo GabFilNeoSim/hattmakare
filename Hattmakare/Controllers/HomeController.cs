@@ -3,6 +3,7 @@ using Hattmakare.Data;
 using Hattmakare.Data.Entities;
 using Hattmakare.Models;
 using Hattmakare.Models.Home;
+using Hattmakare.Models.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -49,13 +50,12 @@ public class HomeController : Controller
     [HttpGet]
     public JsonResult PopulateCalendar()
     {
-        // Todo: lägg till villkor där den inloggde användarens ordrar visas
         var events = _appDbContext.Orders
             .GroupBy(o => o.EndDate)
             .Select(g => new
             {
                 Title = $"{g.Count()} ordrar",
-                Start = g.Key.ToString("yyyy-MM-dd")
+                Start = g.Key.ToString("yyyy-MM-dd"),
             }).ToList();
 
         return Json(events);
@@ -64,7 +64,6 @@ public class HomeController : Controller
     [HttpGet]
     public async Task<IActionResult> PopulateCalendarPopUp(DateTime date)
     {
-        // Todo: samma som ovan
         var orders = await _appDbContext.Orders
         .Where(o => o.EndDate == date)
         .Select(x => new CalendarPopupViewModel

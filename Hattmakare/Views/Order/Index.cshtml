@@ -1,9 +1,36 @@
 ﻿@using Hattmakare.Models.Order
 
-@model List<OrderListViewModel>
+@model OrderIndexViewModel
 
+    <div class="search"> 
+        <form asp-controller="Order" asp-action="Index" method="get" id="search">
+        <input type="text" name="searchQuery" value="@Context.Request.Query["query"]" placeholder="Sök kund..." class="form-control"/>
+        <button type="submit" class="btn btn-primary btn-sm">Sök</button>
+        </form>
+    </div>
+
+    <div class="searchReset">
+<form asp-controller="Order" asp-action="Index" method="get" id="resetSearch">
+    <button type="submit">
+        <p>Rensa filtrering </p>
+    </button>
+</form>
+  
+
+
+<form method="get" class="mb-3">
+    <label for="HatId" class="mt-2">Välj hatt:</label>
+    <select asp-for="HatId" asp-items="Model.HatNames" class="form-control" onchange="this.form.submit()">
+        <option value="">Alla hattar</option>
+    </select>
+</form>
+
+
+
+</div>
+ 
 <div id="boards-container">
-    @foreach(var board in Model) {
+    @foreach(var board in Model.OrderItems) {
         <div class="boards-wrapper">
             <h3>@board.Status</h3>
             <div class="board" data-board-id="@board.Id" ondragover="dragoverHandler(event)" ondrop="dropHandler(event)">

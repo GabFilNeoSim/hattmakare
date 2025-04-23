@@ -7,7 +7,7 @@ namespace Hattmakare.Models.Order;
 public class WayBilViewModel
 {
     public string address { get; set; }
-    public User sender { get; set; }
+    public Data.Entities.User sender { get; set; }
     public Data.Entities.Customer reciver { get; set; }
     public int Export { get; set; }
     public decimal price { get; set; }
@@ -15,7 +15,11 @@ public class WayBilViewModel
 
     public decimal tax => price * 0.25m;
 
-    public decimal totalPrice => price + tax;
+    public bool IsPriority { get; set; }
+
+    public decimal prio => IsPriority ? price * 1.20m : 0;
+
+    public decimal totalPrice => price + tax + prio;
 
     public Data.Entities.Order order { get; set; }
     public int orderNumber { get; set; }

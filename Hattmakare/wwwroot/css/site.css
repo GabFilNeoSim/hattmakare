@@ -39,7 +39,6 @@ p {
 }
 
 #confirm-wrapper {
-    z-index: 1000000000000000000000;
     position: fixed;
     width: 100vw;
     height: 100vh;
@@ -48,6 +47,7 @@ p {
     align-items: center;
     background: rgba(0,0,0,0.3);
     backdrop-filter: blur(4px);
+    z-index: 1000000000;
 }
 
 #confirm-modal {
@@ -62,18 +62,10 @@ p {
     gap: 15px;
     margin-top: 10px;
 }
+
 #confirm-btns button {
     padding: 5px 15px;
 }
-
-.fc-daygrid-day-number, .fc-col-header-cell-cushion {
-    text-decoration: none !important;
-}
-
-.fc-col-header thead tr a, .fc-daygrid-day-number {
-    color: #2c3e50 !important;
-}
-
 
 /* Notify */
 #notify-wrapper {
@@ -117,4 +109,33 @@ p {
 .notify-text {
     font-size: 16px;
     margin: auto 0;
+}
+
+.fc-daygrid-day-number, .fc-col-header-cell-cushion {
+    text-decoration: none !important;
+}
+
+.fc-col-header thead tr a, .fc-daygrid-day-number {
+    color: #2c3e50 !important;
+}
+
+.navbar {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    font-size: 20px;
+   height: 60px;
+    
+}
+
+.logo {
+    height: 50px; 
+    width: auto; 
+    vertical-align: middle;
+}
+
+.logo-link {
+    margin-right: 4px;
 }

@@ -123,8 +123,9 @@ button {
 }
 
 #customer #resetSearch {
-  margin-left: 4px;
-  p
+    margin-left: 4px;
+    p
+
 
 {
   font-weight: 400;
@@ -137,5 +138,7 @@ button {
   border-bottom: 1px solid hsl(0,0%, 50%);
 }
 
-}
+
+
+
 

@@ -63,25 +63,40 @@
                 var standardHat = item.Hat as Hat;
                 <tr>
                     <td>@item.Hat.Name</td>
-                    <td>@standardHat.Price.ToString("C")</td>
+                    <td class="text-end"> @standardHat.Price.ToString("C")</td>
                 </tr>
             }
 
             <tr class="table-light">
                 <td><strong>Totalt vikt:</strong></td>
-                @*<td>
-                    Fält för att ändra vikten manuellt istället
+                <td class="text-end">
                     <input type="number" name="weight" value="@Model.weight" /> kg
-                </td> *@
-                <td>@Model.weight kg</td>
+                </td>
+
             </tr>
+
+            <tr class="table-light">
+                <td><strong>Kod för export:</strong></td>
+                <td class="text-end">
+                    <input type="number" value="@Model.Export" />
+                </td>
+
+            </tr>
+            @if (Model.IsPriority == true)
+            {
+                <tr class="table-light">
+                    <td><strong>Expressleverans:</strong></td>
+                    <td class="text-end">@Model.prio.ToString("C")</td>
+                </tr>
+            }
+
             <tr class="table-light">
                 <td><strong>Moms:</strong></td>
-                <td>@Model.tax.ToString("C")</td>
+                <td class="text-end">@Model.tax.ToString("C")</td>
             </tr>
             <tr class="table-light">
                 <td><strong>Totalpris inkl. moms:</strong></td>
-                <td>@Model.totalPrice.ToString("C")</td>
+                <td class="text-end">@Model.totalPrice.ToString("C")</td>
             </tr>
         </tbody>
     </table>
