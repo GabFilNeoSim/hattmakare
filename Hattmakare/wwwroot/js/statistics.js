@@ -109,5 +109,7 @@ document.addEventListener("DOMContentLoaded", function () {
             updateIntervalData(range);
         });
     });
-    });
+
+    fetchAndUpdateChart();
+});
 
