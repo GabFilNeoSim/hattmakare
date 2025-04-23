@@ -216,30 +216,28 @@ public class OrderController : Controller
         return View(model);
     }
 
-    [HttpPost("AddSpecialHat")]
-    public async Task<IActionResult> AddSpecialHat([FromBody] AddSpecialHatViewModel newHat)
-    {
-        var hat = new Hat();
-        hat.Name = newHat.Name;
-        hat.Size = newHat.Size;
-        hat.Length = newHat.Length;
-        hat.Depth = newHat.Depth;
-        hat.Width = newHat.Width;
-        hat.Quantity = newHat.Quantity;
-        hat.Comment = newHat.Comment;
-        hat.Price = newHat.Price;
-        hat.IsSpecial = true;
-        hat.ImageUrl = "placeholder.png";
+  [HttpPost("AddSpecialHat")]
+  public async Task<IActionResult> AddSpecialHat([FromForm] AddHatViewModel newHat)
+  {
+    var hat = new Hat();
+    hat.Name = newHat.Name;
+    hat.Size = newHat.Size ?? 0;
+    hat.Length = newHat.Length ?? 0;
+    hat.Depth = newHat.Depth ?? 0;
+    hat.Width = newHat.Width ?? 0;
+    hat.Quantity = newHat.Quantity;
+    hat.Price = newHat.Price ?? 0;
+    hat.Comment = newHat.Comment ?? "";
+    hat.IsSpecial = true;
 
 
-        //var image = await _imageService.UploadImageAsync(newHat.Image);
-        //hat.ImageUrl = image;
+    var image = await _imageService.UploadImageAsync(newHat.Image);
+    
+    hat.ImageUrl = image;
 
-        await _context.Hats.AddAsync(hat);
-        await _context.SaveChangesAsync();
+    await _context.Hats.AddAsync(hat);
+    await _context.SaveChangesAsync();
 
-        return Ok();
-    }
-
-
-}
+    return Ok(hat.Id);
+  }
+  }

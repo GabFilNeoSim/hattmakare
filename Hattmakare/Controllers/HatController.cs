@@ -60,16 +60,16 @@ public class HatController : Controller
 
     //[Authorize]
     [HttpPost("AddHat")]
-    public async Task<IActionResult> AddHat(AddHatViewModel newHat)
+    public async Task<IActionResult> AddHat([FromForm] AddHatViewModel newHat)
     {
         var hat = new Hat();
         hat.Name = newHat.Name;
         hat.Size = newHat.Size;
-        hat.Length = (double)newHat.Length;
-        hat.Depth = (double)newHat.Depth;
-        hat.Width = (double)newHat.Width;
+        hat.Length = newHat.Length ?? 0;
+        hat.Depth = newHat.Depth ?? 0;
+        hat.Width = newHat.Width ?? 0;
         hat.Quantity = newHat.Quantity;
-        hat.Price = (decimal)newHat.Price;
+        hat.Price = newHat.Price ?? 0;
 
 
         var image = await _imageService.UploadImageAsync(newHat.Image);

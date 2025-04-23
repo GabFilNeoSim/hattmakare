@@ -22,5 +22,7 @@ public class AddHatViewModel
     public IFormFile? Image { get; set; }
     
     public string? Comment { get; set; }
+
+    public bool? IsSpecial { get; set; } = false;
 }
 
