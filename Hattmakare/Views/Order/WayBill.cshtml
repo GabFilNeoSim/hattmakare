@@ -69,12 +69,27 @@
 
             <tr class="table-light">
                 <td><strong>Totalt vikt:</strong></td>
-                @*<td>
-                    Fält för att ändra vikten manuellt istället
+                <td>
                     <input type="number" name="weight" value="@Model.weight" /> kg
-                </td> *@
-                <td>@Model.weight kg</td>
+                </td>
+
             </tr>
+
+            <tr class="table-light">
+                <td><strong>Kod för export:</strong></td>
+                <td>
+                    <input type="number" value="@Model.Export" />
+                </td>
+
+            </tr>
+            @if (Model.IsPriority == true)
+            {
+                <tr class="table-light">
+                    <td><strong>Expressleverans:</strong></td>
+                    <td>@Model.prio.ToString("C")</td>
+                </tr>
+            }
+
             <tr class="table-light">
                 <td><strong>Moms:</strong></td>
                 <td>@Model.tax.ToString("C")</td>

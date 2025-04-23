@@ -15,7 +15,11 @@ public class WayBilViewModel
 
     public decimal tax => price * 0.25m;
 
-    public decimal totalPrice => price + tax;
+    public bool IsPriority { get; set; }
+
+    public decimal prio => IsPriority ? price * 1.20m : 0;
+
+    public decimal totalPrice => price + tax + prio;
 
     public Data.Entities.Order order { get; set; }
     public int orderNumber { get; set; }
