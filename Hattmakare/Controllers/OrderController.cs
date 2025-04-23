@@ -204,7 +204,14 @@ public class OrderController : Controller
                     Comment = x.Comment,
                     ImageUrl = x.ImageUrl
                 }
+
             ).ToListAsync(),
+            Customers = await _context.Customers
+            .Select(c => new SelectListItem
+            {
+                Value = c.Id.ToString(),
+                Text = c.FirstName + " " + c.LastName
+            }).ToListAsync()
         };
         return View(model);
     }

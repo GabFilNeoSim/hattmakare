@@ -215,7 +215,7 @@
 }
 
 .form-check-input {
-    background-color: lightgray;
+    background-color: lightgrey;
 }
 
 
@@ -230,6 +230,10 @@
 
 .order {
     position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 100px;
+    margin-top: 50px;
     #hatList {
 
     #addNewHat{

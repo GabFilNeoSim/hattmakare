@@ -27,113 +27,66 @@
       </div>
     }
   </div>
-  @*<form method="post" asp-action="AddSpecialHat" enctype="multipart/form-data" class="p-4 shadow rounded bg-light" id="addSpecialHat">
-        <h2 class="mb-4 text-center">Lägg till en specialhatt</h2>
 
-        <div class="form-group mb-3">
-            <label asp-for="Name" class="form-label fw-bold">Hattens namn</label>
-            <input asp-for="Name" class="form-control" placeholder="Skriv namn på hatten" required />
-            <span asp-validation-for="Name" class="text-danger small"></span>
+    <div class="container d-flex justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <form enctype="multipart/form-data" class="p-4 shadow rounded bg-light">
+                <h2 class="mb-4 text-center">Skapa en specialhatt</h2>
+
+                <div class="form-group mb-3">
+                    <label for="Name" class="form-label fw-bold">Hattens namn</label>
+                    <input id="Name" class="form-control" placeholder="Skriv namn på hatten" required />
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="Price" class="form-label fw-bold">Pris</label>
+                        <input id="Price" type="number" class="form-control" placeholder="Ange pris i SEK" required />
+                    </div>
+                    <div class="col-md-6">
+                        <label for="Quantity" class="form-label fw-bold">Antal</label>
+                        <input id="Quantity" type="number" class="form-control" placeholder="Hur många ska beställas?" required />
+                    </div>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="Size" class="form-label fw-bold">Storlek</label>
+                    <input id="Size" class="form-control" placeholder="Ange storlek (t.ex. S, M, L, 58cm...)" required />
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="Length" class="form-label fw-bold">Längd</label>
+                        <input id="Length" class="form-control" placeholder="cm" required />
+                    </div>
+                    <div class="col-md-4">
+                        <label for="Depth" class="form-label fw-bold">Djup</label>
+                        <input id="Depth" class="form-control" placeholder="cm" required />
+                    </div>
+                    <div class="col-md-4">
+                        <label for="Width" class="form-label fw-bold">Bredd</label>
+                        <input id="Width" class="form-control" placeholder="cm" required />
+                    </div>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="Comment" class="form-label fw-bold">Beskrivning</label>
+                    <input id="Comment" class="form-control" placeholder="Ange en beskrivning" required />
+                </div>
+
+                <div class="form-group mb-4">
+                    <label for="Image" class="form-label fw-bold">Ladda upp bild</label>
+                    <input id="Image" type="file" class="form-control" />
+                </div>
+
+                <div class="text-end">
+                    <button type="button" id="SpecialHat" class="btn btn-dark px-4 py-2">
+                        ➕ Lägg till specialhatt i order
+                    </button>
+                </div>
+            </form>
         </div>
-
-        <div class="form-group mb-3">
-            <label asp-for="Price" class="form-label fw-bold">Pris</label>
-            <input asp-for="Price" type="number" class="form-control" placeholder="Ange pris i SEK" required />
-            <span asp-validation-for="Price" class="text-danger small"></span>
-        </div>
-
-        <div class="form-group mb-3">
-            <label asp-for="Quantity" class="form-label fw-bold">Antal</label>
-            <input asp-for="Quantity" type="number" class="form-control" placeholder="Hur många ska beställas?" required />
-            <span asp-validation-for="Quantity" class="text-danger small"></span>
-        </div>
-
-        <div class="form-group mb-3">
-            <label asp-for="Size" class="form-label fw-bold">Storlek</label>
-            <input asp-for="Size" class="form-control" placeholder="Ange storlek (t.ex. S, M, L, 58cm...)" required />
-            <span asp-validation-for="Size" class="text-danger small"></span>
-        </div>
-
-        <div class="form-group mb-3">
-            <label asp-for="Length" class="form-label fw-bold">Längd (cm)</label>
-            <input asp-for="Length" class="form-control" placeholder="Ange storlek (Längd)" required />
-            <span asp-validation-for="Length" class="text-danger small"></span>
-
-            <label asp-for="Depth" class="form-label fw-bold">Djup (cm)</label>
-            <input asp-for="Depth" class="form-control" placeholder="Ange storlek (Djup)" required />
-            <span asp-validation-for="Depth" class="text-danger small"></span>
-
-            <label asp-for="Width" class="form-label fw-bold">Bredd (cm)</label>
-            <input asp-for="Width" class="form-control" placeholder="Ange storlek (Bredd)" required />
-            <span asp-validation-for="Width" class="text-danger small"></span>
-        </div>
-
-         <div class="form-group mb-3">
-            <label asp-for="Comment" class="form-label fw-bold">Beskrivning</label>
-            <input asp-for="Comment" class="form-control" placeholder="Ange en beskrivning" required />
-            <span asp-validation-for="Comment" class="text-danger small"></span>
-        </div>
-
-        <div class="form-group mb-4">
-            <label asp-for="Image" class="form-label fw-bold">Ladda upp bild</label>
-            <input asp-for="Image" type="file" class="form-control" />
-            <span asp-validation-for="Image" class="text-danger small"></span>
-        </div>
-
-        <div class="text-end">
-            <button type="submit" class="btn btn-dark px-4">➕ Lägg till hatt</button>
-        </div>
-    </form>
-*@
-   <form enctype="multipart/form-data" class="p-4 shadow rounded bg-light">
-        <h2 class="mb-4 text-center">Lägg till en ny hatt</h2>
-
-        <div class="form-group mb-3">
-            <label class="form-label fw-bold">Hattens namn</label>
-            <input id="Name" class="form-control" placeholder="Skriv namn på hatten" required />
-        </div>
-
-        <div class="form-group mb-3">
-            <label class="form-label fw-bold">Pris</label>
-            <input id="Price" type="number" class="form-control" placeholder="Ange pris i SEK" required />
-        </div>
-
-        <div class="form-group mb-3">
-            <label class="form-label fw-bold">Antal</label>
-            <input id="Quantity" type="number" class="form-control" placeholder="Hur många ska beställas?" required />
-        </div>
-
-        <div class="form-group mb-3">
-            <label class="form-label fw-bold">Storlek</label>
-            <input id="Size" class="form-control" placeholder="Ange storlek (t.ex. S, M, L, 58cm...)" required />
-        </div>
-
-        <div class="form-group mb-3">
-            <label class="form-label fw-bold">Längd</label>
-            <input id="Length" class="form-control" placeholder="Ange storlek (Längd)" required />
-
-            <label class="form-label fw-bold">Djup</label>
-            <input id="Depth" class="form-control" placeholder="Ange storlek (Djup)" required />
-
-            <label class="form-label fw-bold">Bredd</label>
-            <input id="Width" class="form-control" placeholder="Ange storlek (Bredd)" required />
-        </div>
-
-        <div class="form-group mb-3">
-            <label class="form-label fw-bold">Beskrivning</label>
-            <input id="Comment" class="form-control" placeholder="Ange en beskrivning" required />
-        </div>
-
-        <div class="form-group mb-4">
-            <label class="form-label fw-bold">Ladda upp bild</label>
-            <input id="Image" type="file" class="form-control" />
-
-        </div> 
-
-        <div class="text-end">
-            <button type="button" id="SpecialHat" class="btn btn-dark px-4">➕ Lägg till specialhatt i order</button>
-        </div>
-    </form>
+    </div>
 
 
   <div id="cartContainer">
@@ -144,7 +97,7 @@
       go to order
     </button>
   </div>
-  <div id="settings">
+  @* <div id="settings">
     <form method="post">
       <select class="form-select order-customer-input"
         asp-for="CustomerId"
@@ -158,5 +111,39 @@
         Skapa order
       </button>
     </form>
-  </div>
-  </div>
+  </div> *@
+
+    <div id="settings" class="container mt-5">
+        <form method="post" class="d-flex flex-column gap-4">
+
+            <div>
+                <label class="form-label fw-bold">Välj kund</label>
+                <select class="form-select" asp-for="CustomerId" asp-items="Model.Customers"></select>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Startdatum</label>
+                    <input type="date" class="form-control" asp-for="StartDate" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Slutdatum</label>
+                    <input type="date" class="form-control" asp-for="EndDate" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                </div>
+            </div>
+
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" asp-for="Priority" id="priorityCheck" />
+                <label class="form-check-label fw-bold" for="priorityCheck">
+                    Markera som högprioriterad order
+                </label>
+            </div>
+
+            <div class="text-end">
+                <button type="submit" class="btn btn-dark px-4">
+                    Skapa order
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
