@@ -8,12 +8,8 @@ using Microsoft.AspNetCore.Authorization;
 using Hattmakare.Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
-<<<<<<< HEAD
 using Hattmakare.Services;
-=======
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
->>>>>>> main
-
 namespace Hattmakare.Controllers;
 [Authorize]
 [Route("order")]
@@ -257,7 +253,7 @@ public class OrderController : Controller
     {
         var model = new NewOrderViewModel
         {
-            Hats = await _context.Hats.Where(h => h.IsDeleted == false && !h.IsSpecial).Select(x =>
+            Hats = await _context.Hats.Where(h => h.IsDeleted == false && h.HatType.Name == "StandardHatt").Select(x =>
                 new HatViewModel
                 {
                     Id = x.Id,
@@ -278,8 +274,6 @@ public class OrderController : Controller
         };
         return View(model);
     }
-
-<<<<<<< HEAD
   [HttpPost("AddSpecialHat")]
   public async Task<IActionResult> AddSpecialHat([FromForm] AddHatViewModel newHat)
   {
@@ -292,7 +286,8 @@ public class OrderController : Controller
     hat.Quantity = newHat.Quantity;
     hat.Price = newHat.Price ?? 0;
     hat.Comment = newHat.Comment ?? "";
-    hat.IsSpecial = true;
+    hat.HatType = await _context.HatTypes
+        .FirstOrDefaultAsync(x => x.Name == "SpecialHatt");
 
 
     var image = await _imageService.UploadImageAsync(newHat.Image);
@@ -304,11 +299,4 @@ public class OrderController : Controller
 
     return Ok(hat.Id);
   }
-  }
-=======
-
-
-
-
 }
->>>>>>> main

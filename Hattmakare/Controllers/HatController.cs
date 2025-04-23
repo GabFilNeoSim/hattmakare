@@ -29,7 +29,7 @@ public class HatController : Controller
     public async Task<IActionResult> Index()
     {
         var hats = await _context.Hats
-              .Where(x => !x.IsDeleted && !x.IsSpecial)
+              .Where(x => !x.IsDeleted && x.HatType.Name == "StandardHatt")
              .Select(x => new HatViewModel
              {
             Name = x.Name,
