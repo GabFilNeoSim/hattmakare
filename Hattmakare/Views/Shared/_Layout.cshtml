@@ -26,46 +26,47 @@
     <div id="notify-wrapper">
         <div class="notify-parent"></div>
     </div>
-    @if (User.Identity.IsAuthenticated) {
-        <header>
-            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-                <div class="container-fluid">
-                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Hattmakare</a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                            aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                        <ul class="navbar-nav flex-grow-1">
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Hem</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Order" asp-action="Index">Ordrar</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Hat" asp-action="Index">Hattar</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="Index">Kunder</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Material" asp-action="Index">Material</a>
-                            </li>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Hattmakare</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Order" asp-action="Index">Ordrar</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Hat" asp-action="Index">Hattar</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="Index">Kunder</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Material" asp-action="Index">Material</a>
+                        </li>
+                        @if (User.IsInRole("Admin"))
+                        {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-controller="User" asp-action="Index">Användare</a>
                             </li>
+                        }
+                        @if (User.Identity.IsAuthenticated)
+                        {
                             <li class="nav-item logout">
                                 <form class="nav-link text-dark" asp-controller="Auth" asp-action="Logout" method="post">
                                     <button>Logga ut</button>
                                 </form>
                             </li>
-                        </ul>
-                    </div>
+                        }
+                    </ul>
                 </div>
-            </nav>
-        </header>
-    }
+            </div>
+        </nav>
+    </header>
     <div class="container">
         <div class="modal fade" id="editOrderModal" tabindex="-1" aria-labelledby="editOrderLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">

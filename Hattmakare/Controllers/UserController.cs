@@ -1,12 +1,14 @@
 ﻿using Hattmakare.Data;
 using Hattmakare.Data.Entities;
 using Hattmakare.Models.User;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Hattmakare.Controllers;
 
+[Authorize(Roles = "Admin")]
 [Route("users")]
 public class UserController : Controller
 {
