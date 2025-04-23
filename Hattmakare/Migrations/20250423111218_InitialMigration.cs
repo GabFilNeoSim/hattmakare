@@ -72,26 +72,16 @@ namespace Hattmakare.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Hats",
+                name: "HatTypes",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Comment = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    IsSpecial = table.Column<bool>(type: "bit", nullable: false),
-                    Size = table.Column<int>(type: "int", nullable: true),
-                    Quantity = table.Column<int>(type: "int", nullable: true),
-                    Length = table.Column<double>(type: "float", nullable: false),
-                    Width = table.Column<double>(type: "float", nullable: false),
-                    Depth = table.Column<double>(type: "float", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Hats", x => x.Id);
+                    table.PrimaryKey("PK_HatTypes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -255,25 +245,30 @@ namespace Hattmakare.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "HatsMaterial",
+                name: "Hats",
                 columns: table => new
                 {
-                    HatId = table.Column<int>(type: "int", nullable: false),
-                    MaterialId = table.Column<int>(type: "int", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Comment = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    Size = table.Column<int>(type: "int", nullable: true),
+                    Quantity = table.Column<int>(type: "int", nullable: true),
+                    Length = table.Column<double>(type: "float", nullable: false),
+                    Width = table.Column<double>(type: "float", nullable: false),
+                    Depth = table.Column<double>(type: "float", nullable: false),
+                    HatTypeId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_HatsMaterial", x => new { x.HatId, x.MaterialId });
+                    table.PrimaryKey("PK_Hats", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_HatsMaterial_Hats_HatId",
-                        column: x => x.HatId,
-                        principalTable: "Hats",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_HatsMaterial_Materials_MaterialId",
-                        column: x => x.MaterialId,
-                        principalTable: "Materials",
+                        name: "FK_Hats_HatTypes_HatTypeId",
+                        column: x => x.HatTypeId,
+                        principalTable: "HatTypes",
                         principalColumn: "Id");
                 });
 
@@ -306,6 +301,29 @@ namespace Hattmakare.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "HatsMaterial",
+                columns: table => new
+                {
+                    HatId = table.Column<int>(type: "int", nullable: false),
+                    MaterialId = table.Column<int>(type: "int", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HatsMaterial", x => new { x.HatId, x.MaterialId });
+                    table.ForeignKey(
+                        name: "FK_HatsMaterial_Hats_HatId",
+                        column: x => x.HatId,
+                        principalTable: "Hats",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_HatsMaterial_Materials_MaterialId",
+                        column: x => x.MaterialId,
+                        principalTable: "Materials",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "OrderHats",
                 columns: table => new
                 {
@@ -332,7 +350,8 @@ namespace Hattmakare.Migrations
                         name: "FK_OrderHats_Orders_OrderId",
                         column: x => x.OrderId,
                         principalTable: "Orders",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
@@ -341,13 +360,19 @@ namespace Hattmakare.Migrations
                 values: new object[] { 1, "Adress 1", "Örebro", "Sverige", "Adress 2", "12345" });
 
             migrationBuilder.InsertData(
-                table: "Hats",
-                columns: new[] { "Id", "Comment", "Depth", "ImageUrl", "IsDeleted", "IsSpecial", "Length", "Name", "Price", "Quantity", "Size", "Width" },
+                table: "HatTypes",
+                columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
-                    { 1, "Testcomment", 0.0, null, false, false, 0.0, "Studenthatt", 5m, 2, 10, 0.0 },
-                    { 2, "Testcomment", 0.0, null, false, false, 0.0, "Kaptenshatt", 52m, 5, 8, 0.0 }
+                    { 1, "Standardhatt" },
+                    { 2, "Standardhatt med tillägg" },
+                    { 3, "Speicalhatt" }
                 });
+
+            migrationBuilder.InsertData(
+                table: "Hats",
+                columns: new[] { "Id", "Comment", "Depth", "HatTypeId", "ImageUrl", "IsDeleted", "Length", "Name", "Price", "Quantity", "Size", "Width" },
+                values: new object[] { 2, "Testcomment", 0.0, null, null, false, 0.0, "Kaptenshatt", 52m, 5, 8, 0.0 });
 
             migrationBuilder.InsertData(
                 table: "OrderStatuses",
@@ -367,6 +392,11 @@ namespace Hattmakare.Migrations
                     { 1, 1, "testmejl", "Olof", 0.0, false, "Svensson", "1234567890" },
                     { 2, 1, "testmejl", "Jan", 0.0, false, "Jansson", "1234567890" }
                 });
+
+            migrationBuilder.InsertData(
+                table: "Hats",
+                columns: new[] { "Id", "Comment", "Depth", "HatTypeId", "ImageUrl", "IsDeleted", "Length", "Name", "Price", "Quantity", "Size", "Width" },
+                values: new object[] { 1, "Testcomment", 0.0, 1, null, false, 0.0, "Studenthatt", 5m, 2, 10, 0.0 });
 
             migrationBuilder.InsertData(
                 table: "Orders",
@@ -429,6 +459,11 @@ namespace Hattmakare.Migrations
                 name: "IX_Customers_AddressId",
                 table: "Customers",
                 column: "AddressId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Hats_HatTypeId",
+                table: "Hats",
+                column: "HatTypeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_HatsMaterial_MaterialId",
@@ -499,6 +534,9 @@ namespace Hattmakare.Migrations
 
             migrationBuilder.DropTable(
                 name: "Orders");
+
+            migrationBuilder.DropTable(
+                name: "HatTypes");
 
             migrationBuilder.DropTable(
                 name: "Customers");

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hattmakare.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250423084134_exampleData")]
-    partial class exampleData
+    [Migration("20250423111218_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -200,6 +200,7 @@ namespace Hattmakare.Migrations
                             Id = 1,
                             Comment = "Testcomment",
                             Depth = 0.0,
+                            HatTypeId = 1,
                             IsDeleted = false,
                             Length = 0.0,
                             Name = "Studenthatt",

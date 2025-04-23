@@ -197,6 +197,7 @@ namespace Hattmakare.Migrations
                             Id = 1,
                             Comment = "Testcomment",
                             Depth = 0.0,
+                            HatTypeId = 1,
                             IsDeleted = false,
                             Length = 0.0,
                             Name = "Studenthatt",
