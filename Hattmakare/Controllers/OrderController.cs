@@ -1,5 +1,6 @@
 ﻿using Hattmakare.Data;
 using Hattmakare.Models.Hats;
+using Hattmakare.Models.Material;
 using Microsoft.AspNetCore.Mvc;
 using Hattmakare.Models.Order;
 using Microsoft.EntityFrameworkCore;
@@ -177,7 +178,18 @@ public class OrderController : Controller
                 HatId = x.HatId,
                 HatName = x.Hat.Name,
                 HatImageUrl = x.Hat.ImageUrl ?? "/assets/hats/placeholder-image.png",
-                UserId = x.UserId
+                UserId = x.UserId,
+                Depth = x.Hat.Depth,
+                Length = x.Hat.Length,
+                Price = x.Hat.Price,
+                Size = x.Hat.Size,
+                Width = x.Hat.Width,
+                Materials = x.Hat.HatMaterials.Select(y => new OrderHatMaterialViewModel
+                {
+                    Name = y.Material.Name,
+                    Unit = y.Material.Unit,
+                    Amount = y.Quantity
+                }).ToList()
             }).ToList(),
             Users = users
         };
