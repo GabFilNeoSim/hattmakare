@@ -19,29 +19,15 @@ namespace Hattmakare.Controllers
             _context = context;
         }
 
-        [HttpGet]
-        public async Task<ActionResult> Index(int? customerId, int? hatId)
+        public async Task<ActionResult> Index()
         {
-            var orders = await _context.Orders
-                .Include(o => o.Customer)
-                .Include(o => o.OrderHats)
-                .ThenInclude(oh => oh.Hat)
-                .ToListAsync();
-
-            if (customerId.HasValue)
-            {
-                orders = orders
-                    .Where(o => o.Customer.Id == customerId.Value)
-                    .ToList();
-            }
-
             var customerList = await _context.Customers
-                .Select(c => new SelectListItem
-                {
-                    Value = c.Id.ToString(),
-                    Text = c.FirstName + " " + c.LastName
-                })
-                .ToListAsync();
+        .Select(c => new SelectListItem
+        {
+            Value = c.Id.ToString(),
+            Text = c.FirstName + " " + c.LastName
+        })
+        .ToListAsync();
 
             var hatList = await _context.Hats
                 .Select(h => new SelectListItem
@@ -51,22 +37,42 @@ namespace Hattmakare.Controllers
                 })
                 .ToListAsync();
 
-            var allOrderHats = orders.SelectMany(o => o.OrderHats);
+            var model = new StatisticsViewModel
+            {
+                Customers = customerList,
+                Hats = hatList,
+                DailyLabels = new List<string>(), 
+                DailySales = new List<int>(),
+                QuarterlySales = new List<int>(),
+                MonthlySales = new List<int>()
+            };
 
-            //var result = allOrderHats
-            //    .GroupBy(oh => oh.Hat.Name)
-            //    .Select(g => new
-            //    {
-            //        HatName = g.Key,
-            //        TotalSold = g.Count()
-            //    })
-            //    .ToList();
+            return View(model);
+        }
+
+        [HttpGet("data")]
+        public async Task<IActionResult> GetChartData(int? customerId, int? hatId)
+        {
+            var orders = await _context.Orders
+                .Include(o => o.Customer)
+                .Include(o => o.OrderHats)
+                .ThenInclude(oh => oh.Hat)
+                .ToListAsync();
+
+            if (customerId.HasValue)
+            {
+                orders = orders.Where(o => o.Customer.Id == customerId.Value).ToList();
+            }
+
+            if (hatId.HasValue)
+            {
+                orders = orders.Where(o => o.OrderHats.Any(oh => oh.Hat.Id == hatId.Value)).ToList();
+            }
 
             var today = DateTime.Today;
             var startDate = new DateTime(today.Year, today.Month, 1);
             var endDate = startDate.AddMonths(1).AddDays(-1);
 
-            // Daglig försäljning för linjediagrammet
             var dailySales = Enumerable.Range(0, (endDate - startDate).Days + 1)
                 .Select(i =>
                 {
@@ -76,7 +82,7 @@ namespace Hattmakare.Controllers
                         Date = date.ToString("yyyy-MM-dd"),
                         Total = orders
                             .SelectMany(o => o.OrderHats)
-                            .Where(oh => oh.Order.EndDate.Date == date)
+                            .Where(oh => oh.Order.EndDate.Date == date && (!hatId.HasValue || oh.Hat.Id == hatId.Value))
                             .Count()
                     };
                 })
@@ -85,34 +91,31 @@ namespace Hattmakare.Controllers
             var quarterlySales = new int[4];
             foreach (var oh in orders.SelectMany(o => o.OrderHats))
             {
-                var month = oh.Order.EndDate.Month;
-                int quarter = (month - 1) / 3;
-                quarterlySales[quarter]++;
+                if (!hatId.HasValue || oh.Hat.Id == hatId.Value)
+                {
+                    var month = oh.Order.EndDate.Month;
+                    int quarter = (month - 1) / 3;
+                    quarterlySales[quarter]++;
+                }
             }
 
             var monthlySales = new int[12];
             foreach (var oh in orders.SelectMany(o => o.OrderHats))
             {
-                var month = oh.Order.EndDate.Month;
-                monthlySales[month - 1]++;
+                if (!hatId.HasValue || oh.Hat.Id == hatId.Value)
+                {
+                    var month = oh.Order.EndDate.Month;
+                    monthlySales[month - 1]++;
+                }
             }
 
-            var model = new StatisticsViewModel
+            return Json(new
             {
-                CustomerId = customerId,
-                Customers = customerList,
-                HatId = hatId,
-                Hats = hatList,
-                //HatNames = result.Select(r => r.HatName).ToList(),
-                //Sales = result.Select(r => r.TotalSold).ToList(),
-
-                DailyLabels = dailySales.Select(d => d.Date).ToList(),
-                DailySales = dailySales.Select(d => d.Total).ToList(),
-                QuarterlySales = quarterlySales.ToList(),
-                MonthlySales = monthlySales.ToList()
-            };
-
-            return View(model);
+                dailyLabels = dailySales.Select(d => d.Date),
+                dailySales = dailySales.Select(d => d.Total),
+                quarterlySales,
+                monthlySales
+            });
         }
 
     }

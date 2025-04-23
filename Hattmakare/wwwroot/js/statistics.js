@@ -1,13 +1,43 @@
-﻿    document.addEventListener("DOMContentLoaded", function () {
+﻿let dailyLabels = [];
+let dailySales = [];
+let quarterlySales = [];
+let monthlySales = [];
+
+document.addEventListener("DOMContentLoaded", function () {
     const canvas = document.getElementById("hatChart");
     const ctx = canvas.getContext("2d");
     const rangeButtons = document.querySelectorAll(".range-btn");
 
-    const dailyLabels = JSON.parse(canvas.dataset.dailylabels || "[]");
-    const dailySales = JSON.parse(canvas.dataset.dailysales || "[]");
-    const quarterlySales = JSON.parse(canvas.dataset.quarterlysales || "[]");
-    const monthlySales = JSON.parse(canvas.dataset.monthlysales || "[]");
+    dailyLabels = JSON.parse(canvas.dataset.dailylabels || "[]");
+    dailySales = JSON.parse(canvas.dataset.dailysales || "[]");
+    quarterlySales = JSON.parse(canvas.dataset.quarterlysales || "[]");
+    monthlySales = JSON.parse(canvas.dataset.monthlysales || "[]");
 
+    const customerSelect = document.querySelector('[name="CustomerId"]');
+    const hatSelect = document.querySelector('[name="HatId"]');
+
+
+    async function fetchAndUpdateChart() {
+    const customerId = customerSelect.value;
+    const hatId = hatSelect.value;
+
+    const url = `/statistics/data?customerId=${customerId}&hatId=${hatId}`;
+    const response = await fetch(url);
+    const data = await response.json();
+
+    // Uppdatera dataset baserat på aktiv range
+    const activeRange = document.querySelector(".range-btn.active").dataset.range;
+
+    dailyLabels = data.dailyLabels;
+    dailySales = data.dailySales;
+    quarterlySales = data.quarterlySales;
+    monthlySales = data.monthlySales;
+
+    updateIntervalData(activeRange);
+    }
+
+    customerSelect.addEventListener("change", fetchAndUpdateChart);
+    hatSelect.addEventListener("change", fetchAndUpdateChart);
 
     let chart;
 
@@ -79,4 +109,5 @@
             updateIntervalData(range);
         });
     });
-});
+    });
+
