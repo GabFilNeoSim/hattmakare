@@ -44,6 +44,7 @@ public class OrderController : Controller
             address = "Hattmakarvägen 1<br />702 52 Örebro",
             sender = sender,
             reciver = order.Customer,
+            IsPriority = order.Priority,
             price = totalPrice,
             weight = 2,
             OrderHats = order.OrderHats.ToList()
