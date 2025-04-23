@@ -6,8 +6,13 @@ namespace Hattmakare.Data;
 
 public static class DbSeeder
 {
-    public static async Task SeedAllAsync(AppDbContext context, UserManager<User> userManager)
+    public static async Task SeedAllAsync(
+        AppDbContext context,
+        UserManager<User> userManager,
+        RoleManager<IdentityRole> roleManager
+    )
     {
+        await AddRoles(roleManager);
         await AddUsers(userManager);
         await AddMaterials(context);
         await AddDecorations(context);
@@ -15,30 +20,42 @@ public static class DbSeeder
         await context.SaveChangesAsync();
     }
 
+    private static async Task AddRoles(RoleManager<IdentityRole> roleManager)
+    {
+        if (!await roleManager.RoleExistsAsync("Admin"))
+        {
+            await roleManager.CreateAsync(new IdentityRole("Admin"));
+        }
+    }
+
     private static async Task AddUsers(UserManager<User> userManager)
     {
-        string password = "password";
+        const string password = "password";
 
         if (await userManager.FindByEmailAsync("otto@hattmakare.se") == null)
         {
-            await userManager.CreateAsync(new User
+            var user1 = new User
             {
                 FirstName = "Otto",
                 LastName = "Ottosson",
                 UserName = "otto@hattmakare.se",
                 Email = "otto@hattmakare.se"
-            }, password);
+            };
+            await userManager.CreateAsync(user1, password);
+            await userManager.AddToRoleAsync(user1, "Admin");
         }
 
         if (await userManager.FindByEmailAsync("judiths@hattmakare.se") == null)
         {
-            await userManager.CreateAsync(new User
+            var user2 = new User
             {
                 FirstName = "Judiths",
                 LastName = "Judithsdottir",
                 UserName = "judiths@hattmakare.se",
                 Email = "judiths@hattmakare.se"
-            }, password);
+            };
+            await userManager.CreateAsync(user2, password);
+            await userManager.AddToRoleAsync(user2, "Admin");
         }
     }
 

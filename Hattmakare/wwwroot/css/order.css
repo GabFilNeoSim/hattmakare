@@ -182,7 +182,16 @@
     display: flex;
     align-items: center;
     gap: 5px;
-    margin-top: 5px;
+    margin-top: 7px;
+}
+
+.order-info-prio p {
+    font-size: unset;
+}
+
+.order-info-pro-title {
+    display: flex;
+    flex-direction: row;
 }
 
 .form-check {
