@@ -206,12 +206,11 @@ public class OrderController : Controller
                 }
             ).ToListAsync(),
         };
-
         return View(model);
     }
 
     [HttpPost("AddSpecialHat")]
-    public async Task<IActionResult> AddSpecialHat(AddSpecialHatViewModel newHat)
+    public async Task<IActionResult> AddSpecialHat([FromBody] AddSpecialHatViewModel newHat)
     {
         var hat = new Hat();
         hat.Name = newHat.Name;
@@ -232,7 +231,7 @@ public class OrderController : Controller
         await _context.Hats.AddAsync(hat);
         await _context.SaveChangesAsync();
 
-        return RedirectToAction("New");
+        return Ok();
     }
 
 

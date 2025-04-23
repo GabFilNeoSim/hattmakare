@@ -65,11 +65,11 @@ public class HatController : Controller
         var hat = new Hat();
         hat.Name = newHat.Name;
         hat.Size = newHat.Size;
-        hat.Length = newHat.Length;
-        hat.Depth = newHat.Depth;
-        hat.Width = newHat.Width;
+        hat.Length = (double)newHat.Length;
+        hat.Depth = (double)newHat.Depth;
+        hat.Width = (double)newHat.Width;
         hat.Quantity = newHat.Quantity;
-        hat.Price = newHat.Price;
+        hat.Price = (decimal)newHat.Price;
 
 
         var image = await _imageService.UploadImageAsync(newHat.Image);
