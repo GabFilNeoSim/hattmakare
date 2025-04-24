@@ -84,7 +84,7 @@ public class OrderController : Controller
             reciver = order.Customer,
             IsPriority = order.Priority,
             price = totalPrice,
-            weight = 2,
+            weight = 0,
             OrderHats = order.OrderHats.ToList()
         };
 

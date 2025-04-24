@@ -42,9 +42,7 @@
                 {
                     <div class="text-danger">Adress saknas</div>
                 }
-                
-                @* @Model.reciver.Address.DeliveryAddress<br />
-                @Model.reciver.Address.PostalCode @Model.reciver.Address.City *@
+     
             </p>
         </div>
     </div>
@@ -68,9 +66,9 @@
             }
 
             <tr class="table-light">
-                <td><strong>Totalt vikt:</strong></td>
+                <td><strong>Totalt vikt (kg):</strong></td>
                 <td class="text-end">
-                    <input type="number" name="weight" value="@Model.weight" /> kg
+                    <input class="form-control waybillInput" type="number" name="weight" value="@Model.weight" /> 
                 </td>
 
             </tr>
@@ -78,7 +76,7 @@
             <tr class="table-light">
                 <td><strong>Kod för export:</strong></td>
                 <td class="text-end">
-                    <input type="number" value="@Model.Export" />
+                    <input class="form-control waybillInput"  type="number" value="@Model.Export" />
                 </td>
 
             </tr>
@@ -102,6 +100,6 @@
     </table>
 </div>
 
-<button class="btn btn-secondary mt-3" onclick="window.print()">Skriv ut fraktsedel</button>
+<button class="btn btn-blue mt-3" onclick="window.print()">Skriv ut fraktsedel</button>
 
 
