@@ -4,6 +4,7 @@ using Hattmakare.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hattmakare.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250423161637_init")]
+    partial class init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -237,20 +240,6 @@ namespace Hattmakare.Migrations
                     b.HasIndex("MaterialId");
 
                     b.ToTable("HatsMaterial");
-
-                    b.HasData(
-                        new
-                        {
-                            HatId = 1,
-                            MaterialId = 1,
-                            Quantity = 1
-                        },
-                        new
-                        {
-                            HatId = 2,
-                            MaterialId = 2,
-                            Quantity = 6
-                        });
                 });
 
             modelBuilder.Entity("Hattmakare.Data.Entities.HatType", b =>
@@ -284,7 +273,7 @@ namespace Hattmakare.Migrations
                         new
                         {
                             Id = 3,
-                            Name = "Specialhatt"
+                            Name = "Speicalhatt"
                         });
                 });
 
@@ -320,17 +309,6 @@ namespace Hattmakare.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Materials");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            IsDecoration = false,
-                            Name = "tyg",
-                            Price = 10m,
-                            Supplier = "Olhsson",
-                            Unit = "M"
-                        });
                 });
 
             modelBuilder.Entity("Hattmakare.Data.Entities.Order", b =>

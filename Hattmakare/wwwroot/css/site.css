@@ -126,8 +126,7 @@ p {
     padding: 0;
     margin: 0;
     font-size: 20px;
-   height: 60px;
-    
+    padding: 15px;
 }
 
 .logo {
@@ -137,5 +136,34 @@ p {
 }
 
 .logo-link {
-    margin-right: 4px;
+    margin-right: 35px;
+}
+
+.container.order {
+    max-width: 100% !important;
+}
+
+.nav-item .nav-link {
+    font-size: 18px
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+}
+
+.nav-link {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    color: rgb(65, 65, 65);
+}
+
+.navbar-nav {
+    gap: 9px
+}
+
+.nav-item i {
+    font-size: 17px;
+    color: rgb(65, 65, 65);
 }

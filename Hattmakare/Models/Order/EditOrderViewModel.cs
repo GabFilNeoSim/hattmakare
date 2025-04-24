@@ -10,8 +10,8 @@ public class EditOrderViewModel
     public string CustomerPhone { get; set; }
     public decimal Price { get; set; }
     public string Status { get; set; }
-    public DateOnly StartDate { get; set; }
-    public DateOnly EndDate { get; set; }
+    public string StartDate { get; set; }
+    public string EndDate { get; set; }
     public bool Priority { get; set; }
 
     public List<EditOrderHatViewModel> Hats { get; set; }

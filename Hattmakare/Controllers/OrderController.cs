@@ -8,8 +8,8 @@ using Microsoft.AspNetCore.Authorization;
 using Hattmakare.Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Hattmakare.Services;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-using System.Reflection;
 
 namespace Hattmakare.Controllers;
 [Authorize]
@@ -17,12 +17,12 @@ namespace Hattmakare.Controllers;
 public class OrderController : Controller 
 {
     private readonly AppDbContext _context;
-    private readonly ILogger<OrderController> _logger;
+    private readonly IImageService _imageService;
 
-    public OrderController(AppDbContext context, ILogger<OrderController> logger)
+    public OrderController(AppDbContext context, IImageService imageService)
     {
         _context = context;
-        _logger = logger;
+        _imageService = imageService;
     }
    
     [HttpGet("materialorder")]
@@ -90,75 +90,85 @@ public class OrderController : Controller
 
 
     [HttpGet]
-    public async Task<IActionResult> Index(string searchQuery)
+    public async Task<IActionResult> Index(string searchQuery, int? HatId, DateTime? StartDate, DateTime? EndDate)
     {
-        IQueryable<OrderListViewModel> ordersQuery;
+        var hatNameList = await _context.HatTypes
+         .Select(x => new SelectListItem
+         {
+             Value = x.Id.ToString(),
+             Text = x.Name,
+         })
+         .ToListAsync();
+
+
+        var filteredOrders = _context.Orders
+      .Include(o => o.Customer)
+      .Include(o => o.OrderStatus)
+      .Include(o => o.OrderHats).ThenInclude(oh => oh.Hat)
+      .Include(o => o.OrderHats).ThenInclude(oh => oh.User)
+      .AsQueryable();
+
+        if (StartDate.HasValue)
+        {
+            filteredOrders = filteredOrders.Where(o => o.StartDate >= StartDate.Value);
+        }
+
+        if (EndDate.HasValue)
+        {
+            filteredOrders = filteredOrders.Where(o => o.EndDate <= EndDate.Value);
+        }
+
 
         if (!string.IsNullOrWhiteSpace(searchQuery))
         {
-            
-            ordersQuery = _context.OrderStatuses
-                .Select(x => new OrderListViewModel
-                {
-                  Id = x.Id,
-                  Status = x.Name,
-                  Orders = x.Orders
-                  .Where(y =>
-                        (y.Customer.FirstName + " " + y.Customer.LastName).Contains(searchQuery.ToLower()))
-                        .Select(y => new OrderViewModel 
-                        {
-                            Id = y.Id,
-                            Customer = y.Customer.FirstName + " " + y.Customer.LastName,
-                            StartDate = y.StartDate,
-                            EndDate = y.EndDate,
-                            Price = y.Price,
-                            Priority = y.Priority,
-                            Status = y.OrderStatus.Name,
-                            Managers = y.OrderHats
-                                .Where(z => z.User != null)
-                                .Select(z => $"{z.User.FirstName[0].ToString().ToUpper()}{z.User.LastName[0].ToString().ToUpper()}")
-                                .Distinct()
-                                .ToList(),
-                        }).ToList()
-                });
-        }
-        else
-        {
-            
-            ordersQuery = _context.OrderStatuses
-                .Select(x => new OrderListViewModel
-                {
-                    Id = x.Id,
-                    Status = x.Name,
-                    Orders = x.Orders
-                        .Select(y => new OrderViewModel
-                        {
-                            Id = y.Id,
-                            Customer = y.Customer.FirstName + " " + y.Customer.LastName,
-                            StartDate = y.StartDate,
-                            EndDate = y.EndDate,
-                            Price = y.Price,
-                            Priority = y.Priority,
-                            Status = y.OrderStatus.Name,
-                            Managers = y.OrderHats
-                                .Where(z => z.User != null)
-                                .Select(z => $"{z.User.FirstName[0].ToString().ToUpper()}{z.User.LastName[0].ToString().ToUpper()}")
-                                .Distinct()
-                                .ToList(),
-                        }).ToList()
-                });
+            filteredOrders = filteredOrders.Where(o =>
+                (o.Customer.FirstName + " " + o.Customer.LastName).ToLower().Contains(searchQuery.ToLower()));
         }
 
-       
-        var viewModel = await ordersQuery.ToListAsync();
+        if (HatId.HasValue)
+        {
+            filteredOrders = filteredOrders.Where(o =>
+                o.OrderHats.Any(h => h.Hat.HatTypeId == HatId));
+        }
+
+        var ordersQuery = await _context.OrderStatuses
+            .Select(s => new OrderListViewModel
+            {
+                Id = s.Id,
+                Status = s.Name,
+                Orders = filteredOrders
+                    .Where(o => o.OrderStatusId == s.Id)
+                    .Select(y => new OrderViewModel
+                    {
+                        Id = y.Id,
+                        Customer = y.Customer.FirstName + " " + y.Customer.LastName,
+                        StartDate = y.StartDate.ToString("MM/dd/yyyy"),
+                        EndDate = y.EndDate.ToString("MM/dd/yyyy"),
+                        Price = y.Price,
+                        Priority = y.Priority,
+                        Status = y.OrderStatus.Name,
+                        Managers = y.OrderHats
+                            .Where(z => z.User != null)
+                            .Select(z => $"{z.User.FirstName[0].ToString().ToUpper()}{z.User.LastName[0].ToString().ToUpper()}")
+                            .Distinct()
+                            .ToList(),
+                    }).ToList()
+            })
+            .ToListAsync();
+
+
+        var viewModel = new OrderIndexViewModel
+        {
+            HatNames = hatNameList,
+            HatId = HatId ?? 0,
+            StartDate = StartDate?.ToString("MM/dd/yyyy"),
+            EndDate = EndDate?.ToString("MM/dd/yyyy"),
+            OrderItems = ordersQuery
+        };
+
 
         return View(viewModel);
     }
-
-
-
-
-
 
     [HttpPost("{oid}/status")]
     public async Task<IActionResult> EditOrderStatus(int oid, int sid)
@@ -174,9 +184,6 @@ public class OrderController : Controller
         order.OrderStatusId = sid;
 
         await _context.SaveChangesAsync();
-
-        TempData["NotifyType"] = "success";
-        TempData["NotifyMessage"] = "Done";
 
         return Ok();
     }
@@ -201,8 +208,8 @@ public class OrderController : Controller
             Id = order.Id,
             CustomerName = order.Customer?.FirstName + " " + order.Customer?.LastName,
             CustomerPhone = order.Customer?.PhoneNumber,
-            StartDate = order.StartDate,
-            EndDate = order.EndDate,
+            StartDate = order.StartDate.ToString("MM/dd/yyyy"),
+            EndDate = order.EndDate.ToString("MM/dd/yyyy"),
             Price = order.Price,
             Priority = order.Priority,
             Status = order.OrderStatus?.Name,
@@ -237,8 +244,8 @@ public class OrderController : Controller
         var order = await _context.Orders.Where(x => x.Id == oid).FirstOrDefaultAsync();
         if (order is null) return NotFound();
 
-        order.StartDate = request.StartDate;
-        order.EndDate = request.EndDate;
+        order.StartDate = DateTime.Parse(request.StartDate);
+        order.EndDate = DateTime.Parse(request.EndDate);
         order.Priority = request.Priority;
 
 
@@ -278,11 +285,11 @@ public class OrderController : Controller
     }
 
     [HttpGet("new")]
-    public async Task<IActionResult> Hats()
+    public async Task<IActionResult> New()
     {
         var model = new NewOrderViewModel
         {
-            Hats = await _context.Hats.Where(h => h.IsDeleted == false).Select(x =>
+            Hats = await _context.Hats.Where(h => h.IsDeleted == false && h.HatType.Name == "StandardHatt").Select(x =>
                 new HatViewModel
                 {
                     Id = x.Id,
@@ -292,33 +299,40 @@ public class OrderController : Controller
                     Comment = x.Comment,
                     ImageUrl = x.ImageUrl
                 }
-            ).ToListAsync(),
-        };
 
+            ).ToListAsync(),
+            Customers = await _context.Customers
+            .Select(c => new SelectListItem
+            {
+                Value = c.Id.ToString(),
+                Text = c.FirstName + " " + c.LastName
+            }).ToListAsync()
+        };
         return View(model);
     }
+  [HttpPost("AddSpecialHat")]
+  public async Task<IActionResult> AddSpecialHat([FromForm] AddHatViewModel newHat)
+  {
+    var hat = new Hat();
+    hat.Name = newHat.Name;
+    hat.Size = newHat.Size ?? 0;
+    hat.Length = newHat.Length ?? 0;
+    hat.Depth = newHat.Depth ?? 0;
+    hat.Width = newHat.Width ?? 0;
+    hat.Quantity = newHat.Quantity;
+    hat.Price = newHat.Price ?? 0;
+    hat.Comment = newHat.Comment ?? "";
+    hat.HatType = await _context.HatTypes
+        .FirstOrDefaultAsync(x => x.Name == "SpecialHatt");
 
 
+    var image = await _imageService.UploadImageAsync(newHat.Image);
+    
+    hat.ImageUrl = image;
 
-    [HttpGet("dropdown-hats")]
-    public async Task<IActionResult> DropdownHats()
-    {
-        var hats = await _context.Hats
-            .Include(h => h.HatType)
-            .Where(h => !h.IsDeleted)
-            .Select(h => new HatViewModel
-            {
-                Id = h.Id,
-                Name = h.Name,
-                HatTypeName = h.HatType.Name
-            })
-            .ToListAsync();
+    await _context.Hats.AddAsync(hat);
+    await _context.SaveChangesAsync();
 
-        return PartialView("_DropdownHatsPartial", hats);
-    }
-
-
-
-
-
+    return Ok(hat.Id);
+  }
 }

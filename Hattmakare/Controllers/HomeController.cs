@@ -54,7 +54,7 @@ public class HomeController : Controller
             .GroupBy(o => o.EndDate)
             .Select(g => new
             {
-                Title = $"{g.Count()} ordrar",
+                Title = g.Count() > 1 ? $"{g.Count()} ordrar" : $"{g.Count()} order",
                 Start = g.Key.ToString("yyyy-MM-dd"),
             }).ToList();
 
@@ -62,7 +62,7 @@ public class HomeController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> PopulateCalendarPopUp(DateOnly date)
+    public async Task<IActionResult> PopulateCalendarPopUp(DateTime date)
     {
         var orders = await _appDbContext.Orders
         .Where(o => o.EndDate == date)
@@ -70,8 +70,8 @@ public class HomeController : Controller
         {
             Id = x.Id,
             CustomerName = $"{x.Customer.FirstName} {x.Customer.LastName}",
-            StartDate = x.StartDate,
-            EndDate = x.EndDate,
+            StartDate = x.StartDate.ToString("MM/dd/yyyy"),
+            EndDate = x.EndDate.ToString("MM/dd/yyyy"),
         })
         .ToListAsync();
 

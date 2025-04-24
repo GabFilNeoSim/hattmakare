@@ -148,13 +148,19 @@ public class UserController : Controller
     [HttpPost("{id}/remove")]
     public async Task<IActionResult> RemoveUser(string id)
     {
-        var user = await _userManager.FindByIdAsync(id);
-        if (user == null)
+        var userToRemove = await _userManager.FindByIdAsync(id);
+        if (userToRemove == null)
         {
             return RedirectToAction(nameof(Index));
         }
 
-        await _userManager.DeleteAsync(user);
+        var loggedInUser = await _userManager.GetUserAsync(User);
+        if (userToRemove.Id == loggedInUser!.Id)
+        {
+            return RedirectToAction(nameof(Index));
+        }
+
+        await _userManager.DeleteAsync(userToRemove);
 
         return RedirectToAction(nameof(Index));
     }
