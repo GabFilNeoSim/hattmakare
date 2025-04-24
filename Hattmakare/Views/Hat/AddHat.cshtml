@@ -55,8 +55,70 @@
         <span asp-validation-for="Image" class="text-danger small"></span>
     </div>
 
-    <div class="text-end">
-        <button type="submit" class="btn btn-dark px-4">➕ Lägg till hatt</button>
+    <h4 class="mt-4">Materialval</h4>
+
+    <div id="material-selection" class="mb-3">
+        <div class="input-group material-group">
+            <select id="material-dropdown" class="form-select">
+                <option value="">-- Välj material --</option>
+                @foreach (var mat in Model.AvailableMaterials)
+                {
+                    <option value="@mat.MaterialId" data-name="@mat.Name" data-unit="@mat.Unit">@mat.Name (@mat.Unit)</option>
+                }
+            </select>
+            <input type="number" id="material-qty" class="form-control" placeholder="Mängd" min="1" />
+            <button type="button" id="add-material-btn" class="btn btn-primary btn-sm">
+                <i class="fa-solid fa-plus"></i>
+                Lägg till
+            </button>
+        </div>
     </div>
+
+    <ul id="material-list" class="list-group mb-3"></ul>
+
+    <div class="text-end">
+        <button type="submit" class="btn btn-primary px-4 mt-4">
+            <i class="fa-solid fa-plus"></i>
+            Skapa hatt
+        </button>
+    </div>
+
+    @section Scripts {
+<script>
+    const dropdown = document.getElementById('material-dropdown');
+    const qtyInput = document.getElementById('material-qty');
+    const addBtn = document.getElementById('add-material-btn');
+    const list = document.getElementById('material-list');
+
+    let index = 0;
+
+    addBtn.addEventListener('click', () => {
+        const id = dropdown.value;
+        const name = dropdown.options[dropdown.selectedIndex].dataset.name;
+        const unit = dropdown.options[dropdown.selectedIndex].dataset.unit;
+        const qty = qtyInput.value;
+
+        if (!id || qty < 1) return;
+
+        // Create list item UI
+        const li = document.createElement('li');
+        li.className = 'list-group-item d-flex justify-content-between align-items-center';
+        li.innerHTML = `
+                    ${name} - ${qty} ${unit}
+            <button type="button" class="btn btn-sm btn-danger ms-2" onclick="this.parentElement.remove()">
+                        <i class="fa-solid fa-xmark"></i>
+            </button>
+            <input type="hidden" name="SelectedMaterials[${index}].MaterialId" value="${id}" />
+            <input type="hidden" name="SelectedMaterials[${index}].Quantity" value="${qty}" />
+        `;
+        list.appendChild(li);
+
+        index++;
+        qtyInput.value = '';
+        dropdown.selectedIndex = 0;
+    });
+</script>
+}
+
 </form>
 
