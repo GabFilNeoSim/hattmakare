@@ -17,17 +17,29 @@
 </form>
   
 
-
 <form method="get" class="mb-3">
     <label for="HatId" class="mt-2">Välj hatt:</label>
     <select asp-for="HatId" asp-items="Model.HatNames" class="form-control" onchange="this.form.submit()">
         <option value="">Alla hattar</option>
     </select>
 </form>
-
-
-
 </div>
+
+<form method="get" class="filterByDate">
+    <div class="order-info-child">
+        <p>Startdatum</p>
+        <div class="order-info-title action">
+            <input asp-for="StartDate" id="order-startDate" value="@Model.StartDate" type="date" data-oid="OrderItems.Id" />
+        </div>
+    </div>
+    <div class="order-info-child">
+        <p>Slutdatum</p>
+        <div class="order-info-title action">
+            <input asp-for="EndDate" value="@Model.EndDate" type="date" />
+        </div>
+    </div>
+    <button type="submit">Sök</button>
+</form>
  
 <div id="boards-container">
     @foreach(var board in Model.OrderItems) {
