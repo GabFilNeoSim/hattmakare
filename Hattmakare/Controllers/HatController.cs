@@ -67,9 +67,11 @@ public class HatController : Controller
         hat.Size = newHat.Size;
         hat.Length = newHat.Length ?? 0;
         hat.Depth = newHat.Depth ?? 0;
-        hat.Width = newHat.Width ?? 0;
+        hat.Width = newHat.Width?? 0;
         hat.Quantity = newHat.Quantity;
         hat.Price = newHat.Price ?? 0;
+        hat.HatType = await _context.HatTypes
+        .FirstOrDefaultAsync(x => x.Name == "StandardHatt");
 
 
         var image = await _imageService.UploadImageAsync(newHat.Image);
@@ -158,6 +160,7 @@ public class HatController : Controller
 
        
         allHats = allHats.Where(h => !h.IsDeleted);
+
 
        
         if (!string.IsNullOrEmpty(searchTerm))
