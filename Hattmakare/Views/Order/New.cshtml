@@ -2,6 +2,10 @@
 
 @model NewOrderViewModel;
 
+@{
+    ViewBag.Title = "Ny order";
+}
+
 <div id="hat" class="order">
   <div id="hatList">  
     @foreach (var hat in Model.Hats)
