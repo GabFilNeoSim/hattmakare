@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Hattmakare.Services;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+
 namespace Hattmakare.Controllers;
 [Authorize]
 [Route("order")]
@@ -17,12 +18,45 @@ public class OrderController : Controller
 {
     private readonly AppDbContext _context;
     private readonly IImageService _imageService;
+    private ILogger<OrderController> _logger;
+    
 
-    public OrderController(AppDbContext context, IImageService imageService)
+    public OrderController(AppDbContext context, IImageService imageService, ILogger<OrderController> _logger)
     {
         _context = context;
         _imageService = imageService;
+        _logger = _logger;
     }
+   
+    [HttpGet("materialorder")]
+    public async Task<IActionResult> MaterialOrder(int orderId)
+    {
+        var order = await _context.Orders
+            .Include(o => o.OrderHats)
+                .ThenInclude(oh => oh.Hat)
+                    .ThenInclude(h => h.HatMaterials)
+                        .ThenInclude(hm => hm.Material)
+            .FirstOrDefaultAsync(o => o.Id == orderId);
+
+        if (order == null)
+        {
+            _logger.LogWarning("Ingen order hittades med ID {OrderId}", orderId);
+            
+        }
+
+        var allHatMaterials = order.OrderHats
+            .SelectMany(oh => oh.Hat.HatMaterials)
+            .ToList();
+
+        var model = new MaterialOrderViewModel
+        {
+            OrderId = order.Id,
+            HatMaterials = allHatMaterials
+        };
+
+        return View(model);
+    }
+
 
     [HttpGet("waybill")]
     public async Task<IActionResult> Waybill(int orderId)
@@ -59,7 +93,7 @@ public class OrderController : Controller
 
 
     [HttpGet]
-    public async Task<IActionResult> Index(string searchQuery, int? HatId)
+    public async Task<IActionResult> Index(string searchQuery, int? HatId, DateTime? StartDate, DateTime? EndDate)
     {
         var hatNameList = await _context.HatTypes
          .Select(x => new SelectListItem
@@ -76,6 +110,17 @@ public class OrderController : Controller
       .Include(o => o.OrderHats).ThenInclude(oh => oh.Hat)
       .Include(o => o.OrderHats).ThenInclude(oh => oh.User)
       .AsQueryable();
+
+        if (StartDate.HasValue)
+        {
+            filteredOrders = filteredOrders.Where(o => o.StartDate >= StartDate.Value);
+        }
+
+        if (EndDate.HasValue)
+        {
+            filteredOrders = filteredOrders.Where(o => o.EndDate <= EndDate.Value);
+        }
+
 
         if (!string.IsNullOrWhiteSpace(searchQuery))
         {
@@ -119,19 +164,16 @@ public class OrderController : Controller
         {
             HatNames = hatNameList,
             HatId = HatId ?? 0,
+            StartDate = StartDate?.ToString("MM/dd/yyyy"),
+            EndDate = EndDate?.ToString("MM/dd/yyyy"),
             OrderItems = ordersQuery
         };
+
 
         return View(viewModel);
     }
 
-
-
-
-
-
-
-        [HttpPost("{oid}/status")]
+    [HttpPost("{oid}/status")]
     public async Task<IActionResult> EditOrderStatus(int oid, int sid)
     {
         var order = await _context.Orders.SingleOrDefaultAsync(x => x.Id == oid);
@@ -145,9 +187,6 @@ public class OrderController : Controller
         order.OrderStatusId = sid;
 
         await _context.SaveChangesAsync();
-
-        TempData["NotifyType"] = "success";
-        TempData["NotifyMessage"] = "Done";
 
         return Ok();
     }

@@ -51,11 +51,22 @@ public class HatController : Controller
 
     //[Authorize]
     [HttpGet("AddHat")]
-    public IActionResult Addhat()
+    public async Task<IActionResult> Addhat()
     {
-        var hat = new AddHatViewModel();
-        
-        return View(hat);
+        var materials = await _context.Materials.ToListAsync();
+
+        var viewModel = new AddHatViewModel
+        {
+            AvailableMaterials = materials.Select(m => new MaterialQuantityViewModel
+            {
+                MaterialId = m.Id,
+                Name = m.Name,
+                Unit = m.Unit,
+                Price = m.Price
+            }).ToList()
+        };
+
+        return View(viewModel);
     }
 
     //[Authorize]
@@ -67,26 +78,60 @@ public class HatController : Controller
         hat.Size = newHat.Size;
         hat.Length = newHat.Length ?? 0;
         hat.Depth = newHat.Depth ?? 0;
-        hat.Width = newHat.Width ?? 0;
+        hat.Width = newHat.Width?? 0;
         hat.Quantity = newHat.Quantity;
         hat.Price = newHat.Price ?? 0;
-
+        hat.HatMaterials = new List<HatMaterial>();
+        hat.HatTypeId = 1;
 
         var image = await _imageService.UploadImageAsync(newHat.Image);
         hat.ImageUrl = image;
+
+        foreach (var material in newHat.SelectedMaterials)
+        {
+            if (material.Quantity > 0)
+            {
+                hat.HatMaterials.Add(new HatMaterial
+                {
+                    MaterialId = material.MaterialId,
+                    Quantity = material.Quantity
+                });
+            }
+        }
 
         await _context.Hats.AddAsync(hat);
         await _context.SaveChangesAsync();
         
         return RedirectToAction("Index");
-
-        //return View(newHat);
     }
 
     [HttpGet("EditHat/{hid}")]
     public async Task<IActionResult> EditHat(int Hid)
     {
-        var hat = await _context.Hats.FirstOrDefaultAsync(x => x.Id == Hid);
+        var hat = await _context.Hats
+                .Include(h => h.HatMaterials)
+                .ThenInclude(hm => hm.Material)
+                .FirstOrDefaultAsync(h => h.Id == Hid);
+
+        if (hat == null)
+            return NotFound();
+
+        var selectedMaterials = hat.HatMaterials.Select(hm => new MaterialQuantityViewModel
+        {
+            MaterialId = hm.MaterialId,
+            Name = hm.Material.Name,
+            Quantity = hm.Quantity,
+            Unit = hm.Material.Unit,
+            Price = hm.Material.Price
+        }).ToList();
+
+        var allMaterials = await _context.Materials.Select(m => new MaterialQuantityViewModel
+        {
+            MaterialId = m.Id,
+            Name = m.Name,
+            Unit = m.Unit,
+            Price = m.Price
+        }).ToListAsync();
 
         var model = new EditHatViewModel
         {
@@ -96,7 +141,9 @@ public class HatController : Controller
             Length = hat.Length,
             Depth = hat.Depth,
             Width = hat.Width,
-            Quantity = hat.Quantity
+            Quantity = hat.Quantity,
+            SelectedMaterials = selectedMaterials,
+            AvailableMaterials = allMaterials
         };
 
         return View(model);
@@ -105,7 +152,15 @@ public class HatController : Controller
     [HttpPost("EditHat/{hid}")]
     public async Task<IActionResult> EditHat(EditHatViewModel selectedHat)
     {
-        var hat = await _context.Hats.FirstOrDefaultAsync(x => x.Id == selectedHat.Hid);
+        var hat = await _context.Hats
+        .Include(h => h.HatMaterials)
+        .FirstOrDefaultAsync(h => h.Id == selectedHat.Hid);
+
+        if (hat == null)
+        {
+            return NotFound();
+        }
+
         hat.Name = selectedHat.Name;
         hat.Price = selectedHat.Price;
         hat.Size = selectedHat.Size;
@@ -118,6 +173,17 @@ public class HatController : Controller
         {
             var image = await _imageService.UploadImageAsync(selectedHat.Image);
             hat.ImageUrl = image;
+        }
+
+        hat.HatMaterials.Clear();
+
+        foreach (var item in selectedHat.SelectedMaterials)
+        {
+            hat.HatMaterials.Add(new HatMaterial
+            {
+                MaterialId = item.MaterialId,
+                Quantity = item.Quantity
+            });
         }
 
         _context.Hats.Update(hat);
@@ -158,6 +224,7 @@ public class HatController : Controller
 
        
         allHats = allHats.Where(h => !h.IsDeleted);
+
 
        
         if (!string.IsNullOrEmpty(searchTerm))
