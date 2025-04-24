@@ -132,33 +132,33 @@ namespace Hattmakare.Data
                 });
 
 
-            builder.Entity<Material>()
-               .HasData(new Material
-               {
-                   Id = 1,
-                   Name = "tyg",
-                   Price = 10,
-                   Unit = "M",
-                   IsDecoration = false,
-                   Supplier = "Olhsson"
+            //builder.Entity<Material>()
+            //   .HasData(new Material
+            //   {
+            //       Id = 1,
+            //       Name = "tyg",
+            //       Price = 10,
+            //       Unit = "M",
+            //       IsDecoration = false,
+            //       Supplier = "Olhsson"
 
-               });
+            //   });
 
-            builder.Entity<HatMaterial>()
-              .HasData(new HatMaterial
-              {
-                HatId = 1,
-                MaterialId = 1,
-                Quantity = 1,
+            //builder.Entity<HatMaterial>()
+            //  .HasData(new HatMaterial
+            //  {
+            //      HatId = 1,
+            //      MaterialId = 1,
+            //      Quantity = 1,
 
-              },
-              new HatMaterial
-              {
-                  HatId = 2,
-                  MaterialId = 2,
-                  Quantity = 6,
+            //  },
+            //  new HatMaterial
+            //  {
+            //      HatId = 2,
+            //      MaterialId = 2,
+            //      Quantity = 6,
 
-              });
+            //  });
 
 
             builder.Entity<Hat>()
