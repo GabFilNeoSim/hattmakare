@@ -32,24 +32,24 @@
 
             <div class="form-group mb-3">
                 <label asp-for="Size" class="form-label fw-bold">Storlek</label>
-                <input asp-for="Size" class="form-control" placeholder="Ange storlek (t.ex. S, M, L, 58cm...)" required />
+                <input asp-for="Size" class="form-control" placeholder="Ange storlek (t.ex. 58cm...)" required />
                 <span asp-validation-for="Size" class="text-danger small"></span>
             </div>
 
             <div class="row mb-3">
                 <div class="col-md-4">
                     <label asp-for="Length" class="form-label fw-bold">Längd</label>
-                    <input asp-for="Length" class="form-control" placeholder="cm" required />
+                    <input asp-for="Length" type="text" inputmode="numeric" pattern="[0-9]*" class="form-control" placeholder="Ange i cm" required />
                     <span asp-validation-for="Length" class="text-danger small"></span>
                 </div>
                 <div class="col-md-4">
                     <label asp-for="Depth" class="form-label fw-bold">Djup</label>
-                    <input asp-for="Depth" class="form-control" placeholder="cm" required />
+                    <input asp-for="Depth" type="text" inputmode="numeric" pattern="[0-9]*" class="form-control" placeholder="Ange i cm" required />
                     <span asp-validation-for="Depth" class="text-danger small"></span>
                 </div>
                 <div class="col-md-4">
                     <label asp-for="Width" class="form-label fw-bold">Bredd</label>
-                    <input asp-for="Width" class="form-control" placeholder="cm" required />
+                    <input asp-for="Width" type="text" inputmode="numeric" pattern="[0-9]*" class="form-control" placeholder="Ange i cm" required />
                     <span asp-validation-for="Width" class="text-danger small"></span>
                 </div>
             </div>
@@ -81,7 +81,10 @@
 
             <ul id="material-list" class="list-group mb-3"></ul>
 
+           
+
             <div class="text-end">
+                <a href="@Url.Action("Index", "Hat")" class="btn btn-secondary mt-4">Tillbaka</a> <br />
                 <button type="submit" class="btn btn-primary px-4 mt-4">
                     <i class="fa-solid fa-plus"></i>
                     Skapa hatt
