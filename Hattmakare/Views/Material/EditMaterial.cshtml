@@ -3,71 +3,58 @@
 @model EditMaterialViewModel
 
 @{
-    ViewBag.Title = "Ändra material";
+    ViewBag.Title = "Ändra ett material";
 }
 
-<div class="material-form-container">
-    <div class="material-form-header">
-        <h2>Ändra material</h2>
-    </div>
-    <div class="material-form-wrapper">
-        <form class="material-form" asp-controller="Material" asp-action="EditMaterial">
-            <div class="material-error-summary" asp-validation-summary="ModelOnly"></div>
-            <div class="material-form-child">
-                <div class="material-form-child-header">
-                    <label asp-for="Name">Namn<span>*</span></label>
-                    <span class="material-error" asp-validation-for="Name"></span>
-                </div>
-                <div class="material-form-child-input">
-                    <input class="form-control" type="text" asp-for="Name">
-                </div>
-            </div>
-            <div class="material-form-child">
-                <div class="material-form-child-header">
-                    <label asp-for="Unit">Enhet<span>*</span></label>
-                    <span class="material-error" asp-validation-for="Unit"></span>
-                </div>
-                <div class="material-form-child-input">
-                    <select class="form-control" asp-for="Unit">
-                        <option value="kg">Kilogram</option>
-                        <option value="g">Gram</option>
-                        <option value="m">Meter</option>
-                        <option value="dm">Decimeter</option>
-                        <option value="cm">Centimeter</option>
-                        <option value="ml">Millimeter</option>
-                        <option value="st">Styck</option>
-                    </select>
-                </div>
-            </div>
-            <div class="material-form-child">
-                <div class="material-form-child-header">
-                    <label asp-for="Price">Pris<span>*</span></label>
-                    <span class="material-error" asp-validation-for="Price"></span>
-                </div>
-                <div class="material-form-child-input">
-                    <input class="form-control" type="number" asp-for="Price" step="0.01">
-                </div>
-            </div>
-            <div class="material-form-child">
-                <div class="material-form-child-header">
-                    <label asp-for="Supplier">Leverantör<span>*</span></label>
-                    <span class="material-error" asp-validation-for="Supplier"></span>
-                </div>
-                <div class="material-form-child-input">
-                    <input class="form-control" type="text" asp-for="Supplier">
-                </div>
-            </div>
-            <div class="checkbox">
-                <label asp-for="IsDecoration">
-                    <input type="checkbox" asp-for="IsDecoration">
-                    Markera som dekoration
-                </label>
-            </div>
-            <button class="material-submit" type="submit">Ändra</button>
-            <a class="material-goback" asp-controller="Material" asp-action="Index">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" /></svg>
-                Tillbaka
-            </a>
-        </form>
-    </div>
+<style>
+    #edit-material-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #edit-material-summary ul {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        list-style-type: none;
+    }
+</style>
+
+<div id="edit-material-container">
+    <h2 class="display-10 text-center mb-3">Ändra ett material</h2>
+    <div id="edit-material-summary" asp-validation-summary="All"></div>
+    <form asp-controller="Material" asp-action="EditMaterial" class="form-group col-md-4 mb-2">
+        <div class="form-group mb-3">
+            <label class="fw-bold" asp-for="Name">Namn</label>
+            <input type="text" class="form-control" asp-for="Name" placeholder="Skriv ett namn">
+        </div>
+        <div class="form-group mb-3">
+            <select class="form-control" asp-for="Unit">
+                <option value="kg">Kilogram</option>
+                <option value="g">Gram</option>
+                <option value="m">Meter</option>
+                <option value="dm">Decimeter</option>
+                <option value="cm">Centimeter</option>
+                <option value="ml">Millimeter</option>
+                <option value="st">Styck</option>
+            </select>
+        </div>
+        <div class="form-group mb-3">
+            <label class="fw-bold" asp-for="Price">Pris</label>
+            <input type="number" class="form-control" asp-for="Price" step="0.01">
+        </div>
+        <div class="form-group mb-3">
+            <label class="fw-bold" asp-for="Supplier">Leverantör</label>
+            <input type="text" class="form-control" asp-for="Supplier" placeholder="Skriv en leverantör">
+        </div>
+        <div class="form-check mb-3">
+            <input type="checkbox" class="form-check-input" asp-for="IsDecoration">
+            <label class="form-check-label" asp-for="IsDecoration">Markera som dekoration</label>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Ändra</button>
+    </form>
+    <a asp-controller="Material" asp-action="Index" class="btn btn-link">Tillbaka</a>
 </div>
