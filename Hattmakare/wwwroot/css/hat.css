@@ -127,8 +127,8 @@
   width: 50%;
   display: flex;
   border: 1px solid black;
-  border-radius: 16px;
-  padding: 2px 8px;
+  padding: 5px 15px;
+  border-radius: 50px;
 
   input{
     padding: 0px;
