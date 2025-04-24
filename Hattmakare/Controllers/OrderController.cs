@@ -164,8 +164,8 @@ public class OrderController : Controller
         {
             HatNames = hatNameList,
             HatId = HatId ?? 0,
-            StartDate = StartDate?.ToString("MM/dd/yyyy"),
-            EndDate = EndDate?.ToString("MM/dd/yyyy"),
+            StartDate = StartDate,
+            EndDate = EndDate,
             OrderItems = ordersQuery
         };
 
