@@ -160,6 +160,32 @@ p {
     align-items: center;
 }
 
+.table thead tr th, .table tbody tr td{
+    background: none;
+}
+
+.table > :not(caption) > * > * {
+
+}
+
+tbody, td, tfoot, th, thead, tr {
+    border-color: rgba(0,0,0,0.2);
+}
+
+.fc-event-title-container {
+    background: #6d75c6 !important;
+}
+
+.btn-outline-primary {
+    border-color: #6d75c6 !important;
+    color: #6d75c6 !important;
+}
+
+.btn-outline-primary:hover {
+    background: #6d75c6 !important;
+    color: #fff !important;
+}
+
 .nav-link {
     display: flex;
     gap: 8px;
