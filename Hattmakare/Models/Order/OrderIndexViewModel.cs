@@ -9,5 +9,9 @@ namespace Hattmakare.Models.Order
         public List<HatViewModel> Hats { get; set; }
         public List<SelectListItem> HatNames { get; set; }
         public int HatId { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+         
+
     }
 }

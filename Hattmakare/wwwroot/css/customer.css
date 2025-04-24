@@ -14,22 +14,21 @@
     fill: white;
   }
 
-  #customer #customerAdd {
-    margin: 0 auto;
-    margin-top: 24px;
-    border: 0;
-    background-color: hsl(0,0%,20%);
-    color: white;
-    display: flex;
-    width: 300px;
-    font-size: 25px;
-    width: fit-content;
-    padding: 8px 24px;
-    border-radius: 24px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
+    #customer #customerAdd {
+        margin: 0 auto;
+        margin-top: 24px;
+        border: 0;
+        background-color: #6d75c6;
+        color: white;
+        display: flex;
+        font-size: 18px;
+        width: fit-content;
+        padding: 8px 24px;
+        border-radius: 24px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
 
   #customer #edit svg {
     display: block;
@@ -86,19 +85,19 @@
     min-width: 0;
   }
 
-  #customer #search {
+#customer #search {
     margin-bottom: 4px;
     width: 80%;
     display: flex;
     border: 1px solid black;
-    border-radius: 16px;
-    padding: 2px 8px;
-    input
-
+    padding: 5px 15px;
+    border-radius: 50px;
+input 
 {
   flex: 1;
   padding: 0px;
   border: none;
+  background: none;
 }
 
 input:focus {
@@ -124,21 +123,21 @@ button {
 
 #customer #resetSearch {
     margin-left: 4px;
-    p
 
-
-{
-  font-weight: 400;
-  font-size: 14px;
-  margin-bottom: 0px;
-  color: hsl(0,0%, 20%);
-}
+    p {
+      font-weight: 400;
+      font-size: 14px;
+      margin-bottom: 0px;
+      color: hsl(0,0%, 20%);
+    }
 
 button {
   border-bottom: 1px solid hsl(0,0%, 50%);
 }
 
-
+.customerFields input {
+    background: none !important;
+}
 
 
 

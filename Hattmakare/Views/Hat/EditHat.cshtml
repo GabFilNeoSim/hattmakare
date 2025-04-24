@@ -2,55 +2,146 @@
 
 @model EditHatViewModel
 
-<form method="post" asp-action="EditHat" enctype="multipart/form-data" class="p-4 shadow rounded bg-light">
-    <h2 class="mb-4 text-center">Redigera Hatt</h2>
+@{
+    ViewBag.Title = "Ändra en hat";
+}
 
-    <div class="form-group mb-3">
-        <label asp-for="Name" class="form-label fw-bold">Hattens namn</label>
-        <input asp-for="Name" class="form-control" placeholder="Skriv namn på hatten" required />
-        <span asp-validation-for="Name" class="text-danger small"></span>
-    </div>
+<div class="container d-flex justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <form method="post" asp-action="EditHat" enctype="multipart/form-data" class="p-4 shadow rounded bg-light">
+            <h2 class="mb-4 text-center">Redigera Hatt</h2>
 
-    <div class="form-group mb-3">
-        <label asp-for="Price" class="form-label fw-bold">Pris</label>
-        <input asp-for="Price" type="number" class="form-control" placeholder="Ange pris i SEK" required />
-        <span asp-validation-for="Price" class="text-danger small"></span>
-    </div>
+            <div class="form-group mb-3">
+                <label asp-for="Name" class="form-label fw-bold">Hattens namn</label>
+                <input asp-for="Name" class="form-control" placeholder="Skriv namn på hatten" required />
+                <span asp-validation-for="Name" class="text-danger small"></span>
+            </div>
 
-    <div class="form-group mb-3">
-        <label asp-for="Quantity" class="form-label fw-bold">Antal i lager</label>
-        <input asp-for="Quantity" type="number" class="form-control" placeholder="Hur många finns i lager?" required />
-        <span asp-validation-for="Quantity" class="text-danger small"></span>
-    </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label asp-for="Price" class="form-label fw-bold">Pris</label>
+                    <input asp-for="Price" type="number" class="form-control" placeholder="Ange pris i SEK" required />
+                    <span asp-validation-for="Price" class="text-danger small"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Quantity" class="form-label fw-bold">Antal i lager</label>
+                    <input asp-for="Quantity" type="number" class="form-control" placeholder="Hur många finns i lager?" required />
+                    <span asp-validation-for="Quantity" class="text-danger small"></span>
+                </div>
+            </div>
 
-    <div class="form-group mb-3">
-        <label asp-for="Size" class="form-label fw-bold">Storlek</label>
-        <input asp-for="Size" class="form-control" placeholder="Ange storlek (t.ex. S, M, L, 58cm...)" required />
-        <span asp-validation-for="Size" class="text-danger small"></span>
-    </div>
+            <div class="form-group mb-3">
+                <label asp-for="Size" class="form-label fw-bold">Storlek</label>
+                <input asp-for="Size" class="form-control" placeholder="Ange storlek (t.ex. S, M, L, 58cm...)" required />
+                <span asp-validation-for="Size" class="text-danger small"></span>
+            </div>
 
-    <div class="form-group mb-3">
-        <label asp-for="Length" class="form-label fw-bold">Längd</label>
-        <input asp-for="Length" class="form-control" placeholder="Ange storlek (Längd)" required />
-        <span asp-validation-for="Length" class="text-danger small"></span>
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label asp-for="Length" class="form-label fw-bold">Längd</label>
+                    <input asp-for="Length" type="text" inputmode="numeric" pattern="[0-9]*" class="form-control" placeholder="Ange i cm" required />
+                    <span asp-validation-for="Length" class="text-danger small"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="Depth" class="form-label fw-bold">Djup</label>
+                    <input asp-for="Depth" type="text" inputmode="numeric" pattern="[0-9]*" class="form-control" placeholder="Ange i cm" required />
+                    <span asp-validation-for="Depth" class="text-danger small"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="Width" class="form-label fw-bold">Bredd</label>
+                    <input asp-for="Width" type="text" inputmode="numeric" pattern="[0-9]*" class="form-control" placeholder="Ange i cm" required />
+                    <span asp-validation-for="Width" class="text-danger small"></span>
+                </div>
+            </div>
 
-        <label asp-for="Depth" class="form-label fw-bold">Djup</label>
-        <input asp-for="Depth" class="form-control" placeholder="Ange storlek (Djup)" required />
-        <span asp-validation-for="Depth" class="text-danger small"></span>
 
-        <label asp-for="Width" class="form-label fw-bold">Bredd</label>
-        <input asp-for="Width" class="form-control" placeholder="Ange storlek (Bredd)" required />
-        <span asp-validation-for="Width" class="text-danger small"></span>
-    </div>
+            <div class="form-group mb-4">
+                <label asp-for="Image" class="form-label fw-bold">Ladda upp bild</label>
+                <input asp-for="Image" type="file" class="form-control" />
+                <span asp-validation-for="Image" class="text-danger small"></span>
+            </div>
+
+            <h4 class="mt-4">Materialval</h4>
+
+            <div id="material-selection" class="mb-3">
+                <div class="input-group material-group">
+                    <select id="material-dropdown" class="form-select">
+                        <option value="">-- Välj material --</option>
+                        @foreach (var mat in Model.AvailableMaterials)
+                        {
+                            <option value="@mat.MaterialId" data-name="@mat.Name" data-unit="@mat.Unit">@mat.Name (@mat.Unit)</option>
+                        }
+                    </select>
+                    <input type="number" id="material-qty" class="form-control" placeholder="Mängd" min="1" />
+                    <button type="button" id="add-material-btn" class="btn btn-blue btn-sm">
+                        <i class="fa-solid fa-plus"></i>
+                        Lägg till
+                    </button>
+                </div>
+            </div>
+
+            <ul id="material-list" class="list-group mb-4">
+                @for (int i = 0; i < Model.SelectedMaterials.Count; i++)
+                {
+                    var mat = Model.SelectedMaterials[i];
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        @mat.Name - @mat.Quantity @mat.Unit
+                        <button type="button" class="btn btn-sm btn-danger ms-2" onclick="this.parentElement.remove()">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                        <input type="hidden" name="SelectedMaterials[@i].MaterialId" value="@mat.MaterialId" />
+                        <input type="hidden" name="SelectedMaterials[@i].Quantity" value="@mat.Quantity" />
+                    </li>
+                }
+            </ul>
+
+            
+
+            <div class="text-end">
+                <a href="@Url.Action("Index", "Hat")" class="btn btn-secondary mt-4">Tillbaka</a> <br />
+                <button type="submit" class="btn btn-blue px-4 mt-4 text-light">
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    Spara hatt
+                </button>
+            </div>
 
 
-    <div class="form-group mb-4">
-        <label asp-for="Image" class="form-label fw-bold">Ladda upp bild</label>
-        <input asp-for="Image" type="file" class="form-control" />
-        <span asp-validation-for="Image" class="text-danger small"></span>
-    </div>
+            @section Scripts {
+                <script>
+                    const dropdown = document.getElementById('material-dropdown');
+                    const qtyInput = document.getElementById('material-qty');
+                    const addBtn = document.getElementById('add-material-btn');
+                    const list = document.getElementById('material-list');
 
-    <div class="text-end">
-        <button type="submit" class="btn btn-dark px-4">➕ Spara ändringar</button>
-    </div>
-</form>
+                    let index = @Model.SelectedMaterials.Count;
+
+                    addBtn.addEventListener('click', () => {
+                        const id = dropdown.value;
+                        const name = dropdown.options[dropdown.selectedIndex].dataset.name;
+                        const unit = dropdown.options[dropdown.selectedIndex].dataset.unit;
+                        const qty = qtyInput.value;
+
+                        if (!id || qty < 1) return;
+
+                        const li = document.createElement('li');
+                        li.className = 'list-group-item d-flex justify-content-between align-items-center';
+                        li.innerHTML = `
+                            ${name} - ${qty} ${unit}
+                            <button type="button" class="btn btn-sm btn-danger ms-2 text-light" onclick="this.parentElement.remove()">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                            <input type="hidden" name="SelectedMaterials[${index}].MaterialId" value="${id}" />
+                            <input type="hidden" name="SelectedMaterials[${index}].Quantity" value="${qty}" />
+                        `;
+                        list.appendChild(li);
+
+                        index++;
+                        qtyInput.value = '';
+                        dropdown.selectedIndex = 0;
+                    });
+                </script>
+            }
+
+            </form>
+        </div>
+</div>

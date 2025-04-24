@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Hattmakare.Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Hattmakare.Services;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Hattmakare.Controllers;
@@ -16,11 +17,46 @@ namespace Hattmakare.Controllers;
 public class OrderController : Controller 
 {
     private readonly AppDbContext _context;
+    private readonly IImageService _imageService;
+    private ILogger<OrderController> _logger;
+    
 
-    public OrderController(AppDbContext context)
+    public OrderController(AppDbContext context, IImageService imageService, ILogger<OrderController> _logger)
     {
         _context = context;
+        _imageService = imageService;
+        _logger = _logger;
     }
+   
+    [HttpGet("materialorder")]
+    public async Task<IActionResult> MaterialOrder(int orderId)
+    {
+        var order = await _context.Orders
+            .Include(o => o.OrderHats)
+                .ThenInclude(oh => oh.Hat)
+                    .ThenInclude(h => h.HatMaterials)
+                        .ThenInclude(hm => hm.Material)
+            .FirstOrDefaultAsync(o => o.Id == orderId);
+
+        if (order == null)
+        {
+            _logger.LogWarning("Ingen order hittades med ID {OrderId}", orderId);
+            
+        }
+
+        var allHatMaterials = order.OrderHats
+            .SelectMany(oh => oh.Hat.HatMaterials)
+            .ToList();
+
+        var model = new MaterialOrderViewModel
+        {
+            OrderId = order.Id,
+            HatMaterials = allHatMaterials
+        };
+
+        return View(model);
+    }
+
 
     [HttpGet("waybill")]
     public async Task<IActionResult> Waybill(int orderId)
@@ -57,7 +93,7 @@ public class OrderController : Controller
 
 
     [HttpGet]
-    public async Task<IActionResult> Index(string searchQuery, int? HatId)
+    public async Task<IActionResult> Index(string searchQuery, int? HatId, DateTime? StartDate, DateTime? EndDate)
     {
         var hatNameList = await _context.HatTypes
          .Select(x => new SelectListItem
@@ -74,6 +110,17 @@ public class OrderController : Controller
       .Include(o => o.OrderHats).ThenInclude(oh => oh.Hat)
       .Include(o => o.OrderHats).ThenInclude(oh => oh.User)
       .AsQueryable();
+
+        if (StartDate.HasValue)
+        {
+            filteredOrders = filteredOrders.Where(o => o.StartDate >= StartDate.Value);
+        }
+
+        if (EndDate.HasValue)
+        {
+            filteredOrders = filteredOrders.Where(o => o.EndDate <= EndDate.Value);
+        }
+
 
         if (!string.IsNullOrWhiteSpace(searchQuery))
         {
@@ -117,19 +164,16 @@ public class OrderController : Controller
         {
             HatNames = hatNameList,
             HatId = HatId ?? 0,
+            StartDate = StartDate,
+            EndDate = EndDate,
             OrderItems = ordersQuery
         };
+
 
         return View(viewModel);
     }
 
-
-
-
-
-
-
-        [HttpPost("{oid}/status")]
+    [HttpPost("{oid}/status")]
     public async Task<IActionResult> EditOrderStatus(int oid, int sid)
     {
         var order = await _context.Orders.SingleOrDefaultAsync(x => x.Id == oid);
@@ -143,9 +187,6 @@ public class OrderController : Controller
         order.OrderStatusId = sid;
 
         await _context.SaveChangesAsync();
-
-        TempData["NotifyType"] = "success";
-        TempData["NotifyMessage"] = "Done";
 
         return Ok();
     }
@@ -247,11 +288,11 @@ public class OrderController : Controller
     }
 
     [HttpGet("new")]
-    public async Task<IActionResult> Hats()
+    public async Task<IActionResult> New()
     {
         var model = new NewOrderViewModel
         {
-            Hats = await _context.Hats.Where(h => h.IsDeleted == false).Select(x =>
+            Hats = await _context.Hats.Where(h => h.IsDeleted == false && h.HatType.Name == "StandardHatt").Select(x =>
                 new HatViewModel
                 {
                     Id = x.Id,
@@ -261,14 +302,40 @@ public class OrderController : Controller
                     Comment = x.Comment,
                     ImageUrl = x.ImageUrl
                 }
-            ).ToListAsync(),
-        };
 
+            ).ToListAsync(),
+            Customers = await _context.Customers
+            .Select(c => new SelectListItem
+            {
+                Value = c.Id.ToString(),
+                Text = c.FirstName + " " + c.LastName
+            }).ToListAsync()
+        };
         return View(model);
     }
+  [HttpPost("AddSpecialHat")]
+  public async Task<IActionResult> AddSpecialHat([FromForm] AddHatViewModel newHat)
+  {
+    var hat = new Hat();
+    hat.Name = newHat.Name;
+    hat.Size = newHat.Size ?? 0;
+    hat.Length = newHat.Length ?? 0;
+    hat.Depth = newHat.Depth ?? 0;
+    hat.Width = newHat.Width ?? 0;
+    hat.Quantity = newHat.Quantity;
+    hat.Price = newHat.Price ?? 0;
+    hat.Comment = newHat.Comment ?? "";
+    hat.HatType = await _context.HatTypes
+        .FirstOrDefaultAsync(x => x.Name == "SpecialHatt");
 
 
+    var image = await _imageService.UploadImageAsync(newHat.Image);
+    
+    hat.ImageUrl = image;
 
+    await _context.Hats.AddAsync(hat);
+    await _context.SaveChangesAsync();
 
-
+    return Ok(hat.Id);
+  }
 }
