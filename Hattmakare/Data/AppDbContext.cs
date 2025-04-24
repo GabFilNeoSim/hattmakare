@@ -127,7 +127,7 @@ namespace Hattmakare.Data
                 }, new HatType
                 {
                     Id = 3,
-                    Name = "Speicalhatt"
+                    Name = "Specialhatt"
 
                 });
 
