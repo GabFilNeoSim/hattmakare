@@ -29,8 +29,7 @@
 .boards-wrapper {
     flex: 1;
     height: 900px;
-/*    background-color: #647e8f;*/
-    background-color: #009dff;
+    background-color: #6d75c6;
     border-radius: 12px;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 }
@@ -135,7 +134,7 @@
 }
 
 .item-id {
-    background-color: #009dff;
+    background-color: #6d75c6;
     color: #fff;
     padding: 4px 6px;
     border-radius: 4px;
@@ -186,7 +185,7 @@
     min-width: 100px;
 }
 .order-info-title {
-    background-color: #009dff;
+    background-color: #6d75c6;
     color: #fff;
     padding: 5px 15px;
     border-radius: 4px;
@@ -196,7 +195,7 @@
 }
 .order-info-title.action {
     background-color: transparent !important;
-    border: 2px solid #009dff;
+    border: 2px solid #6d75c6;
     color: #009dff;
     padding: 4px 14px;
 }
@@ -315,6 +314,7 @@
 
 .order-save-btn {
     display: block;
+
 }
 
 .form-check-input {
@@ -419,12 +419,23 @@
     flex-direction: row;
     gap: 5px;
 }
+
 #search button {
-    padding: 0 10px;
+    padding: 0 15px;
+    background-color: #6d75c6;
 }
 
-#resetSearch button{
+.btn-blue {
+    background: #6d75c6 !important;
+    color: #fff !important;
+}
+
+#resetSearch button {
     border: none;
     background-color: transparent;
     border-bottom: 1px solid hsl(0,0%, 50%);
+}
+
+.order-info-child input:not([type="checkbox"]) {
+    background: none;
 }
