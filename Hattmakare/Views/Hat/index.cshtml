@@ -2,6 +2,10 @@
 
 @model List<HatViewModel>
 
+@{
+    ViewBag.Title = "Hattar";
+}
+
 <div id="hat">
     <form asp-controller="Hat" asp-action="SearchHat" method="get" id="search">
         <input type="text" name="searchTerm" placeholder="Sök hattar..." class="form-control" />

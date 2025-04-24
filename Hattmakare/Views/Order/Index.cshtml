@@ -2,6 +2,10 @@
 
 @model OrderIndexViewModel
 
+@{
+    ViewBag.Title = "Ordrar";
+}
+
     <div class="search"> 
         <form asp-controller="Order" asp-action="Index" method="get" id="search">
         <input type="text" name="searchQuery" value="@Context.Request.Query["query"]" placeholder="Sök kund..." class="form-control"/>
