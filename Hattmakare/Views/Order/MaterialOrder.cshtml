@@ -1,0 +1,55 @@
+﻿@using Hattmakare.Data.Entities
+
+@model Hattmakare.Models.Order.MaterialOrderViewModel
+
+<div class="container mt-5">
+    <h2>Materiallista för Order #@Model.OrderId</h2>
+    <hr />
+
+    @if (Model.HatMaterials.Any())
+    {
+        <table class="table table-bordered table-striped mt-3">
+            <thead class="table-light">
+                <tr>
+                    <th>Namn</th>
+                    <th>Enhet</th>
+                    <th>Pris</th>
+                    <th>Leverantör</th>
+                    <th>Dekoration</th>
+                    <th>Antal</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var material in Model.HatMaterials)
+                {
+                    <tr>
+                        <td>@material.Material.Name</td>
+                        <td>@material.Material.Unit</td>
+                        <td>@material.Material.Price.ToString("C")</td>
+                        <td>@material.Material.Supplier</td>
+                        <td>
+                            @if (material.Material.IsDecoration)
+                            {
+                                <span class="badge bg-info">Ja</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">Nej</span>
+                            }
+                        </td>
+                        <td>@material.Quantity</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-warning mt-4">
+            Inga material hittades för denna order.
+        </div>
+    }
+
+    <a href="@Url.Action("Index", "Order")" class="btn btn-secondary mt-4">Tillbaka till orderöversikt</a> <br />
+    <button class="btn btn-secondary mt-3" onclick="window.print()">Skriv ut materiallista</button>
+</div>
