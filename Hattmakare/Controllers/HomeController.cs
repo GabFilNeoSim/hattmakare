@@ -54,7 +54,7 @@ public class HomeController : Controller
             .GroupBy(o => o.EndDate)
             .Select(g => new
             {
-                Title = $"{g.Count()} ordrar",
+                Title = g.Count() > 1 ? $"{g.Count()} ordrar" : $"{g.Count()} order",
                 Start = g.Key.ToString("yyyy-MM-dd"),
             }).ToList();
 

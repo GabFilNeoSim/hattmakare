@@ -139,13 +139,7 @@ public class OrderController : Controller
         return View(viewModel);
     }
 
-
-
-
-
-
-
-        [HttpPost("{oid}/status")]
+    [HttpPost("{oid}/status")]
     public async Task<IActionResult> EditOrderStatus(int oid, int sid)
     {
         var order = await _context.Orders.SingleOrDefaultAsync(x => x.Id == oid);
@@ -159,9 +153,6 @@ public class OrderController : Controller
         order.OrderStatusId = sid;
 
         await _context.SaveChangesAsync();
-
-        TempData["NotifyType"] = "success";
-        TempData["NotifyMessage"] = "Done";
 
         return Ok();
     }
