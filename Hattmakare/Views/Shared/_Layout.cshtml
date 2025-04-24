@@ -39,35 +39,53 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        @if (User.Identity.IsAuthenticated)
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Order" asp-action="Index">
+                                <i class="fa-solid fa-clipboard-list"></i>
+                                Ordrar
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Hat" asp-action="Index">
+                                <i class="fa-solid fa-hat-cowboy"></i>
+                                Hattar
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="Index">
+                                <i class="fa-solid fa-user"></i>
+                                Kunder
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Material" asp-action="Index">
+                                <i class="fa-solid fa-layer-group"></i>
+                                Material
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Statistics" asp-action="Index">
+                                <i class="fa-solid fa-chart-line"></i>
+                                Statistik
+                            </a>
+                        </li>
+                        @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Order" asp-action="Index">Ordrar</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Hat" asp-action="Index">Hattar</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="Index">Kunder</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Material" asp-action="Index">Material</a>
-                            </li>
-                            <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-controller="Statistics" asp-action="Index">Statistik</a>
-                            </li>
-                            @if (User.IsInRole("Admin"))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-controller="User" asp-action="Index">Användare</a>
-                                </li>
-                            }
-                            <li class="nav-item logout">
-                                <form class="nav-link text-dark" asp-controller="Auth" asp-action="Logout" method="post">
-                                    <button>Logga ut</button>
-                                </form>
+                                <a class="nav-link text-dark" asp-controller="User" asp-action="Index">
+                                    <i class="fa-solid fa-user-gear"></i>
+                                    Användare
+                                </a>
                             </li>
                         }
+                        <li class="nav-item logout">
+                            <form class="nav-link text-dark" asp-controller="Auth" asp-action="Logout" method="post">
+                                <button>
+                                    <i class="fa-solid fa-right-from-bracket"></i>
+                                    Logga ut
+                                </button>
+                            </form>
+                        </li>
                     </ul>
                 </div>
             </div>

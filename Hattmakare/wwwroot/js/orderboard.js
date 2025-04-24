@@ -16,11 +16,9 @@ function dropHandler(ev) {
 
     if (!board) return;
 
-    board.prepend(draggedItem);
+    board.append(draggedItem);
 
     $.post(`/order/${data}/status?sid=${boardId}`);
-
-    console.log(`Moved item: ${data} to board: ${boardId}`);
 }
 
 $(".board-item").on("click", function () {
