@@ -335,6 +335,63 @@
     }
   }
 
+  #orderItems{
+    box-shadow: 0px 0px 8px 0px hsla(0,0%,80%, 0.2);
+    border-radius: 8px;
+    border: 0.5px solid hsla(0,0%,60%, 0.2);
+    padding-left: 0px;
+    counter-reset: list-counter;
+    .entry{
+        border: 0.5px solid hsla(0,0%,60%, 0.2);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        counter-increment: list-counter;
+        position: relative;
+        padding-left: 2em;
+        width: 100%;
+
+        details{
+            width: 100%;
+        }
+        details summary #icon{
+            align-self: flex-end;
+            font-weight: bold;
+            transition: all ease 300ms;
+        }
+        details summary #icon::after{
+            content: "+";
+            font-size: 20px;
+        }
+        details[open] summary #icon::after{
+            content: "-";
+            font-size: 24px;
+        }
+        summary{
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            list-style: none;
+            padding: 8px;
+
+            svg{
+                height: 16px;
+                margin-left: auto;
+            }
+        }
+    }
+    .entry::before {
+        content: counter(list-counter) ".";
+        position: absolute;
+        left: 0;
+        width: 1.5em;
+        text-align: right;
+      }
+    }
+    #orderItems:not(:has(*)){
+        display: none;
+    }
+
   #cartContainer {
     position: fixed;
     right: 0px;
