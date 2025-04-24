@@ -21,5 +21,8 @@ namespace Hattmakare.Models.Hats
 
         [Required(ErrorMessage = "Please upload an image")]
         public IFormFile Image { get; set; }
+
+        public List<MaterialQuantityViewModel> SelectedMaterials { get; set; } = new();
+        public List<MaterialQuantityViewModel> AvailableMaterials { get; set; } = new();
     }
 }

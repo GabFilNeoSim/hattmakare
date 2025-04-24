@@ -24,5 +24,8 @@ public class AddHatViewModel
     public string? Comment { get; set; }
 
     public bool? IsSpecial { get; set; } = false;
+
+    public List<MaterialQuantityViewModel> SelectedMaterials { get; set; } = new();
+    public List<MaterialQuantityViewModel> AvailableMaterials { get; set; } = new();
 }
 

@@ -153,3 +153,12 @@
     }
   }
 }
+
+#add-material-btn {
+    color: #fff;
+}
+
+.material-group {
+    display: flex;
+    gap: 10px;
+}
