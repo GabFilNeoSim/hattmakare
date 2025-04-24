@@ -23,21 +23,26 @@
             </button>
         </form>
     </div>
-    <form method="get" class="filterByDate order-options">
+    <form asp-controller="Order" asp-action="Index" method="get" class="filterByDate order-options">
         <div class="order-info-child">
             <p>Startdatum</p>
             <div class="order-info-title action">
-                <input asp-for="StartDate" id="order-startDate" value="@Model.StartDate" type="date" data-oid="OrderItems.Id" />
+                <input type="date" name="StartDate"
+                       value="@(Model.StartDate.HasValue ? Model.StartDate.Value.ToString("yyyy-MM-dd") : "")"
+                       class="form-control" />
             </div>
         </div>
         <div class="order-info-child">
             <p>Slutdatum</p>
             <div class="order-info-title action">
-                <input asp-for="EndDate" value="@Model.EndDate" type="date" />
+                <input type="date" name="EndDate"
+                       value="@(Model.EndDate.HasValue ? Model.EndDate.Value.ToString("yyyy-MM-dd") : "")"
+                       class="form-control" />
             </div>
         </div>
         <button class="btn btn-primary btn-sm mt-4" type="submit">Sök</button>
     </form>
+
     <div id="boards-container">
         @foreach (var board in Model.OrderItems)
         {
