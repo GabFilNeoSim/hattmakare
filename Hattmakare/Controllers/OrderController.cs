@@ -18,11 +18,14 @@ public class OrderController : Controller
 {
     private readonly AppDbContext _context;
     private readonly IImageService _imageService;
+    private ILogger<OrderController> _logger;
+    
 
-    public OrderController(AppDbContext context, IImageService imageService)
+    public OrderController(AppDbContext context, IImageService imageService, ILogger<OrderController> _logger)
     {
         _context = context;
         _imageService = imageService;
+        _logger = _logger;
     }
    
     [HttpGet("materialorder")]
