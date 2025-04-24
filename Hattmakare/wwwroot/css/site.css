@@ -1,3 +1,9 @@
+body {
+    z-index: -1;
+    background-color: #eff2f8;
+}
+
+
 html {
   font-size: 14px;
 }
@@ -60,7 +66,7 @@ p {
     display: flex;
     flex-direction: row;
     gap: 15px;
-    margin-top: 10px;
+    margin-top: 10px; 
 }
 
 #confirm-btns button {
@@ -127,6 +133,7 @@ p {
     margin: 0;
     font-size: 20px;
     padding: 15px;
+    background-color: white !important;
 }
 
 .logo {
@@ -137,6 +144,7 @@ p {
 
 .logo-link {
     margin-right: 35px;
+   
 }
 
 .container.order {
@@ -144,7 +152,7 @@ p {
 }
 
 .nav-item .nav-link {
-    font-size: 18px
+    font-size: 18px;
 }
 
 .nav-item {
@@ -160,10 +168,11 @@ p {
 }
 
 .navbar-nav {
-    gap: 9px
+    gap: 9px;
 }
 
 .nav-item i {
     font-size: 17px;
     color: rgb(65, 65, 65);
+
 }

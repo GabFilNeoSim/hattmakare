@@ -128,7 +128,7 @@
     <div class="order-form-btns">
         <a href="/order/waybill?orderId=@Model.Id" class="order-save-btn btn btn-outline-primary btn-sm">Fraktsedel</a>
         <button class="btn btn-outline-primary btn-sm">Materiallista</button>
-        <button class="btn btn-primary btn-sm">Spara order</button>
+        <button class="btn btn-primary btn-sm btn-blue">Spara order</button>
     </div>
 </form>
 <form asp-controller="Order" asp-action="DeleteOrder" asp-route-oid="@Model.Id" method="post">
