@@ -6,80 +6,75 @@
     ViewBag.Title = "Ordrar";
 }
 
-    <div class="search"> 
+<div class="order-container">
+    <div class="order-options">
         <form asp-controller="Order" asp-action="Index" method="get" id="search">
-        <input type="text" name="searchQuery" value="@Context.Request.Query["query"]" placeholder="Sök kund..." class="form-control"/>
-        <button type="submit" class="btn btn-primary btn-sm">Sök</button>
+            <input type="text" name="searchQuery" value="@Context.Request.Query["query"]" placeholder="Sök kund..." class="form-control" />
+            <button type="submit" class="btn btn-primary btn-sm">Sök</button>
+        </form>
+        <form method="get">
+            <select asp-for="HatId" asp-items="Model.HatNames" class="form-control" onchange="this.form.submit()">
+                <option value="">Alla hattar</option>
+            </select>
+        </form>
+        <form asp-controller="Order" asp-action="Index" method="get" id="resetSearch">
+            <button type="submit">
+                <p>Rensa filtrering </p>
+            </button>
         </form>
     </div>
-
-    <div class="searchReset">
-<form asp-controller="Order" asp-action="Index" method="get" id="resetSearch">
-    <button type="submit">
-        <p>Rensa filtrering </p>
-    </button>
-</form>
-  
-
-<form method="get" class="mb-3">
-    <label for="HatId" class="mt-2">Välj hatt:</label>
-    <select asp-for="HatId" asp-items="Model.HatNames" class="form-control" onchange="this.form.submit()">
-        <option value="">Alla hattar</option>
-    </select>
-</form>
-</div>
-
-<form method="get" class="filterByDate">
-    <div class="order-info-child">
-        <p>Startdatum</p>
-        <div class="order-info-title action">
-            <input asp-for="StartDate" id="order-startDate" value="@Model.StartDate" type="date" data-oid="OrderItems.Id" />
-        </div>
-    </div>
-    <div class="order-info-child">
-        <p>Slutdatum</p>
-        <div class="order-info-title action">
-            <input asp-for="EndDate" value="@Model.EndDate" type="date" />
-        </div>
-    </div>
-    <button type="submit">Sök</button>
-</form>
- 
-<div id="boards-container">
-    @foreach(var board in Model.OrderItems) {
-        <div class="boards-wrapper">
-            <h3>@board.Status</h3>
-            <div class="board" data-board-id="@board.Id" ondragover="dragoverHandler(event)" ondrop="dropHandler(event)">
-                @foreach (var order in board.Orders)
-                {
-                    @* <a asp-controller="Order" asp-action="EditOrder" asp-route-oid="@order.Id" class="board-item" data-item-id="@order.Id" draggable="true" ondragstart="dragstartHandler(event)"> *@
-                    <a class="board-item" data-item-id="@order.Id" draggable="true" ondragstart="dragstartHandler(event)">
-                        @if (order.Priority)
-                        {
-                            <div class="item-prio">⚡</div>
-                        }
-                        <div class="item-header">
-                            <div class="item-id">Order #@order.Id</div>
-                            <div class="item-dates">@order.StartDate - @order.EndDate</div>
-                        </div>
-                        <div class="item-managers">
-                            @if (order.Managers.Count > 0)
-                            {
-                                @foreach (var name in order.Managers)
-                                {
-                                    <div class="item-manager">
-                                        <p>@name</p>
-                                    </div>
-                                }
-                            }
-                            else
-                            {
-                                <i>Inga hanterare</i>
-                            }
-                        </div>
-                    </a>
-                }
+    <form method="get" class="filterByDate order-options">
+        <div class="order-info-child">
+            <p>Startdatum</p>
+            <div class="order-info-title action">
+                <input asp-for="StartDate" id="order-startDate" value="@Model.StartDate" type="date" data-oid="OrderItems.Id" />
             </div>
         </div>
-    }
+        <div class="order-info-child">
+            <p>Slutdatum</p>
+            <div class="order-info-title action">
+                <input asp-for="EndDate" value="@Model.EndDate" type="date" />
+            </div>
+        </div>
+        <button class="btn btn-primary btn-sm mt-4" type="submit">Sök</button>
+    </form>
+    <div id="boards-container">
+        @foreach (var board in Model.OrderItems)
+        {
+            <div class="boards-wrapper">
+                <h3>@board.Status</h3>
+                <div class="board" data-board-id="@board.Id" ondragover="dragoverHandler(event)" ondrop="dropHandler(event)">
+                    @foreach (var order in board.Orders)
+                    {
+                        <a class="board-item" data-item-id="@order.Id" draggable="true" ondragstart="dragstartHandler(event)">
+                            <div class="board-item-side"></div>
+                            @if (order.Priority)
+                            {
+                                <div class="item-prio">⚡</div>
+                            }
+                            <div class="item-header">
+                                <div class="item-id">Order #@order.Id</div>
+                                <div class="item-dates">@order.StartDate - @order.EndDate</div>
+                            </div>
+                            <div class="item-managers">
+                                @if (order.Managers.Count > 0)
+                                {
+                                    @foreach (var name in order.Managers)
+                                    {
+                                        <div class="item-manager">
+                                            <p>@name</p>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <i>Inga hanterare</i>
+                                }
+                            </div>
+                        </a>
+                    }
+                </div>
+            </div>
+        }
+    </div>
 </div>

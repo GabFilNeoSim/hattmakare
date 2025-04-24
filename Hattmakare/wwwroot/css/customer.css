@@ -86,15 +86,14 @@
     min-width: 0;
   }
 
-  #customer #search {
+#customer #search {
     margin-bottom: 4px;
     width: 80%;
     display: flex;
     border: 1px solid black;
-    border-radius: 16px;
-    padding: 2px 8px;
-    input
-
+    padding: 5px 15px;
+    border-radius: 50px;
+input 
 {
   flex: 1;
   padding: 0px;
