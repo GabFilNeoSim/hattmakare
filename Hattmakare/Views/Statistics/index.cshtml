@@ -14,12 +14,12 @@
     
     <div id="customer-search">
         <label for="CustomerId" class="form-label">Välj kund:</label>
-        <select asp-for="CustomerId" asp-items="Model.Customers" class="form-control select2" id="customerSelect" @* onchange="document.getElementById('filterForm').submit();" *@>
+        <select asp-for="CustomerId" asp-items="Model.Customers" class="form-control select2" id="customerSelect">
         </select>
     </div>
     <div id="hat-search">
         <label for="HatId" class="form-label">Välj hatt:</label>
-        <select asp-for="HatId" asp-items="Model.Hats" class="form-control select2" id="hatSelect" @* onchange="document.getElementById('filterForm').submit();" *@>
+        <select asp-for="HatId" asp-items="Model.Hats" class="form-control select2" id="hatSelect" >
         </select>
     </div>
 </form>
