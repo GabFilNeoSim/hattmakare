@@ -308,11 +308,11 @@
 .order-form-btns {
     display: flex;
     margin-top: 25px;
+    justify-content: flex-end;
     gap: 10px;
 }
 
 .order-save-btn {
-    margin-left: auto;
     display: block;
 
 }

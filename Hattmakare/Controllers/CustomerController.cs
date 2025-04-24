@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.Metrics;
+using System.Net.Mail;
+using System.Text.RegularExpressions;
 using Castle.Core.Resource;
 using Hattmakare.Data;
 using Hattmakare.Data.Entities;
@@ -55,47 +57,133 @@ public class CustomerController : Controller
     }
 
     [HttpPost("add")]
-    public async Task<IActionResult> AddCustomer(AddCustomerViewModel newCustomer)
+    public async Task<IActionResult> AddCustomer(
+    string firstName,
+    string lastName,
+    string email,
+    string headMeasurements,
+    string billingAddress,
+    string deliveryAddress,
+    string city,
+    string postalCode,
+    string country,
+    string phone 
+)
     {
+        bool isValid = true;
 
-        if (!ModelState.IsValid)
+        if (string.IsNullOrWhiteSpace(firstName))
+        {
+            ViewData["FirstNameError"] = "Förnamn är obligatoriskt.";
+            isValid = false;
+        }
+
+        if (string.IsNullOrWhiteSpace(lastName))
+        {
+            ViewData["LastNameError"] = "Efternamn är obligatoriskt.";
+            isValid = false;
+        }
+
+       
+        if (string.IsNullOrWhiteSpace(headMeasurements))
+        {
+            ViewData["HeadMeasurementsError"] = "Ange ett giltigt huvudmått.";
+            isValid = false;
+        }
+
+      
+        if (string.IsNullOrWhiteSpace(billingAddress))
+        {
+            ViewData["BillingAddressError"] = "Faktureringsadress är obligatorisk.";
+            isValid = false;
+        }
+
+       
+        if (string.IsNullOrWhiteSpace(deliveryAddress))
+        {
+            ViewData["DeliveryAddressError"] = "Leveransadress är obligatorisk.";
+            isValid = false;
+        }
+
+        if (string.IsNullOrWhiteSpace(city))
+        {
+            ViewData["CityError"] = "Stad är obligatoriskt.";
+            isValid = false;
+        }
+
+        
+        if (!Regex.IsMatch(postalCode ?? "", @"^\d{5}$"))
+        {
+            ViewData["PostalCodeError"] = "Postnummer måste vara fem siffror.";
+            isValid = false;
+        }
+
+        
+        if (string.IsNullOrWhiteSpace(country))
+        {
+            ViewData["CountryError"] = "Land är obligatoriskt.";
+            isValid = false;
+        }
+
+        if (!Regex.IsMatch(email ?? "", @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$"))
+        {
+            ViewData["EmailError"] = "Ogiltig e-postadress. Kontrollera formatet.";
+            isValid = false;
+        }
+
+        var phoneRegex = @"^\+?\d{7,15}$"; 
+
+        if (string.IsNullOrWhiteSpace(phone) || !Regex.IsMatch(phone, phoneRegex))
+        {
+            ViewData["PhoneError"] = "Ogiltigt telefonnummer. Ange 7-15 siffror.";
+            isValid = false;
+        }
+
+        if (!isValid)
         {
             var customers = await _context.Customers.ToListAsync();
-            var viewModel = new CustomerViewModel
+            var model = new CustomerViewModel
             {
                 customers = customers,
                 AddCustomer = new AddCustomerViewModel()
+                
             };
 
-            return View("Index", viewModel);
+            return View("Index", model);
         }
 
+        
         var customer = new Customer
         {
-            FirstName = newCustomer.FirstName,
-            LastName = newCustomer.LastName,
-            HeadMeasurements = newCustomer.HeadMeasurements,
-            Email = newCustomer.Email,
-            PhoneNumber = newCustomer.Phone,
+            FirstName = firstName,
+            LastName = lastName,
+            HeadMeasurements = double.Parse(headMeasurements),
+            Email = email,
+            PhoneNumber = phone,
 
             Address = new Address
-            {
-                BillingAddress = newCustomer.BillingAddress,
-                DeliveryAddress = newCustomer.DeliveryAddress,
-                PostalCode = newCustomer.PostalCode,
-                City = newCustomer.City,
-                Country = newCustomer.Country,
-            }
 
+            {
+                BillingAddress = billingAddress,
+                DeliveryAddress = deliveryAddress,
+                City = city,
+                PostalCode = postalCode,
+                Country = country,
+
+            }
+            
         };
 
         await _context.Customers.AddAsync(customer);
 
         await _context.SaveChangesAsync();
 
-        return RedirectToAction("Index");
+        TempData["NotifyType"] = "success";
+        TempData["NotifyMessage"] = "Kunden sparades!";
 
+        return RedirectToAction("Index");
     }
+
 
     // Ta bort en kund
     [HttpPost("remove/{customerId:int}")]
