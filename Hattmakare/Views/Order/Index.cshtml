@@ -20,8 +20,7 @@
             </button>
         </form>
     </div>
-
-    <form method="get" class="filterByDate">
+    <form method="get" class="filterByDate order-options">
         <div class="order-info-child">
             <p>Startdatum</p>
             <div class="order-info-title action">
@@ -34,9 +33,8 @@
                 <input asp-for="EndDate" value="@Model.EndDate" type="date" />
             </div>
         </div>
-        <button type="submit">Sök</button>
+        <button class="btn btn-primary btn-sm mt-4" type="submit">Sök</button>
     </form>
-
     <div id="boards-container">
         @foreach (var board in Model.OrderItems)
         {
