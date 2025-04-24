@@ -27,9 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const customerSelect = document.querySelector('[name="CustomerId"]');
     const hatSelect = document.querySelector('[name="HatId"]');
 
-
     async function fetchAndUpdateChart() {
-
         const customerId = customerSelect.value;
         const hatId = hatSelect.value;
 
@@ -37,7 +35,6 @@ document.addEventListener("DOMContentLoaded", function () {
         const response = await fetch(url);
         const data = await response.json();
 
-    // Uppdatera dataset baserat på aktiv range
         const activeRange = document.querySelector(".range-btn.active").dataset.range;
 
         dailyLabels = data.dailyLabels;
@@ -66,35 +63,42 @@ document.addEventListener("DOMContentLoaded", function () {
 
         chart = new Chart(ctx, {
             type: 'line',
-        data: {
-            labels: labels,
-        datasets: [{
-            label: "Antal sålda hattar",
-            data: data,
-            borderColor: 'rgba(109, 117, 198, 1)',
-            fill: false,
-            tension: 0.3,
-            pointRadius: 3
-                    }]
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: "Antal sålda hattar",
+                    data: data,
+                    borderColor: 'rgba(109, 117, 198, 1)',
+                    fill: false,
+                    tension: 0.3,
+                    pointRadius: 3
+                }]
             },
-
             options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                        y: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
                         beginAtZero: true,
-                        precision: 0
-                        },
-            x: {
-            ticks: {
-            maxRotation: 45,
-            minRotation: 45
+                        ticks: {
+                            stepSize: 1,
+                            callback: function (value) {
+                                if (Number.isInteger(value)) {
+                                    return value;
+                                }
+                                return null;
                             }
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            maxRotation: 45,
+                            minRotation: 45
                         }
                     }
                 }
-            });
+            }
+        });
     }
 
     function updateIntervalData(range) {
@@ -118,7 +122,6 @@ document.addEventListener("DOMContentLoaded", function () {
         renderLineChart(labelsToUse, dataToUse);
     }
 
-    // Init with "month"
     updateIntervalData("month");
 
     rangeButtons.forEach(btn => {
@@ -133,4 +136,3 @@ document.addEventListener("DOMContentLoaded", function () {
 
     fetchAndUpdateChart();
 });
-

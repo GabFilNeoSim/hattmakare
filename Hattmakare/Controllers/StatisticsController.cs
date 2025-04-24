@@ -32,6 +32,8 @@ namespace Hattmakare.Controllers
             };
 
             var customerList = await _context.Customers
+                .OrderBy(c => c.FirstName)
+                .ThenBy(c => c.LastName)
                 .Select(c => new SelectListItem
                 {
                     Value = c.Id.ToString(),
@@ -47,6 +49,7 @@ namespace Hattmakare.Controllers
             });
 
             var hatList = await _context.Hats
+                .OrderBy(h => h.Name)
                 .Select(h => new SelectListItem
                 {
                     Value = h.Id.ToString(),
@@ -66,56 +69,6 @@ namespace Hattmakare.Controllers
 
             return View(model);
         }
-
-
-        //public async Task<ActionResult> Index()
-        //{
-
-        //    var customerList = await _context.Customers
-
-        //    .Select(c => new SelectListItem
-        //    {
-        //        Value = c.Id.ToString(),
-        //        Text = c.FirstName + " " + c.LastName
-        //    })
-        //    .ToListAsync();
-
-        //    customerList.Insert(0, new SelectListItem
-        //    {
-        //        Value = "",
-        //        Text = "Alla kunder",
-        //        Selected = true
-        //    });
-
-        //    var hatList = await _context.Hats
-        //        .Select(h => new SelectListItem
-        //        {
-        //            Value = h.Id.ToString(),
-        //            Text = h.Name
-        //        })
-        //        .ToListAsync();
-
-        //    hatList.Insert(0, new SelectListItem
-        //    {
-        //        Value = "",
-        //        Text = "Alla hattar",
-        //        Selected = true
-        //    });
-
-        //    var model = new StatisticsViewModel
-        //    {
-        //        CustomerId = "",
-        //        HatId = "",
-        //        Customers = customerList,
-        //        Hats = hatList,
-        //        DailyLabels = new List<string>(), 
-        //        DailySales = new List<int>(),
-        //        QuarterlySales = new List<int>(),
-        //        MonthlySales = new List<int>()
-        //    };
-
-        //    return View(model);
-        //}
 
         [HttpGet("data")]
         public async Task<IActionResult> GetChartData(string? customerId, string? hatId)

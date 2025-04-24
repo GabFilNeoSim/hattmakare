@@ -186,6 +186,11 @@ tbody, td, tfoot, th, thead, tr {
     color: #fff !important;
 }
 
+.btn-outline-primary:active {
+    background: #6d75c6 !important;
+    color: #fff !important;
+}
+
 .nav-link {
     display: flex;
     gap: 8px;
