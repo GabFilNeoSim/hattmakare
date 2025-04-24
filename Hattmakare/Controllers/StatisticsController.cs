@@ -19,39 +19,106 @@ namespace Hattmakare.Controllers
             _context = context;
         }
 
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(string? customerId, string? hatId)
         {
-            var customerList = await _context.Customers
-        .Select(c => new SelectListItem
-        {
-            Value = c.Id.ToString(),
-            Text = c.FirstName + " " + c.LastName
-        })
-        .ToListAsync();
-
-            var hatList = await _context.Hats
-                .Select(h => new SelectListItem
-                {
-                    Value = h.Id.ToString(),
-                    Text = h.Name
-                })
-                .ToListAsync();
-
             var model = new StatisticsViewModel
             {
-                Customers = customerList,
-                Hats = hatList,
-                DailyLabels = new List<string>(), 
+                CustomerId = customerId ?? "",
+                HatId = hatId ?? "",
+                DailyLabels = new List<string>(),
                 DailySales = new List<int>(),
                 QuarterlySales = new List<int>(),
                 MonthlySales = new List<int>()
             };
 
+            var customerList = await _context.Customers
+                .Select(c => new SelectListItem
+                {
+                    Value = c.Id.ToString(),
+                    Text = c.FirstName + " " + c.LastName,    
+                })
+                .ToListAsync();
+
+            customerList.Insert(0, new SelectListItem
+            {
+                Value = "0",
+                Text = "Alla kunder",
+                Selected = true
+            });
+
+            var hatList = await _context.Hats
+                .Select(h => new SelectListItem
+                {
+                    Value = h.Id.ToString(),
+                    Text = h.Name,
+                })
+                .ToListAsync();
+
+            hatList.Insert(0, new SelectListItem
+            {
+                Value = "0",
+                Text = "Alla hattar",
+                Selected = true
+            });
+
+            model.Customers = customerList;
+            model.Hats = hatList;
+
             return View(model);
         }
 
+
+        //public async Task<ActionResult> Index()
+        //{
+
+        //    var customerList = await _context.Customers
+
+        //    .Select(c => new SelectListItem
+        //    {
+        //        Value = c.Id.ToString(),
+        //        Text = c.FirstName + " " + c.LastName
+        //    })
+        //    .ToListAsync();
+
+        //    customerList.Insert(0, new SelectListItem
+        //    {
+        //        Value = "",
+        //        Text = "Alla kunder",
+        //        Selected = true
+        //    });
+
+        //    var hatList = await _context.Hats
+        //        .Select(h => new SelectListItem
+        //        {
+        //            Value = h.Id.ToString(),
+        //            Text = h.Name
+        //        })
+        //        .ToListAsync();
+
+        //    hatList.Insert(0, new SelectListItem
+        //    {
+        //        Value = "",
+        //        Text = "Alla hattar",
+        //        Selected = true
+        //    });
+
+        //    var model = new StatisticsViewModel
+        //    {
+        //        CustomerId = "",
+        //        HatId = "",
+        //        Customers = customerList,
+        //        Hats = hatList,
+        //        DailyLabels = new List<string>(), 
+        //        DailySales = new List<int>(),
+        //        QuarterlySales = new List<int>(),
+        //        MonthlySales = new List<int>()
+        //    };
+
+        //    return View(model);
+        //}
+
         [HttpGet("data")]
-        public async Task<IActionResult> GetChartData(int? customerId, int? hatId)
+        public async Task<IActionResult> GetChartData(string? customerId, string? hatId)
         {
             var orders = await _context.Orders
                 .Include(o => o.Customer)
@@ -59,14 +126,17 @@ namespace Hattmakare.Controllers
                 .ThenInclude(oh => oh.Hat)
                 .ToListAsync();
 
-            if (customerId.HasValue)
+            int? parsedCustomerId = int.TryParse(customerId, out var cId) && cId != 0 ? cId : null;
+            int? parsedHatId = int.TryParse(hatId, out var hId) && hId != 0 ? hId : null;
+
+            if (parsedCustomerId.HasValue)
             {
-                orders = orders.Where(o => o.Customer.Id == customerId.Value).ToList();
+                orders = orders.Where(o => o.Customer.Id == parsedCustomerId.Value).ToList();
             }
 
-            if (hatId.HasValue)
+            if (parsedHatId.HasValue)
             {
-                orders = orders.Where(o => o.OrderHats.Any(oh => oh.Hat.Id == hatId.Value)).ToList();
+                orders = orders.Where(o => o.OrderHats.Any(oh => oh.Hat.Id == parsedHatId.Value)).ToList();
             }
 
             var today = DateTime.Today;
@@ -82,7 +152,7 @@ namespace Hattmakare.Controllers
                         Date = date.ToString("yyyy-MM-dd"),
                         Total = orders
                             .SelectMany(o => o.OrderHats)
-                            .Where(oh => oh.Order.EndDate.Date == date && (!hatId.HasValue || oh.Hat.Id == hatId.Value))
+                            .Where(oh => oh.Order.EndDate.Date == date && (!parsedHatId.HasValue || oh.Hat.Id == parsedHatId.Value))
                             .Count()
                     };
                 })
@@ -91,7 +161,7 @@ namespace Hattmakare.Controllers
             var quarterlySales = new int[4];
             foreach (var oh in orders.SelectMany(o => o.OrderHats))
             {
-                if (!hatId.HasValue || oh.Hat.Id == hatId.Value)
+                if (!parsedHatId.HasValue || oh.Hat.Id == parsedHatId.Value)
                 {
                     var month = oh.Order.EndDate.Month;
                     int quarter = (month - 1) / 3;
@@ -102,7 +172,7 @@ namespace Hattmakare.Controllers
             var monthlySales = new int[12];
             foreach (var oh in orders.SelectMany(o => o.OrderHats))
             {
-                if (!hatId.HasValue || oh.Hat.Id == hatId.Value)
+                if (!parsedHatId.HasValue || oh.Hat.Id == parsedHatId.Value)
                 {
                     var month = oh.Order.EndDate.Month;
                     monthlySales[month - 1]++;

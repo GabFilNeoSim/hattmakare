@@ -6,8 +6,8 @@ namespace Hattmakare.Models.Statistics
 {
     public class StatisticsViewModel
     {
-        public int? CustomerId { get; set; }
-        public int? HatId { get; set; }
+        public string? CustomerId { get; set; }
+        public string? HatId { get; set; }
         public List<string> HatNames { get; set; }
         public List<int> Sales { get; set; }
         

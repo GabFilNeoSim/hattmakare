@@ -29,62 +29,72 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     async function fetchAndUpdateChart() {
-    const customerId = customerSelect.value;
-    const hatId = hatSelect.value;
 
-    const url = `/statistics/data?customerId=${customerId}&hatId=${hatId}`;
-    const response = await fetch(url);
-    const data = await response.json();
+        const customerId = customerSelect.value;
+        const hatId = hatSelect.value;
+
+        const url = `/statistics/data?customerId=${customerId}&hatId=${hatId}`;
+        const response = await fetch(url);
+        const data = await response.json();
 
     // Uppdatera dataset baserat på aktiv range
-    const activeRange = document.querySelector(".range-btn.active").dataset.range;
+        const activeRange = document.querySelector(".range-btn.active").dataset.range;
 
-    dailyLabels = data.dailyLabels;
-    dailySales = data.dailySales;
-    quarterlySales = data.quarterlySales;
-    monthlySales = data.monthlySales;
+        dailyLabels = data.dailyLabels;
+        dailySales = data.dailySales;
+        quarterlySales = data.quarterlySales;
+        monthlySales = data.monthlySales;
 
-    updateIntervalData(activeRange);
+        updateIntervalData(activeRange);
     }
 
-    customerSelect.addEventListener("change", fetchAndUpdateChart);
-    hatSelect.addEventListener("change", fetchAndUpdateChart);
+    $('#customerSelect').on('change', fetchAndUpdateChart);
+    $('#hatSelect').on('change', fetchAndUpdateChart);
+    $('#customerSelect, #hatSelect').on('select2:open', function () {
+        setTimeout(function () {
+            let searchField = document.querySelector('.select2-container--open .select2-search__field');
+            if (searchField) {
+                searchField.focus();
+            }
+        }, 100);
+    });
 
     let chart;
 
     function renderLineChart(labels, data) {
         if (chart) chart.destroy();
 
-    chart = new Chart(ctx, {
-        type: 'line',
-    data: {
-        labels: labels,
-    datasets: [{
-        label: "Antal sålda hattar",
-    data: data,
-    borderColor: 'rgba(75, 192, 192, 1)',
-    fill: false,
-    tension: 0.3,
-    pointRadius: 3
-                }]
+        chart = new Chart(ctx, {
+            type: 'line',
+        data: {
+            labels: labels,
+        datasets: [{
+            label: "Antal sålda hattar",
+            data: data,
+            borderColor: 'rgba(75, 192, 192, 1)',
+            fill: false,
+            tension: 0.3,
+            pointRadius: 3
+                    }]
             },
-    options: {
-        responsive: true,
-    maintainAspectRatio: false,
-    scales: {
-        y: {
-        beginAtZero: true,
-    precision: 0
-                    },
-    x: {
-        ticks: {
-        maxRotation: 45,
-    minRotation: 45
+
+            options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                        y: {
+                        beginAtZero: true,
+                        precision: 0
+                        },
+            x: {
+            ticks: {
+            maxRotation: 45,
+            minRotation: 45
+                            }
                         }
                     }
                 }
-            }
-        });
+            });
     }
 
     function updateIntervalData(range) {
