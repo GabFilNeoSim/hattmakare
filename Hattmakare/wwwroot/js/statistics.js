@@ -71,7 +71,7 @@ document.addEventListener("DOMContentLoaded", function () {
         datasets: [{
             label: "Antal sålda hattar",
             data: data,
-            borderColor: 'rgba(75, 192, 192, 1)',
+            borderColor: 'rgba(109, 117, 198, 1)',
             fill: false,
             tension: 0.3,
             pointRadius: 3
