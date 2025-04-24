@@ -4,6 +4,7 @@ using Hattmakare.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hattmakare.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250423115952_upd")]
+    partial class upd
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -197,7 +200,6 @@ namespace Hattmakare.Migrations
                             Id = 1,
                             Comment = "Testcomment",
                             Depth = 0.0,
-                            HatTypeId = 1,
                             IsDeleted = false,
                             Length = 0.0,
                             Name = "Studenthatt",
@@ -243,13 +245,7 @@ namespace Hattmakare.Migrations
                         {
                             HatId = 1,
                             MaterialId = 1,
-                            Quantity = 1
-                        },
-                        new
-                        {
-                            HatId = 2,
-                            MaterialId = 2,
-                            Quantity = 6
+                            Quantity = 0
                         });
                 });
 
@@ -284,7 +280,7 @@ namespace Hattmakare.Migrations
                         new
                         {
                             Id = 3,
-                            Name = "Specialhatt"
+                            Name = "Speicalhatt"
                         });
                 });
 
@@ -329,7 +325,7 @@ namespace Hattmakare.Migrations
                             Name = "tyg",
                             Price = 10m,
                             Supplier = "Olhsson",
-                            Unit = "M"
+                            Unit = "3"
                         });
                 });
 
@@ -344,8 +340,8 @@ namespace Hattmakare.Migrations
                     b.Property<int?>("CustomerId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("EndDate")
+                        .HasColumnType("date");
 
                     b.Property<int?>("OrderStatusId")
                         .HasColumnType("int");
@@ -356,8 +352,8 @@ namespace Hattmakare.Migrations
                     b.Property<bool>("Priority")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("StartDate")
+                        .HasColumnType("date");
 
                     b.HasKey("Id");
 
@@ -372,31 +368,21 @@ namespace Hattmakare.Migrations
                         {
                             Id = 1,
                             CustomerId = 1,
-                            EndDate = new DateTime(2025, 4, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EndDate = new DateOnly(2025, 4, 17),
                             OrderStatusId = 1,
                             Price = 500m,
                             Priority = false,
-                            StartDate = new DateTime(2025, 4, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            StartDate = new DateOnly(2025, 4, 16)
                         },
                         new
                         {
                             Id = 2,
                             CustomerId = 2,
-                            EndDate = new DateTime(2025, 4, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EndDate = new DateOnly(2025, 4, 17),
                             OrderStatusId = 2,
                             Price = 600m,
                             Priority = true,
-                            StartDate = new DateTime(2025, 4, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CustomerId = 2,
-                            EndDate = new DateTime(2025, 4, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            OrderStatusId = 2,
-                            Price = 600m,
-                            Priority = true,
-                            StartDate = new DateTime(2025, 4, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            StartDate = new DateOnly(2025, 4, 16)
                         });
                 });
 
@@ -439,18 +425,6 @@ namespace Hattmakare.Migrations
                             Id = 2,
                             HatId = 2,
                             OrderId = 1
-                        },
-                        new
-                        {
-                            Id = 3,
-                            HatId = 2,
-                            OrderId = 2
-                        },
-                        new
-                        {
-                            Id = 4,
-                            HatId = 2,
-                            OrderId = 3
                         });
                 });
 

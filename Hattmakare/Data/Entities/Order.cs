@@ -10,6 +10,8 @@ namespace Hattmakare.Data.Entities
         [Required]
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+
+        [Column(TypeName = "decimal(18,2)")]
         public decimal Price { get; set; }
        
 

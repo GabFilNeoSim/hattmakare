@@ -2,13 +2,68 @@
 
 @model EditHatViewModel
 
-<form method="post" asp-action="EditHat" enctype="multipart/form-data" class="p-4 shadow rounded bg-light">
-    <h2 class="mb-4 text-center">Redigera Hatt</h2>
+@{
+    ViewBag.Title = "Ändra en hat";
+}
 
-    <div class="form-group mb-3">
-        <label asp-for="Name" class="form-label fw-bold">Hattens namn</label>
-        <input asp-for="Name" class="form-control" placeholder="Skriv namn på hatten" required />
-        <span asp-validation-for="Name" class="text-danger small"></span>
+<div class="container d-flex justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <form method="post" asp-action="EditHat" enctype="multipart/form-data" class="p-4 shadow rounded bg-light">
+            <h2 class="mb-4 text-center">Redigera Hatt</h2>
+
+            <div class="form-group mb-3">
+                <label asp-for="Name" class="form-label fw-bold">Hattens namn</label>
+                <input asp-for="Name" class="form-control" placeholder="Skriv namn på hatten" required />
+                <span asp-validation-for="Name" class="text-danger small"></span>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label asp-for="Price" class="form-label fw-bold">Pris</label>
+                    <input asp-for="Price" type="number" class="form-control" placeholder="Ange pris i SEK" required />
+                    <span asp-validation-for="Price" class="text-danger small"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Quantity" class="form-label fw-bold">Antal i lager</label>
+                    <input asp-for="Quantity" type="number" class="form-control" placeholder="Hur många finns i lager?" required />
+                    <span asp-validation-for="Quantity" class="text-danger small"></span>
+                </div>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Size" class="form-label fw-bold">Storlek</label>
+                <input asp-for="Size" class="form-control" placeholder="Ange storlek (t.ex. S, M, L, 58cm...)" required />
+                <span asp-validation-for="Size" class="text-danger small"></span>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label asp-for="Length" class="form-label fw-bold">Längd</label>
+                    <input asp-for="Length" class="form-control" placeholder="cm" required />
+                    <span asp-validation-for="Length" class="text-danger small"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="Depth" class="form-label fw-bold">Djup</label>
+                    <input asp-for="Depth" class="form-control" placeholder="cm" required />
+                    <span asp-validation-for="Depth" class="text-danger small"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="Width" class="form-label fw-bold">Bredd</label>
+                    <input asp-for="Width" class="form-control" placeholder="cm" required />
+                    <span asp-validation-for="Width" class="text-danger small"></span>
+                </div>
+            </div>
+
+            <div class="form-group mb-4">
+                <label asp-for="Image" class="form-label fw-bold">Ladda upp bild</label>
+                <input asp-for="Image" type="file" class="form-control" />
+                <span asp-validation-for="Image" class="text-danger small"></span>
+            </div>
+
+            <div class="text-end">
+                <button type="submit" class="btn btn-dark px-4 py-2">Spara ändringar</button>
+            </div>
+        </form>
     </div>
 
     <div class="form-group mb-3">
