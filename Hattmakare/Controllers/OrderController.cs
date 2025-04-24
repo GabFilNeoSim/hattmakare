@@ -9,6 +9,7 @@ using Hattmakare.Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using System.Reflection;
 
 namespace Hattmakare.Controllers;
 [Authorize]
@@ -16,11 +17,43 @@ namespace Hattmakare.Controllers;
 public class OrderController : Controller 
 {
     private readonly AppDbContext _context;
+    private readonly ILogger<OrderController> _logger;
 
-    public OrderController(AppDbContext context)
+    public OrderController(AppDbContext context, ILogger<OrderController> logger)
     {
         _context = context;
+        _logger = logger;
     }
+   
+    [HttpGet("materialorder")]
+    public async Task<IActionResult> MaterialOrder(int orderId)
+    {
+        var order = await _context.Orders
+            .Include(o => o.OrderHats)
+                .ThenInclude(oh => oh.Hat)
+                    .ThenInclude(h => h.HatMaterials)
+                        .ThenInclude(hm => hm.Material)
+            .FirstOrDefaultAsync(o => o.Id == orderId);
+
+        if (order == null)
+        {
+            _logger.LogWarning("Ingen order hittades med ID {OrderId}", orderId);
+            
+        }
+
+        var allHatMaterials = order.OrderHats
+            .SelectMany(oh => oh.Hat.HatMaterials)
+            .ToList();
+
+        var model = new MaterialOrderViewModel
+        {
+            OrderId = order.Id,
+            HatMaterials = allHatMaterials
+        };
+
+        return View(model);
+    }
+
 
     [HttpGet("waybill")]
     public async Task<IActionResult> Waybill(int orderId)

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Hattmakare.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class upd : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -379,6 +379,11 @@ namespace Hattmakare.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Materials",
+                columns: new[] { "Id", "IsDecoration", "Name", "Price", "Supplier", "Unit" },
+                values: new object[] { 1, false, "tyg", 10m, "Olhsson", "3" });
+
+            migrationBuilder.InsertData(
                 table: "OrderStatuses",
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
@@ -396,6 +401,11 @@ namespace Hattmakare.Migrations
                     { 1, 1, "testmejl", "Olof", 0.0, false, "Svensson", "1234567890" },
                     { 2, 1, "testmejl", "Jan", 0.0, false, "Jansson", "1234567890" }
                 });
+
+            migrationBuilder.InsertData(
+                table: "HatsMaterial",
+                columns: new[] { "HatId", "MaterialId", "Quantity" },
+                values: new object[] { 1, 1, 0 });
 
             migrationBuilder.InsertData(
                 table: "Orders",

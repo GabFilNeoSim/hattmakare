@@ -4,6 +4,7 @@ using Hattmakare.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hattmakare.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250424080445_laggtill")]
+    partial class laggtill
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -242,13 +245,13 @@ namespace Hattmakare.Migrations
                         {
                             HatId = 1,
                             MaterialId = 1,
-                            Quantity = 1
+                            Quantity = 0
                         },
                         new
                         {
                             HatId = 2,
                             MaterialId = 2,
-                            Quantity = 6
+                            Quantity = 0
                         });
                 });
 
@@ -328,7 +331,7 @@ namespace Hattmakare.Migrations
                             Name = "tyg",
                             Price = 10m,
                             Supplier = "Olhsson",
-                            Unit = "M"
+                            Unit = "3"
                         });
                 });
 
@@ -426,6 +429,12 @@ namespace Hattmakare.Migrations
                         new
                         {
                             Id = 2,
+                            HatId = 2,
+                            OrderId = 1
+                        },
+                        new
+                        {
+                            Id = 3,
                             HatId = 2,
                             OrderId = 1
                         });

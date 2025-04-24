@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hattmakare.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250423114111_init")]
-    partial class init
+    [Migration("20250424080806_h")]
+    partial class h
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -239,6 +239,20 @@ namespace Hattmakare.Migrations
                     b.HasIndex("MaterialId");
 
                     b.ToTable("HatsMaterial");
+
+                    b.HasData(
+                        new
+                        {
+                            HatId = 1,
+                            MaterialId = 1,
+                            Quantity = 1
+                        },
+                        new
+                        {
+                            HatId = 2,
+                            MaterialId = 2,
+                            Quantity = 6
+                        });
                 });
 
             modelBuilder.Entity("Hattmakare.Data.Entities.HatType", b =>
@@ -308,6 +322,17 @@ namespace Hattmakare.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Materials");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            IsDecoration = false,
+                            Name = "tyg",
+                            Price = 10m,
+                            Supplier = "Olhsson",
+                            Unit = "M"
+                        });
                 });
 
             modelBuilder.Entity("Hattmakare.Data.Entities.Order", b =>
@@ -404,6 +429,12 @@ namespace Hattmakare.Migrations
                         new
                         {
                             Id = 2,
+                            HatId = 2,
+                            OrderId = 1
+                        },
+                        new
+                        {
+                            Id = 3,
                             HatId = 2,
                             OrderId = 1
                         });
