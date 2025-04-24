@@ -11,7 +11,7 @@
     @foreach (var hat in Model.Hats)
     {
       <div class="hatItem" data-name="@hat.Name" data-id="@hat.Id">
-        <img src="/assets/hats/@(hat.ImageUrl ?? "placeholder-image.png")" />
+        <img id="image" src="/assets/hats/@(hat.ImageUrl ?? "placeholder-image.png")" />
         <h2 class="name">@hat.Name</h2>
         <div class="details">
           <div class="item">

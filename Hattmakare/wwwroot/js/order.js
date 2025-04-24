@@ -188,6 +188,3 @@ $(document).ready(function () {
     updateCart();
   });
 });
-
-
-
