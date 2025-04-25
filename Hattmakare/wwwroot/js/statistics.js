@@ -4,6 +4,17 @@ let quarterlySales = [];
 let monthlySales = [];
 
 document.addEventListener("DOMContentLoaded", function () {
+    $('.select2').select2({
+        width: '100%',
+        placeholder: 'Välj eller sök...',
+        allowClear: true,
+        language: {
+            noResults: function () {
+                return "Inga resultat";
+            }
+        }
+    });
+
     const canvas = document.getElementById("hatChart");
     const ctx = canvas.getContext("2d");
     const rangeButtons = document.querySelectorAll(".range-btn");
@@ -16,59 +27,73 @@ document.addEventListener("DOMContentLoaded", function () {
     const customerSelect = document.querySelector('[name="CustomerId"]');
     const hatSelect = document.querySelector('[name="HatId"]');
 
-
     async function fetchAndUpdateChart() {
-    const customerId = customerSelect.value;
-    const hatId = hatSelect.value;
+        const customerId = customerSelect.value;
+        const hatId = hatSelect.value;
 
-    const url = `/statistics/data?customerId=${customerId}&hatId=${hatId}`;
-    const response = await fetch(url);
-    const data = await response.json();
+        const url = `/statistics/data?customerId=${customerId}&hatId=${hatId}`;
+        const response = await fetch(url);
+        const data = await response.json();
 
-    // Uppdatera dataset baserat på aktiv range
-    const activeRange = document.querySelector(".range-btn.active").dataset.range;
+        const activeRange = document.querySelector(".range-btn.active").dataset.range;
 
-    dailyLabels = data.dailyLabels;
-    dailySales = data.dailySales;
-    quarterlySales = data.quarterlySales;
-    monthlySales = data.monthlySales;
+        dailyLabels = data.dailyLabels;
+        dailySales = data.dailySales;
+        quarterlySales = data.quarterlySales;
+        monthlySales = data.monthlySales;
 
-    updateIntervalData(activeRange);
+        updateIntervalData(activeRange);
     }
 
-    customerSelect.addEventListener("change", fetchAndUpdateChart);
-    hatSelect.addEventListener("change", fetchAndUpdateChart);
+    $('#customerSelect').on('change', fetchAndUpdateChart);
+    $('#hatSelect').on('change', fetchAndUpdateChart);
+    $('#customerSelect, #hatSelect').on('select2:open', function () {
+        setTimeout(function () {
+            let searchField = document.querySelector('.select2-container--open .select2-search__field');
+            if (searchField) {
+                searchField.focus();
+            }
+        }, 100);
+    });
 
     let chart;
 
     function renderLineChart(labels, data) {
         if (chart) chart.destroy();
 
-    chart = new Chart(ctx, {
-        type: 'line',
-    data: {
-        labels: labels,
-    datasets: [{
-        label: "Antal sålda hattar",
-    data: data,
-    borderColor: 'rgba(75, 192, 192, 1)',
-    fill: false,
-    tension: 0.3,
-    pointRadius: 3
+        chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: "Antal sålda hattar",
+                    data: data,
+                    borderColor: 'rgba(109, 117, 198, 1)',
+                    fill: false,
+                    tension: 0.3,
+                    pointRadius: 3
                 }]
             },
-    options: {
-        responsive: true,
-    maintainAspectRatio: false,
-    scales: {
-        y: {
-        beginAtZero: true,
-    precision: 0
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1,
+                            callback: function (value) {
+                                if (Number.isInteger(value)) {
+                                    return value;
+                                }
+                                return null;
+                            }
+                        }
                     },
-    x: {
-        ticks: {
-        maxRotation: 45,
-    minRotation: 45
+                    x: {
+                        ticks: {
+                            maxRotation: 45,
+                            minRotation: 45
                         }
                     }
                 }
@@ -97,7 +122,6 @@ document.addEventListener("DOMContentLoaded", function () {
         renderLineChart(labelsToUse, dataToUse);
     }
 
-    // Init with "month"
     updateIntervalData("month");
 
     rangeButtons.forEach(btn => {
@@ -112,4 +136,3 @@ document.addEventListener("DOMContentLoaded", function () {
 
     fetchAndUpdateChart();
 });
-
