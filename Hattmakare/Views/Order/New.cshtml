@@ -116,18 +116,6 @@
   <ol id="orderItems">
 
   </ol>
-  <select id="material-dropdown" class="form-select">
-                        <option value="">-- Välj material --</option>
-                        @foreach (var mat in Model.AvailableMaterials)
-                        {
-                            <option value="@mat.MaterialId" data-name="@mat.Name" data-unit="@mat.Unit">@mat.Name (@mat.Unit)</option>
-                        }
-                    </select>
-                    <input type="number" id="material-qty" class="form-control" placeholder="Mängd" min="1" />
-                    <button type="button" id="add-material-btn" class="btn btn-blue btn-sm">
-                        <i class="fa-solid fa-plus"></i>
-                        Lägg till
-                    </button>
     <div id="settings" class="container mt-5">
         <form method="post" class="d-flex flex-column gap-4">
 

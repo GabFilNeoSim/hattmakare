@@ -345,14 +345,8 @@
     margin-top: 50px;
     #hatList {
 
-    #addNewHat{
-      height: 320px !important;
-      width: 200px !important;
-    }
 
     .hatItem{
-      height: 320px !important;
-      width: 200px !important;
       
       .details {
         width: 100%;

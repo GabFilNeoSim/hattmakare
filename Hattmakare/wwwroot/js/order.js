@@ -1,134 +1,272 @@
-﻿const cart = {};
+﻿class CartHatItem {
+  constructor({id, name, size, length, width, depth, price, quantity, comment, imageUrl, hatTypeId, materials = []}) {
+      this.id = id;
+      this.name = name;
+      this.size = size;
+      this.length = length;
+      this.width = width;
+      this.depth = depth;
+      this.price = price;
+      this.quantity = quantity;
+      this.comment = comment;
+      this.imageUrl = imageUrl,
+      this.hatTypeId = hatTypeId,
+      this.materials = materials.map(m => new HatMaterial(m.materialId, m.quantity, m.name, m.price, m.unit));
+  }
 
-$(document).ready(function () {
-  let obj = localStorage.getItem("cart") ? JSON.parse(localStorage.getItem("cart")) : {}; // Load cart from local storage")
-  Object.entries(obj).forEach(([key, value]) => {
-    cart[key] = value;
-  })
-  updateCart();
-  updateHatList();
-})
+  static async fromApi(id) {
+    const [details, materials] = await Promise.all([
+      $.get('/hats/details', { id }),
+      $.get('/materials/hatMaterials', { hatId: id })
+    ]);
 
-document.querySelectorAll('.hatItem').forEach(hatItem => {
-  const plusBtn = hatItem.querySelector('.count-add');
-  const minusBtn = hatItem.querySelector('.count-remove');
-  const id = hatItem.getAttribute('data-id');
+    const item = new CartHatItem({
+      id: id,
+      name: details.name,
+      size: details.size,
+      length: details.length,
+      width: details.width,
+      depth: details.depth,
+      price: details.price,
+      quantity: 1,
+      comment: details.comment,
+      imageUrl: details.imageUrl,
+      hatTypeId: details.hatTypeId
+    });
 
-  plusBtn.addEventListener('click', async() => {
-    console.log("cart item for id: " + id + " " + cart[id])
-    if (!cart[id]){
-      //Fetch hatdetails
-      await addHatDetails(id);
-    }
-    if (cart[id]){
-      cart[id].Quantity += 1;
-      console.log("Increased quantity")
-    }
-    updateCart();
-    updateHatList();
-  });
+    item.materials = materials.map(m => new HatMaterial(m.materialId, m.quantity, m.name, m.price, m.unit));
+    return item;
+  }
 
-  minusBtn.addEventListener('click', () => {
-    if (cart[id].Quantity > 0) {
-      cart[id].Quantity -= 1;
-      updateCart();
-      updateHatList();
-    }
-  });
-});
+  addMaterial(hatMaterial){
+    this.materials.push(hatMaterial)
+  }
 
-function getHatMaterials(id) {
-  $.get('/materials/hatMaterials', { hatId: id }, function (data) {
-    console.log(data)
-});
-}
+  removeMaterial(hatMaterial){
+    this.materials = this.materials.filter(x => x.materialId != hatMaterial.materialId);
+  }
+} 
 
-async function addHatDetails(id) {
-  let materials = await getHatMaterials(id);
+class HatMaterial {
+  constructor(materialId, quantity, name, price, unit){
+    this.materialId = materialId,
+    this.quantity = quantity
+    this.name = name,
+    this.price = price
+    this.unit = unit
+  }
 
-  $.get('/hats/details', { id: id }, function (data) {
-    cart[id] =
-    {
-      Name: data.name,
-      Comment: data.comment,
-      Depth: data.depth,
-      Width: data.width,
-      Length: data.length,
-      HatTypeId: data.hatTypeId,
-      ImageUrl: data.imageUrl,
-      Size: data.size,
-      Price: data.price,
-      Quantity: 1
-      
-    }
-    localStorage.setItem("cart", JSON.stringify(cart));
-    updateCart();
-});
-}
-
-function updateCart() {
-  const cartEl = $("#cart")
-  cartEl.empty(); // Clear previous entries
-  Object.entries(cart).forEach(([key, value]) => {
-    let html = ""
-    if (value.Quantity > 0) {
-      html = `
-      <div class="entry">
-        <p>${value.Quantity} x  ${value.Name}</p>
-        <p class="size"> Storlek: ${value.Size} </p>
-      </div>
-      `;
-    }
-
-    cartEl.append(html);
-  });
-
-  // Update Quantity texts
-  document.querySelectorAll('.hatItem').forEach(hatItem => {
-    const counterElement = hatItem.querySelector('.count');
-    const id = hatItem.getAttribute('data-id');
-    if (cart[id]){
-      counterElement.textContent = cart[id].Quantity;
-    }
-  })
-
-  const priceEl = $("#total")
-  const total = calculateTotal()
-  priceEl.text("Total: " + total + ":-")
-  if ($("#cart").children().length === 0) {
-    $("#cartContainer").hide(); // or .addClass("d-none") if using Bootstrap
-  } else {
-    $("#cartContainer").show(); // or .removeClass("d-none")
+  changeQuantity(quantity){
+    this.Quantity = quantity;
   }
 }
 
-function updateHatList() {
-  const itemsEl = $("#orderItems")
-  itemsEl.empty();
-  //Loop through each hat in the order
-  Object.entries(cart).forEach(([k1, value]) => {
-    for (let i = 0; i < value.Quantity; i++){
-      html = `
-      <li class="entry" id="${k1}">
-        <details>
-          <summary>
-            <p>${value.Name}</p>
-            <p>Storlek: ${value.Size} </p>
-            <p>Längd: ${value.Length} </p>
-            <p>Bredd: ${value.Width} </p>
-            <p>Djup: ${value.Depth} </p>
-             <svg id="remove" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0L284.2 0c12.1 0 23.2 6.8 28.6 17.7L320 32l96 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 96C14.3 96 0 81.7 0 64S14.3 32 32 32l96 0 7.2-14.3zM32 128l384 0 0 320c0 35.3-28.7 64-64 64L96 512c-35.3 0-64-28.7-64-64l0-320zm96 64c-8.8 0-16 7.2-16 16l0 224c0 8.8 7.2 16 16 16s16-7.2 16-16l0-224c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16l0 224c0 8.8 7.2 16 16 16s16-7.2 16-16l0-224c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16l0 224c0 8.8 7.2 16 16 16s16-7.2 16-16l0-224c0-8.8-7.2-16-16-16z"/></svg>
-            <p id="icon"></p>
-          </summary>
-          <div class="settings">
+class Cart {
+  constructor() {
+      this.items = []
+  }
 
-          <p> extragrejer </p>
-          </div>
-        </details>
-      </li>
-      `;
-      itemsEl.append(html)
+  async addItem(itemId) {
+    let item = this.items.find(x => x.id == itemId);
+    if (item) {
+      item.quantity += 1;
+    } else {
+      item = await CartHatItem.fromApi(itemId);
+      this.items.push(item)
     }
+    this.syncToStorage();
+  }
+
+  removeItem(itemId) {
+    let item = this.items.find(x => x.id == itemId);
+    if (item) {
+      if (item.quantity > 1) item.quantity -= 1;
+      else{
+        this.items = this.items.filter(x => x.id !== itemId);
+      }
+    }
+    this.syncToStorage();
+  }
+
+  getItem(id) {
+    return this.items.find(x => x.id == id);
+  }
+
+  syncToStorage() {
+    const plain = this.items.map(i => ({ ...i }));
+    localStorage.setItem('cart', JSON.stringify(plain));
+  }
+
+  loadFromStorage() {
+    const saved = JSON.parse(localStorage.getItem('cart') || '{}');
+    console.log( Object.values(saved).map(data => new CartHatItem(data)))
+    if (typeof saved === 'object' && saved !== null) {
+      this.items = Object.values(saved).map(data => new CartHatItem(data));
+    } else {
+      this.items = [];
+    }
+  }
+
+  total() {
+    return this.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  }
+}
+
+const cart = new Cart();
+
+$(document).ready(function () {
+  cart.loadFromStorage();
+  updateCart(cart.items);
+  updateHatList(cart.items);
+  $('#hatList').on('click', '.count-add', async function () {
+    const id = $(this).closest('.hatItem').data('id');
+    await cart.addItem(id);
+    updateCart(cart.items);
+    updateHatList(cart.items);
+  });
+
+  $('#hatList').on('click', '.count-remove', function () {
+    const id = $(this).closest('.hatItem').data('id');
+    cart.removeItem(id);
+    updateCart(cart.items);
+    updateHatList(cart.items);
+  });
+
+  //handle materials
+  document.querySelectorAll('.material-quantity').forEach(input => {
+    input.addEventListener('input', (e) => {
+      const materialId = e.target.getAttribute('data-material-id');
+      const itemId = e.target.getAttribute('data-item-id');
+      const newQuantity = parseInt(e.target.value, 10);
+      
+      // Find the item and the material inside the item
+      const item = cart.getItem(itemId);
+      if (item) {
+        const material = item.materials.find(m => m.materialId == materialId);
+        if (material) {
+          material.quantity = newQuantity;
+          // Optionally, sync the cart to localStorage or do other updates
+          cart.syncToStorage();
+          updateCart(cart.items);
+          updateHatList(cart.items);
+        }
+      }
+    });
+  });
+
+  document.querySelectorAll('.remove-material').forEach(button => {
+    button.addEventListener('click', () => {
+      const materialId = button.getAttribute('data-material-id');
+      const itemId = button.getAttribute('data-item-id');
+      
+      // Find the item and the material inside the item
+      const item = cart.getItem(itemId);
+      if (item) {
+        const materialIndex = item.materials.findIndex(m => m.materialId == materialId);
+        if (materialIndex > -1) {
+          item.materials.splice(materialIndex, 1);  // Remove the material
+          // Optionally, sync the cart to localStorage or do other updates
+          cart.syncToStorage();
+          updateCart(cart.items);
+          updateHatList(cart.items);
+        }
+      }
+    });
+  });
+})
+
+function updateCart(cartItems) {
+  const cartEl = $("#cart");
+  cartEl.empty();
+
+  cartItems.forEach(item => {
+    if (item.quantity > 0) {
+      const html = `
+        <div class="entry">
+          <p>${item.quantity} x ${item.name}</p>
+          <p class="size">Storlek: ${item.size}</p>
+        </div>
+      `;
+      cartEl.append(html);
+    }
+  });
+
+  document.querySelectorAll('.hatItem').forEach(hatItem => {
+    const counterElement = hatItem.querySelector('.count');
+    const id = hatItem.getAttribute('data-id');
+    const cartItem = cart.getItem(id)
+    if (cartItem) {
+      counterElement.textContent = cartItem.quantity;
+    }
+    else{
+      counterElement.textContent = 0;
+    }
+  });
+
+  const total = calculateTotal(cartItems);
+  $("#total").text("Total: " + total + ":-");
+
+  if (cartItems.length === 0) {
+    $("#cartContainer").hide();
+  } else {
+    $("#cartContainer").show();
+  }
+}
+
+
+function updateHatList(cartItems) {
+  const itemsEl = $("#orderItems");
+  itemsEl.empty();
+
+  cartItems.forEach(item => {
+    console.log(item.materials)
+    const html = `
+        <li class="entry" id="${item.id}">
+          <details>
+            <summary>
+              <p>${item.name}</p>
+              <p>Storlek: ${item.size}</p>
+              <p>Längd: ${item.length}</p>
+              <p>Bredd: ${item.width}</p>
+              <p>Djup: ${item.depth}</p>
+              <p> Antal: ${item.quantity} </p>
+              <svg id="remove" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                <path d="..."/>
+              </svg>
+              <p id="icon"></p>
+            </summary>
+            <div class="settings">
+            ${item.materials.map(material => `
+              <div class="material-entry" data-material-id="${material.materialId}">
+                <p>Material: ${material.name}</p>
+                <input 
+                  type="number" 
+                  value="${material.quantity}" 
+                  class="material-quantity" 
+                  data-material-id="${material.materialId}" 
+                  data-item-id="${item.id}" 
+                  min="0"
+                />
+                <button class="remove-material" data-material-id="${material.materialId}" data-item-id="${item.id}">Remove</button>
+              </div>
+            `).join('')}
+              <select id="material-dropdown" class="form-select">
+                        <option value="">-- Välj material --</option>
+                        @foreach (var mat in Model.AvailableMaterials)
+                        {
+                            <option value="@mat.MaterialId" data-name="@mat.Name" data-unit="@mat.Unit">@mat.Name (@mat.Unit)</option>
+                        }
+                    </select>
+                    <input type="number" id="material-qty" class="form-control" placeholder="Mängd" min="1" />
+                    <button type="button" id="add-material-btn" class="btn btn-blue btn-sm">
+                        <i class="fa-solid fa-plus"></i>
+                        Lägg till
+                    </button>
+            </div>
+          </details>
+        </li>
+      `;
+      itemsEl.append(html);
   });
 }
 
