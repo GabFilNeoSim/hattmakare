@@ -219,7 +219,7 @@
 }
 
 .order-hats-name i {
-    color: #009dff !important;
+    color: #6d75c6 !important;
     font-size: 20px;
 }
 
@@ -228,7 +228,6 @@
     top: 50%;
     transform: translateY(-50%);
     left: 100%;
-    width: 350px;
     background-color: #fff;
     z-index: 1000;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
@@ -247,11 +246,13 @@
 .order-hats-name h3 {
     text-align: center;
     color: black !important;
+    font-size: 24px;
 }
 
 .order-hats-name h4 {
     color: black !important;
     margin-top: 20px;
+    font-size: 16px;
 }
 
 .order-hats-name img {
@@ -260,9 +261,14 @@
     display: block;
 }
 
-.order-details {
-
+.order-hats-details table {
+    font-size: 14px;
 }
+
+.order-hats-details .table.order-info {
+    margin-bottom: 30px;
+}
+
 
 .order-hats-img {
     width: 50px;
