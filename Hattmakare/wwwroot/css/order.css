@@ -6,6 +6,28 @@
     gap: 25px;
 }
 
+#orderCompleted {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#confirm-modal {
+    background: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    text-align: center;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+
 #boards-container {
     display: flex;
     flex-direction: row;
@@ -29,8 +51,7 @@
 .boards-wrapper {
     flex: 1;
     height: 900px;
-/*    background-color: #647e8f;*/
-    background-color: #009dff;
+    background-color: #6d75c6;
     border-radius: 12px;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 }
@@ -135,7 +156,7 @@
 }
 
 .item-id {
-    background-color: #009dff;
+    background-color: #6d75c6;
     color: #fff;
     padding: 4px 6px;
     border-radius: 4px;
@@ -186,7 +207,7 @@
     min-width: 100px;
 }
 .order-info-title {
-    background-color: #009dff;
+    background-color: #6d75c6;
     color: #fff;
     padding: 5px 15px;
     border-radius: 4px;
@@ -196,7 +217,7 @@
 }
 .order-info-title.action {
     background-color: transparent !important;
-    border: 2px solid #009dff;
+    border: 2px solid #6d75c6;
     color: #009dff;
     padding: 4px 14px;
 }
@@ -220,7 +241,7 @@
 }
 
 .order-hats-name i {
-    color: #009dff !important;
+    color: #6d75c6 !important;
     font-size: 20px;
 }
 
@@ -229,7 +250,6 @@
     top: 50%;
     transform: translateY(-50%);
     left: 100%;
-    width: 350px;
     background-color: #fff;
     z-index: 1000;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
@@ -248,11 +268,13 @@
 .order-hats-name h3 {
     text-align: center;
     color: black !important;
+    font-size: 24px;
 }
 
 .order-hats-name h4 {
     color: black !important;
     margin-top: 20px;
+    font-size: 16px;
 }
 
 .order-hats-name img {
@@ -261,9 +283,14 @@
     display: block;
 }
 
-.order-details {
-
+.order-hats-details table {
+    font-size: 14px;
 }
+
+.order-hats-details .table.order-info {
+    margin-bottom: 30px;
+}
+
 
 .order-hats-img {
     width: 50px;
@@ -315,6 +342,7 @@
 
 .order-save-btn {
     display: block;
+
 }
 
 .form-check-input {
@@ -419,12 +447,23 @@
     flex-direction: row;
     gap: 5px;
 }
+
 #search button {
-    padding: 0 10px;
+    padding: 0 15px;
+    background-color: #6d75c6;
 }
 
-#resetSearch button{
+.btn-blue {
+    background: #6d75c6 !important;
+    color: #fff !important;
+}
+
+#resetSearch button {
     border: none;
     background-color: transparent;
     border-bottom: 1px solid hsl(0,0%, 50%);
+}
+
+.order-info-child input:not([type="checkbox"]) {
+    background: none;
 }

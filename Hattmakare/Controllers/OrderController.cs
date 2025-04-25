@@ -317,10 +317,13 @@ public class OrderController : Controller
         };
         return View(model);
     }
+
   [HttpPost("AddSpecialHat")]
   public async Task<IActionResult> AddSpecialHat([FromForm] AddHatViewModel newHat)
   {
+
     var hat = new Hat();
+
     hat.Name = newHat.Name;
     hat.Size = newHat.Size ?? 0;
     hat.Length = newHat.Length ?? 0;
@@ -329,6 +332,7 @@ public class OrderController : Controller
     hat.Quantity = newHat.Quantity;
     hat.Price = newHat.Price ?? 0;
     hat.Comment = newHat.Comment ?? "";
+    hat.HatMaterials = new List<HatMaterial>();
     hat.HatType = await _context.HatTypes
         .FirstOrDefaultAsync(x => x.Name == "SpecialHatt");
 
@@ -337,8 +341,21 @@ public class OrderController : Controller
     
     hat.ImageUrl = image;
 
-    await _context.Hats.AddAsync(hat);
-    await _context.SaveChangesAsync();
+
+        foreach (var material in newHat.SelectedMaterials)
+        {
+            if (material.Quantity > 0)
+            {
+                hat.HatMaterials.Add(new HatMaterial
+                {
+                    MaterialId = material.MaterialId,
+                    Quantity = material.Quantity
+                });
+            }
+        }
+
+        await _context.Hats.AddAsync(hat);
+        await _context.SaveChangesAsync();
 
     return Ok(hat.Id);
   }

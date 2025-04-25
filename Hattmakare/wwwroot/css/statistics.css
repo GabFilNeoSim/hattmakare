@@ -2,3 +2,61 @@
     position: relative;
     height: 400px;
 }
+
+#search-form {
+    display: flex;
+    margin-top: 16px;
+    gap: 20px;
+}
+
+.form-label {
+    display: flex;
+}
+
+#customer-search, #hat-search {
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+}
+
+#range-titles {
+    height: 28px;
+    display: flex;
+    width: 200px;
+    margin-left: auto;
+    text-align: center;
+    button{
+             max-height:28px;
+              min-width: 66px;
+              padding: 2px;
+          }
+button:focus {
+    outline: none;
+    box-shadow: none;
+}
+}
+
+.btn-outline-primary.active {
+    background-color: #6d75c6 !important;
+    color: white !important;
+}
+
+.test {
+    display: flex;
+    align-items: flex-end;
+}
+
+.btn btn-outline-primary range-btn, btn btn-outline-primary range-btn active {
+    display: flex;
+    width: 50px;
+}
+
+.select2-results__options li:hover {
+    background-color: #6d75c6 !important;
+    color: white !important;
+}
+
+.select2-container--default .select2-results__option--highlighted.select2-results__option--selectable {
+    background-color: #6d75c6 !important;
+    color: white !important;
+}

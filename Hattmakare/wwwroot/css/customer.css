@@ -14,22 +14,21 @@
     fill: white;
   }
 
-  #customer #customerAdd {
-    margin: 0 auto;
-    margin-top: 24px;
-    border: 0;
-    background-color: hsl(0,0%,20%);
-    color: white;
-    display: flex;
-    width: 300px;
-    font-size: 25px;
-    width: fit-content;
-    padding: 8px 24px;
-    border-radius: 24px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
+    #customer #customerAdd {
+        margin: 0 auto;
+        margin-top: 24px;
+        border: 0;
+        background-color: #6d75c6;
+        color: white;
+        display: flex;
+        font-size: 18px;
+        width: fit-content;
+        padding: 8px 24px;
+        border-radius: 24px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
 
   #customer #edit svg {
     display: block;
@@ -53,14 +52,15 @@
     width: 45%;
   }
 
-  #customer .customerFields {
-    width: 45%;
-    font-size: 20px;
-    margin-top: 1px;
-    box-shadow: 0px 0px 16px 0px hsla(0,0%,50%, 0.2);
-    border-radius: 8px;
-    padding: 16px;
-  }
+    #customer .customerFields {
+        width: 45%;
+        font-size: 20px;
+        margin-top: 1px;
+        box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+        border-radius: 8px;
+        background: rgba(255,255,255,0.5);
+        padding: 16px;
+    }
 
   #customer .customerFields form {
     display: flex;
@@ -86,18 +86,21 @@
     min-width: 0;
   }
 
-#customer #search {
-    margin-bottom: 4px;
-    width: 80%;
-    display: flex;
-    border: 1px solid black;
-    padding: 5px 15px;
-    border-radius: 50px;
-input 
+    #customer #search {
+        margin-bottom: 4px;
+        width: 80%;
+        display: flex;
+        box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+        border-radius: 50px;
+        background: #fff;
+        padding: 10px 25px;
+        margin-bottom: 25px;
+        input 
 {
   flex: 1;
   padding: 0px;
   border: none;
+  background: none;
 }
 
 input:focus {
@@ -123,21 +126,21 @@ button {
 
 #customer #resetSearch {
     margin-left: 4px;
-    p
 
-
-{
-  font-weight: 400;
-  font-size: 14px;
-  margin-bottom: 0px;
-  color: hsl(0,0%, 20%);
-}
+    p {
+      font-weight: 400;
+      font-size: 14px;
+      margin-bottom: 0px;
+      color: hsl(0,0%, 20%);
+    }
 
 button {
   border-bottom: 1px solid hsl(0,0%, 50%);
 }
 
-
+.customerFields input {
+    background: none !important;
+}
 
 
 
