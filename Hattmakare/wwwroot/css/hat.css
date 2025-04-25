@@ -3,18 +3,20 @@
   flex-wrap: wrap;
   gap: 40px;
 
-  #addNewHat{
+  #addNewHat
+{
     background-color: transparent;
     border: none;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 250px;
-    height: 360px;
+    width: 270px;
+    height: 100%px;
     transition: all ease-in-out 300ms;
     border-radius: 8px;
     text-decoration: none;
+    background: rgba(255,255,255,0.6);
 
     .container{
       display: flex;
@@ -29,11 +31,12 @@
     }
   }
 
-  #addNewHat:hover{
-    box-shadow: 0px 0px 25px rgba(50, 50, 50, 0.1);
-  }
+#addNewHat:hover {
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+    background: #fff;
+}
 
-  .hatItem {
+.hatItem {
     position: relative;
     border-radius: 8px;
     overflow: hidden;
@@ -41,11 +44,11 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
     width: 270px;
-    padding: 10px 20px;
+    padding: 40px 20px 10px 20px;
     box-sizing: border-box;
-
+    background: rgba(255,255,255,1);
     img {
       object-fit: contain;
       width: 100%;
@@ -79,10 +82,52 @@
     }
 
     .details{
-      width: 90%;
-      .top{
+        width: 90%;
+        margin-top: 15px;
+
+      .info{
         display: flex;
         justify-content: space-between;
+
+        .text {
+            height: max-content;
+            margin: auto 0;
+        }
+
+        .measurements {
+            position: relative;
+            img
+
+        {
+            width: 75px;
+            height: 75px;
+        }
+
+        p {
+            text-align: center;
+            width: max-content;
+            font-size: 12px;
+        }
+
+        .width {
+            position: absolute;
+            left: 15px;
+            bottom: -15px;
+        }
+
+        .length {
+            position: absolute;
+            left: 63px;
+            bottom: -4px;
+        }
+
+        .depth {
+            position: absolute;
+            left: 70px;
+            top: 20px;
+        }
+
+        }
       }
       .bottom{
         display: flex;
@@ -90,55 +135,27 @@
         align-items: flex-end;
         justify-content: space-between;
         padding-right: 30px;
-        margin-top: 10px;
+        margin-top: 15px;
 
         .price{
           font-size: 24px;
           font-weight: 600;
-        }
-        .measurements{
-          position: relative;
-          img{
-            width: 75px;
-            height: 75px;
-          }
-
-          p{
-            text-align: center;
-            width: max-content;
-            font-size: 12px;
-          }
-
-          .width{
-            position: absolute;
-            left: 15px;
-            bottom: -15px;
-          }
-          .length{
-            position: absolute;
-            left: 63px;
-            bottom: -4px;
-          }
-          .depth{
-            position: absolute;
-            left: 70px;
-            top: 20px;
-          }
         }
       }
     }
     }
   }
 
-#hat #search{
-  margin-bottom: 16px;
-  width: 50%;
-  display: flex;
-  border: 1px solid black;
-  padding: 5px 15px;
-  border-radius: 50px;
+#hat #search {
+    margin-bottom: 16px;
+    width: 50%;
+    display: flex;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+    border-radius: 50px;
+    background: #fff;
+    padding: 10px 25px;
 
-  input{
+    input{
     padding: 0px;
     background: none;
     border: none;
