@@ -10,6 +10,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Hattmakare.Services;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using Hattmakare.Models.Customer;
+using System.Text.RegularExpressions;
+using System.Reflection.Metadata.Ecma335;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Hattmakare.Controllers;
 [Authorize]
@@ -290,7 +294,7 @@ public class OrderController : Controller
     [HttpGet("new")]
     public async Task<IActionResult> New()
     {
-        var model = new NewOrderViewModel
+        var model = new NewOrderIndexViewModel
         {
             Hats = await _context.Hats.Where(h => h.IsDeleted == false && h.HatType.Name == "StandardHatt").Select(x =>
                 new HatViewModel
@@ -355,4 +359,98 @@ public class OrderController : Controller
 
     return Ok(hat.Id);
   }
+
+    [HttpGet("get-customer/{id}")]
+    public async Task<IActionResult> GetCustomerById(int id)
+    {
+        var customer = await _context.Customers
+            .Include(c => c.Address)
+            .FirstOrDefaultAsync(c => c.Id == id);
+
+        if (customer == null)
+        {
+            return NotFound();
+        }
+
+        return Json(new
+        {
+            firstName = customer.FirstName,
+            lastName = customer.LastName,
+            headMeasurements = customer.HeadMeasurements,
+            email = customer.Email,
+            phone = customer.PhoneNumber,
+            billingAddress = customer.Address?.BillingAddress,
+            deliveryAddress = customer.Address?.DeliveryAddress,
+            city = customer.Address?.City,
+            postalCode = customer.Address?.PostalCode,
+            country = customer.Address?.Country
+        });
+    }
+
+    [HttpPost("new")]
+    public async Task<IActionResult> CreateOrder(NewOrderIndexViewModel viewModel)
+    {
+        Customer customer;
+
+        if (viewModel.CustomerId > 0)
+        {
+            customer = await _context.Customers
+                .Include(c => c.Address)
+                .FirstOrDefaultAsync(c => c.Id == viewModel.CustomerId);
+
+            if (customer == null)
+            {
+                TempData["NotifyType"] = "error";
+                TempData["NotifyMessage"] = "Kunden hittades inte!";
+                return RedirectToAction("New");
+            }
+
+        }
+        else
+        {
+
+            var address = new Address
+            {
+                BillingAddress = viewModel.AddCustomer.BillingAddress,
+                DeliveryAddress = viewModel.AddCustomer.DeliveryAddress,
+                City = viewModel.AddCustomer.City,
+                PostalCode = viewModel.AddCustomer.PostalCode,
+                Country = viewModel.AddCustomer.Country
+            };
+
+            customer = new Customer
+            {
+                FirstName = viewModel.AddCustomer.FirstName,
+                LastName = viewModel.AddCustomer.LastName,
+                HeadMeasurements = viewModel.AddCustomer.HeadMeasurements,
+                Email = viewModel.AddCustomer.Email,
+                PhoneNumber = viewModel.AddCustomer.Phone,
+
+            };
+
+            _context.Customers.Add(customer);
+            await _context.SaveChangesAsync();
+        }
+
+        var order = new Order
+        {
+            Priority = viewModel.NewOrders.Priority,
+            StartDate = viewModel.NewOrders.StartDate,
+            EndDate = viewModel.NewOrders.EndDate,
+            Price = viewModel.NewOrders.Price,
+            CustomerId = customer.Id
+        };
+
+        var orderStatus = new OrderStatus
+        {
+            Id = viewModel.OrderStatusId,
+        };
+
+        _context.Orders.Add(order);
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction("Index");
+        
+    }
+
 }

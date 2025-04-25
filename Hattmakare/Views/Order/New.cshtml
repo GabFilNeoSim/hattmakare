@@ -1,37 +1,39 @@
 ﻿@using Hattmakare.Models.Order;
 @using Hattmakare.Models.Hats;
+@using Hattmakare.Models.Customer;
+@using Hattmakare.Models.Hats;
 
-@model NewOrderViewModel;
+@model NewOrderIndexViewModel;
 
-@{
-    ViewBag.Title = "Ny order";
-}
+    @{
+        ViewBag.Title = "Ny order";
+    }
 
 <div id="hat" class="order">
-  <div id="hatList">  
-    @foreach (var hat in Model.Hats)
-    {
-      <div class="hatItem" data-name="@hat.Name" data-id="@hat.Id">
-        <img src="/assets/hats/@(hat.ImageUrl ?? "placeholder-image.png")" />
-        <h2 class="name">@hat.Name</h2>
-        <div class="details">
-          <div class="item">
-            <p>Storlek: </p>
-            <p class="size">@hat.Size</p>
-          </div>
-          <div class="item">
-            <p>Pris: </p>
-            <p class="price">@hat.Price:-</p>
-          </div>
-        </div>
-        <div class="counter">
-          <button class="count-remove">-</button>
-          <p class="count">0</p>
-          <button class="count-add">+</button>
-        </div>
-      </div>
-    }
-  </div>
+    <div id="hatList">
+            @foreach (var hat in Model.Hats)
+            {
+            <div class="hatItem" data-name="@hat.Name" data-id="@hat.Id">
+                <img src="/assets/hats/@(hat.ImageUrl ?? "placeholder-image.png")" />
+                <h2 class="name">@hat.Name</h2>
+                <div class="details">
+                    <div class="item">
+                        <p>Storlek: </p>
+                        <p class="size">@hat.Size</p>
+                    </div>
+                    <div class="item">
+                        <p>Pris: </p>
+                        <p class="price">@hat.Price:-</p>
+                    </div>
+                </div>
+                <div class="counter">
+                    <button class="count-remove">-</button>
+                    <p class="count">0</p>
+                    <button class="count-add">+</button>
+                </div>
+            </div>
+            }
+    </div>
 
     <div class="container d-flex justify-content-center">
         <div class="col-md-8 col-lg-6">
@@ -153,34 +155,105 @@
     </div>
 
 
-  <div id="cartContainer">
-    <div id="cart">
+    <div id="cartContainer">
+        <div id="cart">
+        </div>
+        <p id="total">Total: 0:- </p>
     </div>
-    <p id="total">Total: 0:- </p>
   </div>
 
     <div id="settings" class="container mt-5">
-        <form method="post" class="d-flex flex-column gap-4">
+        <form asp-action="CreateOrder" asp-controller="Order" method="post" enctype="multipart/form-data">
 
             <div>
-                <label class="form-label fw-bold">Välj kund</label>
-                <select class="form-select" asp-for="CustomerId" asp-items="Model.Customers"></select>
+                <label class="form-label fw-bold" for="CustomerId">Välj kund</label>
+                <select id="CustomerId" class="form-select" asp-for="CustomerId" asp-items="Model.Customers">
+                    <option value="">Ny kund</option>
+                </select>
+            </div>
+
+            <div class="customerFields">
+                <input type="hidden" asp-for="CustomerId" />
+
+                <div class="formGroup">
+                    <div class="formItem">
+                        <label class="form-label fw-bold" for="FirstName">Förnamn:</label>
+                        <input id="FirstName" class="form-control" asp-for="AddCustomer.FirstName" />
+                        <span class="text-danger" asp-validation-for="AddCustomer.FirstName"></span>
+                    </div>
+
+                    <div class="formItem">
+                        <label class="form-label fw-bold" for="LastName">Efternamn:</label>
+                        <input id="LastName" class="form-control" asp-for="AddCustomer.LastName" />
+                        <span class="text-danger" asp-validation-for="AddCustomer.LastName"></span>
+                    </div>
+
+                    <div class="formItem">
+                        <label class="form-label fw-bold" for="HeadMeasurements">Huvudmått:</label>
+                        <input id="HeadMeasurements" class="form-control" asp-for="AddCustomer.HeadMeasurements" />
+                        <span class="text-danger" asp-validation-for="AddCustomer.HeadMeasurements"></span>
+                    </div>
+                </div>
+
+                <div class="formItem">
+                    <label class="form-label fw-bold" for="BillingAddress">Faktureringsadress:</label>
+                    <input id="BillingAddress" class="form-control" asp-for="AddCustomer.BillingAddress" />
+                    <span class="text-danger" asp-validation-for="AddCustomer.BillingAddress"></span>
+                </div>
+
+                <div class="formItem">
+                    <label class="form-label fw-bold" for="DeliveryAddress">Leveransadress:</label>
+                    <input id="DeliveryAddress" class="form-control" asp-for="AddCustomer.DeliveryAddress" />
+                    <span class="text-danger" asp-validation-for="AddCustomer.DeliveryAddress"></span>
+                </div>
+
+                <div class="formGroup">
+                    <div class="formItem">
+                        <label class="form-label fw-bold" for="City">Stad:</label>
+                        <input id="City" class="form-control" asp-for="AddCustomer.City" />
+                        <span class="text-danger" asp-validation-for="AddCustomer.City"></span>
+                    </div>
+
+                    <div class="formItem">
+                        <label class="form-label fw-bold" for="PostalCode">Postnummer:</label>
+                        <input id="PostalCode" class="form-control" asp-for="AddCustomer.PostalCode" />
+                        <span class="text-danger" asp-validation-for="AddCustomer.PostalCode"></span>
+                    </div>
+
+                    <div class="formItem">
+                        <label class="form-label fw-bold" for="Country">Land:</label>
+                        <input id="Country" class="form-control" asp-for="AddCustomer.Country" />
+                        <span class="text-danger" asp-validation-for="AddCustomer.Country"></span>
+                    </div>
+                </div>
+
+                <div class="formItem">
+                    <label class="form-label fw-bold" for="Email">Email:</label>
+                    <input id="Email" class="form-control" asp-for="AddCustomer.Email" />
+                    <span class="text-danger" asp-validation-for="AddCustomer.Email"></span>
+                </div>
+
+                <div class="phoneNumber">
+                    <label class="form-label fw-bold" for="Phone">Telefonnummer:</label>
+                    <input id="Phone" class="form-control" asp-for="AddCustomer.Phone" />
+                    <span class="text-danger" asp-validation-for="AddCustomer.Phone"></span>
+                </div>
             </div>
 
             <div class="row">
                 <div class="col-md-6">
-                    <label class="form-label fw-bold">Startdatum</label>
-                    <input type="date" class="form-control" asp-for="StartDate" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                    <label class="form-label fw-bold" for="StartDate">Startdatum</label>
+                    <input id="StartDate" type="date" class="form-control" asp-for="NewOrders.StartDate" />
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label fw-bold">Slutdatum</label>
-                    <input type="date" class="form-control" asp-for="EndDate" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                    <label class="form-label fw-bold" for="EndDate">Slutdatum</label>
+                    <input id="EndDate" type="date" class="form-control" asp-for="NewOrders.EndDate" />
                 </div>
             </div>
 
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" asp-for="Priority" id="priorityCheck" />
-                <label class="form-check-label fw-bold" for="priorityCheck">
+                <input id="Priority" class="form-check-input" type="checkbox" asp-for="NewOrders.Priority" />
+                <label class="form-check-label fw-bold" for="Priority">
                     Markera som högprioriterad order
                 </label>
             </div>
