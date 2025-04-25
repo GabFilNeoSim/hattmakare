@@ -8,6 +8,34 @@ $(document).ready(function () {
   updateCart();
 })
 
+document.addEventListener("DOMContentLoaded", function () {
+    const createBtn = document.getElementById("createOrderBtn");
+    const popup = document.getElementById("orderCompleted");
+    const okBtn = document.getElementById("confirm-yes");
+
+    createBtn.addEventListener("click", function (e) {
+        e.preventDefault(); // hindra form från att skickas direkt
+        popup.style.display = "flex"; // visa popup
+    });
+
+    $(document).on("click", "#confirm-yes", function (e) {
+        e.preventDefault()
+        window.location.href = "/order";
+    });
+});
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const orderForm = document.querySelector('#settings form');
+
+    if (orderForm) {
+        orderForm.addEventListener('submit', function (e) {
+            alert("Order är lagd");
+        });
+    }
+});
+
+
 document.querySelectorAll('.hatItem').forEach(hatItem => {
   const plusBtn = hatItem.querySelector('.count-add');
   const minusBtn = hatItem.querySelector('.count-remove');
