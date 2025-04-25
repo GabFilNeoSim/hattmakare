@@ -290,27 +290,38 @@ public class OrderController : Controller
     [HttpGet("new")]
     public async Task<IActionResult> New()
     {
-        var model = new NewOrderViewModel
-        {
-            Hats = await _context.Hats.Where(h => h.IsDeleted == false && h.HatType.Name == "StandardHatt").Select(x =>
+    var model = new NewOrderViewModel
+    {
+      AvailableMaterials = await _context.Materials.Select(x =>
+                new MaterialQuantityViewModel
+                {
+                  MaterialId = x.Id,
+                  Name = x.Name,
+                  Unit = x.Unit,
+                  Price = x.Price,
+                }).ToListAsync(),
+      Hats = await _context.Hats.Where(h => h.IsDeleted == false && h.HatType.Name == "StandardHatt").Select(x =>
                 new HatViewModel
                 {
-                    Id = x.Id,
-                    Name = x.Name,
-                    Price = x.Price,
-                    Size = x.Size,
-                    Comment = x.Comment,
-                    ImageUrl = x.ImageUrl
+                  Id = x.Id,
+                  Name = x.Name,
+                  Price = x.Price,
+                  Size = x.Size,
+                  Comment = x.Comment,
+                  ImageUrl = x.ImageUrl,
+                  Length = x.Length,
+                  Width = x.Width,
+                  Depth = x.Depth,
                 }
 
-            ).ToListAsync(),
-            Customers = await _context.Customers
-            .Select(c => new SelectListItem
-            {
-                Value = c.Id.ToString(),
-                Text = c.FirstName + " " + c.LastName
-            }).ToListAsync()
-        };
+        ).ToListAsync(),
+      Customers = await _context.Customers
+        .Select(c => new SelectListItem
+        {
+          Value = c.Id.ToString(),
+          Text = c.FirstName + " " + c.LastName
+        }).ToListAsync()
+    };
         return View(model);
     }
   [HttpPost("AddSpecialHat")]

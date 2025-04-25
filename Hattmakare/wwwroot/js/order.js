@@ -12,20 +12,17 @@ $(document).ready(function () {
 document.querySelectorAll('.hatItem').forEach(hatItem => {
   const plusBtn = hatItem.querySelector('.count-add');
   const minusBtn = hatItem.querySelector('.count-remove');
-  const counterElement = hatItem.querySelector('.count');
-  const nameElement = hatItem.querySelector('.name');
-  const priceElement = hatItem.querySelector('.price');
-  const sizeElement = hatItem.querySelector('.size');
   const id = hatItem.getAttribute('data-id');
 
-  plusBtn.addEventListener('click', () => {
-    cart[id] =
-    {
-      Name: nameElement.textContent,
-      Price: parseInt(priceElement.textContent),
-      Size: parseInt(sizeElement.textContent),
-      Quantity: (cart[id]?.Quantity || 0) + 1
-
+  plusBtn.addEventListener('click', async() => {
+    console.log("cart item for id: " + id + " " + cart[id])
+    if (!cart[id]){
+      //Fetch hatdetails
+      await addHatDetails(id);
+    }
+    if (cart[id]){
+      cart[id].Quantity += 1;
+      console.log("Increased quantity")
     }
     updateCart();
     updateHatList();
@@ -40,8 +37,36 @@ document.querySelectorAll('.hatItem').forEach(hatItem => {
   });
 });
 
+function getHatMaterials(id) {
+  $.get('/materials/hatMaterials', { hatId: id }, function (data) {
+    console.log(data)
+});
+}
+
+async function addHatDetails(id) {
+  let materials = await getHatMaterials(id);
+
+  $.get('/hats/details', { id: id }, function (data) {
+    cart[id] =
+    {
+      Name: data.name,
+      Comment: data.comment,
+      Depth: data.depth,
+      Width: data.width,
+      Length: data.length,
+      HatTypeId: data.hatTypeId,
+      ImageUrl: data.imageUrl,
+      Size: data.size,
+      Price: data.price,
+      Quantity: 1
+      
+    }
+    localStorage.setItem("cart", JSON.stringify(cart));
+    updateCart();
+});
+}
+
 function updateCart() {
-  localStorage.setItem("cart", JSON.stringify(cart)); // Save cart to local storage
   const cartEl = $("#cart")
   cartEl.empty(); // Clear previous entries
   Object.entries(cart).forEach(([key, value]) => {
@@ -62,24 +87,27 @@ function updateCart() {
   document.querySelectorAll('.hatItem').forEach(hatItem => {
     const counterElement = hatItem.querySelector('.count');
     const id = hatItem.getAttribute('data-id');
-    counterElement.textContent = cart[id].Quantity;
+    if (cart[id]){
+      counterElement.textContent = cart[id].Quantity;
+    }
   })
 
   const priceEl = $("#total")
   const total = calculateTotal()
   priceEl.text("Total: " + total + ":-")
+  if ($("#cart").children().length === 0) {
+    $("#cartContainer").hide(); // or .addClass("d-none") if using Bootstrap
+  } else {
+    $("#cartContainer").show(); // or .removeClass("d-none")
+  }
 }
 
 function updateHatList() {
-  console.log("UpdatehatList")
   const itemsEl = $("#orderItems")
-  console.log(itemsEl)
   itemsEl.empty();
   //Loop through each hat in the order
   Object.entries(cart).forEach(([k1, value]) => {
-    console.log(value.Name)
     for (let i = 0; i < value.Quantity; i++){
-      console.log(i + " " + value.Name)
       html = `
       <li class="entry" id="${k1}">
         <details>
@@ -171,7 +199,8 @@ $(document).ready(function () {
           Comment: hat.Comment
         }
         cart[hatId] = temp
-        updateCartItems()
+        updateCart()
+        updateHatList()
       },
       error: function (xhr, status, error) {
         console.error("POST error", status, error, xhr.responseText);

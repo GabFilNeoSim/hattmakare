@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Hattmakare.Models.Order;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Hattmakare.Models.Hats;
 
