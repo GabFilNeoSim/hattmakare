@@ -250,18 +250,6 @@ function updateHatList(cartItems) {
                 <button class="remove-material" data-material-id="${material.materialId}" data-item-id="${item.id}">Remove</button>
               </div>
             `).join('')}
-              <select id="material-dropdown" class="form-select">
-                        <option value="">-- Välj material --</option>
-                        @foreach (var mat in Model.AvailableMaterials)
-                        {
-                            <option value="@mat.MaterialId" data-name="@mat.Name" data-unit="@mat.Unit">@mat.Name (@mat.Unit)</option>
-                        }
-                    </select>
-                    <input type="number" id="material-qty" class="form-control" placeholder="Mängd" min="1" />
-                    <button type="button" id="add-material-btn" class="btn btn-blue btn-sm">
-                        <i class="fa-solid fa-plus"></i>
-                        Lägg till
-                    </button>
             </div>
           </details>
         </li>
