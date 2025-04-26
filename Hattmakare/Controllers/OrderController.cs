@@ -10,6 +10,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Hattmakare.Services;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using Hattmakare.Models.Customer;
+using System.Text.RegularExpressions;
+using System.Reflection.Metadata.Ecma335;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Hattmakare.Controllers;
 [Authorize]
@@ -290,17 +294,9 @@ public class OrderController : Controller
     [HttpGet("new")]
     public async Task<IActionResult> New()
     {
-    var model = new NewOrderViewModel
-    {
-      AvailableMaterials = await _context.Materials.Select(x =>
-                new MaterialQuantityViewModel
-                {
-                  MaterialId = x.Id,
-                  Name = x.Name,
-                  Unit = x.Unit,
-                  Price = x.Price,
-                }).ToListAsync(),
-      Hats = await _context.Hats.Where(h => h.IsDeleted == false && h.HatType.Name == "StandardHatt").Select(x =>
+        var model = new NewOrderIndexViewModel
+        {
+            Hats = await _context.Hats.Where(h => h.IsDeleted == false && h.HatType.Name == "StandardHatt").Select(x =>
                 new HatViewModel
                 {
                   Id = x.Id,
@@ -324,10 +320,13 @@ public class OrderController : Controller
     };
         return View(model);
     }
+
   [HttpPost("AddSpecialHat")]
   public async Task<IActionResult> AddSpecialHat([FromForm] AddHatViewModel newHat)
   {
+
     var hat = new Hat();
+
     hat.Name = newHat.Name;
     hat.Size = newHat.Size ?? 0;
     hat.Length = newHat.Length ?? 0;
@@ -336,6 +335,7 @@ public class OrderController : Controller
     hat.Quantity = newHat.Quantity;
     hat.Price = newHat.Price ?? 0;
     hat.Comment = newHat.Comment ?? "";
+    hat.HatMaterials = new List<HatMaterial>();
     hat.HatType = await _context.HatTypes
         .FirstOrDefaultAsync(x => x.Name == "SpecialHatt");
 
@@ -344,9 +344,116 @@ public class OrderController : Controller
     
     hat.ImageUrl = image;
 
-    await _context.Hats.AddAsync(hat);
-    await _context.SaveChangesAsync();
+
+        foreach (var material in newHat.SelectedMaterials)
+        {
+            if (material.Quantity > 0)
+            {
+                hat.HatMaterials.Add(new HatMaterial
+                {
+                    MaterialId = material.MaterialId,
+                    Quantity = material.Quantity
+                });
+            }
+        }
+
+        await _context.Hats.AddAsync(hat);
+        await _context.SaveChangesAsync();
 
     return Ok(hat.Id);
   }
+
+    [HttpGet("get-customer/{id}")]
+    public async Task<IActionResult> GetCustomerById(int id)
+    {
+        var customer = await _context.Customers
+            .Include(c => c.Address)
+            .FirstOrDefaultAsync(c => c.Id == id);
+
+        if (customer == null)
+        {
+            return NotFound();
+        }
+
+        return Json(new
+        {
+            firstName = customer.FirstName,
+            lastName = customer.LastName,
+            headMeasurements = customer.HeadMeasurements,
+            email = customer.Email,
+            phone = customer.PhoneNumber,
+            billingAddress = customer.Address?.BillingAddress,
+            deliveryAddress = customer.Address?.DeliveryAddress,
+            city = customer.Address?.City,
+            postalCode = customer.Address?.PostalCode,
+            country = customer.Address?.Country
+        });
+    }
+
+    [HttpPost("new")]
+    public async Task<IActionResult> CreateOrder(NewOrderIndexViewModel viewModel)
+    {
+        Customer customer;
+
+        if (viewModel.CustomerId > 0)
+        {
+            customer = await _context.Customers
+                .Include(c => c.Address)
+                .FirstOrDefaultAsync(c => c.Id == viewModel.CustomerId);
+
+            if (customer == null)
+            {
+                TempData["NotifyType"] = "error";
+                TempData["NotifyMessage"] = "Kunden hittades inte!";
+                return RedirectToAction("New");
+            }
+
+        }
+        else
+        {
+
+            var address = new Address
+            {
+                BillingAddress = viewModel.AddCustomer.BillingAddress,
+                DeliveryAddress = viewModel.AddCustomer.DeliveryAddress,
+                City = viewModel.AddCustomer.City,
+                PostalCode = viewModel.AddCustomer.PostalCode,
+                Country = viewModel.AddCustomer.Country
+            };
+
+            customer = new Customer
+            {
+                FirstName = viewModel.AddCustomer.FirstName,
+                LastName = viewModel.AddCustomer.LastName,
+                HeadMeasurements = viewModel.AddCustomer.HeadMeasurements,
+                Email = viewModel.AddCustomer.Email,
+                PhoneNumber = viewModel.AddCustomer.Phone,
+
+            };
+
+            _context.Customers.Add(customer);
+            await _context.SaveChangesAsync();
+        }
+
+        var order = new Order
+        {
+            Priority = viewModel.NewOrders.Priority,
+            StartDate = viewModel.NewOrders.StartDate,
+            EndDate = viewModel.NewOrders.EndDate,
+            Price = viewModel.NewOrders.Price,
+            CustomerId = customer.Id
+        };
+
+        var orderStatus = new OrderStatus
+        {
+            Id = viewModel.OrderStatusId,
+        };
+
+        _context.Orders.Add(order);
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction("Index");
+        
+    }
+
 }

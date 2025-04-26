@@ -415,3 +415,58 @@ $(document).ready(function () {
     updateCart();
   });
 });
+
+
+document.querySelector('select[name="CustomerId"]').addEventListener('change', function () {
+    const customerId = this.value;
+ 
+
+    if (customerId) {
+        fetch(`/order/get-customer/${customerId}`)
+            .then(res => res.json())
+            .then(data => {
+               
+                document.getElementById('FirstName').value = data.firstName;
+                document.getElementById('LastName').value = data.lastName;
+                document.getElementById('HeadMeasurements').value = data.headMeasurements;
+                document.getElementById('BillingAddress').value = data.billingAddress;
+                document.getElementById('DeliveryAddress').value = data.deliveryAddress;
+                document.getElementById('City').value = data.city;
+                document.getElementById('PostalCode').value = data.postalCode;
+                document.getElementById('Country').value = data.country;
+                document.getElementById('Email').value = data.email;
+                document.getElementById('Phone').value = data.phone;
+            });
+    } else {
+        
+        ['FirstName', 'LastName', 'HeadMeasurements', 'BillingAddress', 'DeliveryAddress', 'City', 'PostalCode', 'Country','Email','Phone'].forEach(id => {
+            document.getElementById(id).value = '';
+        });
+    }
+});
+
+
+// Kolla om en kund redan är vald vid sidladdning
+window.addEventListener('DOMContentLoaded', function () {
+    const customerSelect = document.querySelector('select[name="CustomerId"]');
+    const customerId = customerSelect.value;
+
+    if (customerId) {
+        fetch(`/order/get-customer/${customerId}`)
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('FirstName').value = data.firstName;
+                document.getElementById('LastName').value = data.lastName;
+                document.getElementById('HeadMeasurements').value = data.headMeasurements;
+                document.getElementById('BillingAddress').value = data.billingAddress;
+                document.getElementById('DeliveryAddress').value = data.deliveryAddress;
+                document.getElementById('City').value = data.city;
+                document.getElementById('PostalCode').value = data.postalCode;
+                document.getElementById('Country').value = data.country;
+                document.getElementById('Email').value = data.email;
+                document.getElementById('Phone').value = data.phone;
+
+            });
+    }
+});
+

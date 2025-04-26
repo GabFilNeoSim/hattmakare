@@ -11,8 +11,8 @@ namespace Hattmakare.Models.Order
     public List<MaterialQuantityViewModel> AvailableMaterials { get; set; } = new();
     public List<SelectListItem> Customers { get; set; } //Dropdown lista
     public int CustomerId { get; set; } //Valt kund id
-    public DateOnly StartDate { get; set; }
-    public DateOnly EndDate { get; set; }
+    public DateTime StartDate { get; set; }
+    public DateTime EndDate { get; set; }
     public bool Priority { get; set; }
 
     }
