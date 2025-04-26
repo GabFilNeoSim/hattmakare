@@ -42,8 +42,8 @@
     this.materials.push(hatMaterial)
   }
 
-  removeMaterial(hatMaterial){
-    this.materials = this.materials.filter(x => x.materialId != hatMaterial.materialId);
+  removeMaterial(materialId){
+    this.materials = this.materials.filter(x => x.materialId != materialId);
   }
 } 
 
@@ -57,7 +57,7 @@ class HatMaterial {
   }
 
   changeQuantity(quantity){
-    this.Quantity = quantity;
+    this.quantity = quantity;
   }
 }
 
@@ -113,8 +113,24 @@ class Cart {
 }
 
 const cart = new Cart();
+let availableMaterials = [];
 
-$(document).ready(function () {
+async function loadAvailableMaterials() {
+  try {
+    const response = await fetch('/Materials/allMaterials');
+    if (!response.ok) {
+      throw new Error('Failed to fetch materials');
+    }
+    const data = await response.json();
+    availableMaterials = data; // Save the array of materials here
+    console.log('Loaded materials:', availableMaterials);
+  } catch (error) {
+    console.error('Error loading materials:', error);
+  }
+}
+
+$(document).ready(async function () {
+  await loadAvailableMaterials();
   cart.loadFromStorage();
   updateCart(cart.items);
   updateHatList(cart.items);
@@ -131,47 +147,90 @@ $(document).ready(function () {
     updateCart(cart.items);
     updateHatList(cart.items);
   });
-
-  //handle materials
-  document.querySelectorAll('.material-quantity').forEach(input => {
-    input.addEventListener('input', (e) => {
-      const materialId = e.target.getAttribute('data-material-id');
-      const itemId = e.target.getAttribute('data-item-id');
-      const newQuantity = parseInt(e.target.value, 10);
-      
+  
+  $(document).on("input", ".material-quantity", function (e) {
+    const materialId = $(this).attr('data-material-id');
+    const itemId = $(this).attr('data-item-id');
+    const item = cart.getItem(itemId);
+    const material = item.materials.find(m => m.materialId == materialId);
+    const val = parseInt($(this).val(), 10);
+    // Find the item and the material inside the item
+    if (material) {
+      material.changeQuantity(val)
+      cart.syncToStorage();
+      updateCart(cart.items);
+    }
+  })
+  $(document).on("click", ".remove-material", function (e) {
+      const materialId = $(this).attr('data-material-id');
+      const itemId = $(this).attr('data-item-id');
       // Find the item and the material inside the item
       const item = cart.getItem(itemId);
       if (item) {
-        const material = item.materials.find(m => m.materialId == materialId);
-        if (material) {
-          material.quantity = newQuantity;
-          // Optionally, sync the cart to localStorage or do other updates
-          cart.syncToStorage();
-          updateCart(cart.items);
-          updateHatList(cart.items);
-        }
+        $(this).closest('.material-entry').remove();
+        item.removeMaterial(materialId)
+        cart.syncToStorage();
+        updateCart(cart.items);
       }
-    });
   });
+  $(document).on("click", ".add-material-btn", function (e) {
+  
+    const $parent = $(this).closest(".entry");
+    const itemId = $(this).data('item-id');
+    const $dropdown = $(this).siblings('.material-dropdown');
+    const $qtyInput = $(this).siblings('.material-add-quantity');
+    
+    const selectedMaterialId = $dropdown.val();
+    const quantity = parseInt($qtyInput.val(), 10);
+    
+    if (!selectedMaterialId || isNaN(quantity) || quantity <= 0) {
+      alert("Välj ett material och ange en korrekt mängd.");
+      return;
+    }
+  
+    const selectedMaterial = availableMaterials.find(m => m.materialId == selectedMaterialId);
+    if (!selectedMaterial) {
+      alert("Material hittades inte.");
+      return;
+    }
+  
+    const item = cart.getItem(itemId);
+    if (!item) {
+      alert("Objektet hittades inte.");
+      return;
+    }
+    const material = new HatMaterial(
+      selectedMaterialId, 
+      quantity, 
+      selectedMaterial.name, 
+      selectedMaterial.price, 
+      selectedMaterial.unit
+    )
+    // Add the material to the item's material list
+    item.addMaterial(material)
+  
+    // Save to localStorage
+    cart.syncToStorage();
 
-  document.querySelectorAll('.remove-material').forEach(button => {
-    button.addEventListener('click', () => {
-      const materialId = button.getAttribute('data-material-id');
-      const itemId = button.getAttribute('data-item-id');
-      
-      // Find the item and the material inside the item
-      const item = cart.getItem(itemId);
-      if (item) {
-        const materialIndex = item.materials.findIndex(m => m.materialId == materialId);
-        if (materialIndex > -1) {
-          item.materials.splice(materialIndex, 1);  // Remove the material
-          // Optionally, sync the cart to localStorage or do other updates
-          cart.syncToStorage();
-          updateCart(cart.items);
-          updateHatList(cart.items);
-        }
-      }
-    });
+    //Update UI
+    const materialHtml = `
+      <div class="material-entry" data-material-id="${selectedMaterialId}">
+        <p>Material: ${selectedMaterial.name}</p>
+        <input 
+          type="number" 
+          value="${quantity}" 
+          class="material-quantity" 
+          data-material-id="${selectedMaterialId}" 
+          data-item-id="${itemId}" 
+          min="0"
+        />
+        <button class="remove-material" data-material-id="${selectedMaterialId}" data-item-id="${itemId}">Remove</button>
+      </div>
+    `;
+    $parent.find(".settings").append(materialHtml);
+  
+    // Re-render cart and list
+    updateCart(cart.items);
   });
 })
 
@@ -219,7 +278,6 @@ function updateHatList(cartItems) {
   itemsEl.empty();
 
   cartItems.forEach(item => {
-    console.log(item.materials)
     const html = `
         <li class="entry" id="${item.id}">
           <details>
@@ -235,6 +293,7 @@ function updateHatList(cartItems) {
               </svg>
               <p id="icon"></p>
             </summary>
+
             <div class="settings">
             ${item.materials.map(material => `
               <div class="material-entry" data-material-id="${material.materialId}">
@@ -250,6 +309,19 @@ function updateHatList(cartItems) {
                 <button class="remove-material" data-material-id="${material.materialId}" data-item-id="${item.id}">Remove</button>
               </div>
             `).join('')}
+            </div>
+
+            <div class="add-material-form">
+              <select class="material-dropdown" data-item-id="${item.id}">
+                <option value="">-- Välj material --</option>
+                ${availableMaterials.map(mat => `
+                  <option value="${mat.materialId}" data-name="${mat.name}" data-unit="${mat.unit}">
+                    ${mat.name} (${mat.unit})
+                  </option>
+                `).join('')}
+              </select>
+              <input type="number" class="material-add-quantity" placeholder="Mängd" min="1" data-item-id="${item.id}" />
+              <button class="add-material-btn" data-item-id="${item.id}">Lägg till material</button>
             </div>
           </details>
         </li>
