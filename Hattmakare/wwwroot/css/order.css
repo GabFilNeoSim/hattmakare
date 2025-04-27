@@ -519,6 +519,40 @@
     border-bottom: 1px solid hsl(0,0%, 50%);
 }
 
+
 .order-info-child input:not([type="checkbox"]) {
     background: none;
+}
+
+.customerFields {
+    width: 45%;
+    font-size: 20px;
+    margin-top: 1px;
+    box-shadow: 0px 0px 16px 0px hsla(0,0%,50%, 0.2);
+    border-radius: 8px;
+    padding: 16px;
+}
+
+.customerFields form {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+}
+
+.formGroup {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.formGroup > * {
+        flex: 1;
+}
+
+#customer .formItem {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    min-width: 0;
 }
