@@ -114,6 +114,7 @@ class Cart {
 
 const cart = new Cart();
 let availableMaterials = [];
+let selectedMaterials = [];
 
 async function loadAvailableMaterials() {
   try {
@@ -347,7 +348,7 @@ $(document).on('click', '#order-hat-all', function (e) {
 $(document).ready(function () {
   console.log("document ready");
   
-  $("#SpecialHat").on("click", function (e) {
+  $("#specialHat").on("click", function (e) {
     console.log("Submitted form");
     e.preventDefault();
 
@@ -406,17 +407,54 @@ $(document).ready(function () {
     });
   });
 
-  $("#orderItems").on("click", "#remove", function (e) {
-    const entry = $(this).closest(".entry");
-    const id = entry.attr("id");
+  $('#orderForm').on('submit', function (e) {
+    e.preventDefault(); // prevent normal submit
+  
+    const form = $(this)[0];
+    const formData = new FormData(form);
 
-    entry.remove();
-    cart[id].Quantity -= 1;
-    updateCart();
+    console.log(formData)
+  
+    $.ajax({
+      type: "POST",
+      url: '/Order/New', // it will use /Order/CreateOrder
+      data: formData,
+      processData: false,
+      contentType: false,
+      success: function (response) {
+        console.log("Order created successfully!");
+        console.log(response)
+        addHatsToOrder();
+      },
+      error: function (xhr, status, error) {
+        console.error("Failed to create order:", error);
+      }
+    });
   });
 });
 
+function addHatsToOrder(orderId){
+  // const data = {
+  //   OrderId: 
+  // }
+  $.ajax({
+    type: "POST",
+    url: '/Order/addHats', // it will use /Order/CreateOrder
+    data: formData,
+    processData: false,
+    contentType: false,
+    success: function (response) {
+      console.log("Order created successfully!");
 
+      addHatsToOrder();
+    },
+    error: function (xhr, status, error) {
+      console.error("Failed to create order:", error);
+    }
+  });
+}
+
+// Populera formulär med vald kunds uppgifter
 document.querySelector('select[name="CustomerId"]').addEventListener('change', function () {
     const customerId = this.value;
  

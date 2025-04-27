@@ -108,7 +108,7 @@
                 <ul id="material-list" class="list-group mb-3"></ul>
 
                 <div class="text-end">
-                    <button type="submit" class="btn btn-blue px-4 mt-4 text-light">
+                    <button type="submit" id="specialHat" class="btn btn-blue px-4 mt-4 text-light">
                         <i class="fa-solid fa-plus"></i>
                         Skapa hatt
                     </button>
@@ -123,10 +123,14 @@
         </div>
         <p id="total">Total: 0:- </p>
     </div>
+  <div id="orderItems">
+
+  </div>
   </div>
 
+
     <div id="settings" class="container mt-5">
-        <form asp-action="CreateOrder" asp-controller="Order" method="post" enctype="multipart/form-data">
+        <form asp-action="CreateOrder" asp-controller="Order" method="post" enctype="multipart/form-data" id="orderForm">
 
             <div>
                 <label class="form-label fw-bold" for="CustomerId">Välj kund</label>

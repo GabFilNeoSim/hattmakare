@@ -296,33 +296,42 @@ public class OrderController : Controller
     {
         var model = new NewOrderIndexViewModel
         {
-            Hats = await _context.Hats.Where(h => h.IsDeleted == false && h.HatType.Name == "StandardHatt").Select(x =>
-                new HatViewModel
-                {
-                  Id = x.Id,
-                  Name = x.Name,
-                  Price = x.Price,
-                  Size = x.Size,
-                  Comment = x.Comment,
-                  ImageUrl = x.ImageUrl,
-                  Length = x.Length,
-                  Width = x.Width,
-                  Depth = x.Depth,
-                }
+          Hats = await _context.Hats.Where(h => h.IsDeleted == false && h.HatType.Name == "StandardHatt").Select(x =>
+              new HatViewModel
+              {
+                Id = x.Id,
+                Name = x.Name,
+                Price = x.Price,
+                Size = x.Size,
+                Comment = x.Comment,
+                ImageUrl = x.ImageUrl,
+                Length = x.Length,
+                Width = x.Width,
+                Depth = x.Depth,
+              }
 
         ).ToListAsync(),
-      Customers = await _context.Customers
+          Customers = await _context.Customers
         .Select(c => new SelectListItem
         {
           Value = c.Id.ToString(),
           Text = c.FirstName + " " + c.LastName
+        }).ToListAsync(),
+          AvailableMaterials = await _context.Materials
+        .Select(m => new MaterialQuantityViewModel
+        {
+          MaterialId = m.Id,
+          Name = m.Name,
+          Unit = m.Unit,
+          Price = m.Price,
+          Quantity = 0
         }).ToListAsync()
-    };
+        };
         return View(model);
     }
 
   [HttpPost("AddSpecialHat")]
-  public async Task<IActionResult> AddSpecialHat([FromForm] AddHatViewModel newHat)
+  public async Task<IActionResult> AddSpecialHat([FromForm] Hattmakare.Models.Hats.AddHatViewModel newHat)
   {
 
     var hat = new Hat();
@@ -440,20 +449,25 @@ public class OrderController : Controller
             Priority = viewModel.NewOrders.Priority,
             StartDate = viewModel.NewOrders.StartDate,
             EndDate = viewModel.NewOrders.EndDate,
-            Price = viewModel.NewOrders.Price,
-            CustomerId = customer.Id
-        };
-
-        var orderStatus = new OrderStatus
-        {
-            Id = viewModel.OrderStatusId,
+            Price = 0,
+            CustomerId = customer.Id,
+            OrderStatusId = await _context.OrderStatuses
+                .Where(os => os.Name == "Ej påbörjad")
+                .Select(os => os.Id)
+                .FirstOrDefaultAsync(),
         };
 
         _context.Orders.Add(order);
         await _context.SaveChangesAsync();
 
-        return RedirectToAction("Index");
-        
+    return Ok(order);
     }
+
+  [HttpPost("addHats")] 
+  public async Task<IActionResult> AddHatsToOrder(AddHatsViewlModel model)
+  {
+        _logger.LogWarning("{asd}", model);
+    return Ok();
+  }
 
 }
