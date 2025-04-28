@@ -71,7 +71,7 @@
                             <option value="@mat.MaterialId" data-name="@mat.Name" data-unit="@mat.Unit" data-price="@mat.Price">@mat.Name - @mat.Price kr</option>
                         }
                     </select>
-                    <input type="number" id="material-qty" class="form-control" style="width: 50px;" placeholder="Mängd" min="1" />
+                    <input type="number" id="material-qty" class="form-control" style="width: 50px;" placeholder="Mängd" min="0" step="0.01"/>
                     <div class="material-unit" id="material-unit-val">-</div>
                     <button type="button" id="add-material-btn" class="btn btn-blue btn-sm">
                         <i class="fa-solid fa-plus"></i>
@@ -79,9 +79,13 @@
                     </button>
                 </div>
             </div>
+
             <ul id="material-list" class="list-group mb-3"></ul>
             <div class="mb-3">
                 <strong id="total-price">Totalt materialpris: </strong>
+            </div>
+            <div class="mb-3">
+                <strong id="profit">Marginal:  </strong>
             </div>
             <hr />
 
@@ -106,17 +110,20 @@
                     const addBtn = document.getElementById('add-material-btn');
                     const list = document.getElementById('material-list');
                     const totalPriceDisplay = document.getElementById('total-price');
+                    const priceInput = document.getElementById('Price');
+                    const profitPriceDisplay = document.getElementById('profit');
 
                     let index = 0;
                     let totalMaterialPrice = 0;
 
                     dropdown.addEventListener("change", () => {
-                        const unit = dropdown.options[dropdown.selectedIndex].dataset.unit;
+                        let unit = dropdown.options[dropdown.selectedIndex].dataset.unit;
                         console.log(unit);
                         const materialVal = document.getElementById("material-unit-val");
+                        if(!unit) {
+                            unit = "-";
+                        }
                         materialVal.innerText = unit;
-
-                        console.log("HEHE")
                     });
 
                     addBtn.addEventListener('click', () => {
@@ -126,15 +133,15 @@
                         const pricePerUnit = parseFloat(dropdown.options[dropdown.selectedIndex].dataset.price);
                         const qty = qtyInput.value;
 
-                        if (!id || qty < 1) return;
-
+                        if (!id || qty < 0.001) return;
+                        
                         const totalPrice = (pricePerUnit * qty).toFixed(2);
 
                         // Create list item UI
                         const li = document.createElement('li');
                         li.className = 'list-group-item d-flex justify-content-between align-items-center';
                         li.innerHTML = `
-                                    ${name} - ${totalPrice} kr
+                                    ${name} (${qty } ${unit}) - ${totalPrice} kr
                             <button type="button" class="btn btn-sm btn-danger ms-2" onclick="removeMaterial(this, ${totalPrice})">
                                         <i class="fa-solid fa-xmark"></i>
                             </button>
@@ -145,6 +152,8 @@
 
                         totalMaterialPrice += parseFloat(totalPrice);
                         totalPriceDisplay.textContent = `Totalt materialpris: ${totalMaterialPrice.toFixed(2)} kr`;
+                        
+                        updateProfit();
 
                         index++;
                         qtyInput.value = '';
@@ -155,10 +164,18 @@
                             button.parentElement.remove();
                             totalMaterialPrice -= price;
                             totalPriceDisplay.textContent = `Totalt materialpris: ${totalMaterialPrice.toFixed(2)} kr`;
+                            updateProfit();
                         }
+
+                        function updateProfit() {
+                            const salePrice = parseFloat(priceInput.value) || 0;
+                            const profit = (salePrice - totalMaterialPrice).toFixed(2);
+                            profitPriceDisplay.textContent = `Vinstmarginal vid försäljning: ${profit} kr`;
+                        }
+
+                        priceInput.addEventListener('input', updateProfit);
                     </script>
                 }
-
             </form>
     </div>
 </div>
