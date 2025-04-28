@@ -5,7 +5,6 @@
 }
 
 <div id="customer">
-
 	<div class="customerList">
 		<form asp-controller="Customer" asp-action="Index" method="get" id="search">
 			<input type="text" name="query" value="@Context.Request.Query["query"]" placeholder="Sök kund" />
@@ -127,7 +126,6 @@
 				<input type="hidden" id="fullPhone" name="phone" />
 				<span class="text-danger">@ViewData["PhoneError"]</span>
 			</div>
-
 
 			<button type="submit" id="customerAdd">
 				<p>Skapa kund</p>
