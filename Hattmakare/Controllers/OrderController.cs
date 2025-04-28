@@ -296,8 +296,9 @@ public class OrderController : Controller
     {
         var model = new NewOrderIndexViewModel
         {
-            Hats = await _context.Hats.Where(h => h.IsDeleted == false && h.HatType.Name == "StandardHatt").Select(x =>
-                new HatViewModel
+            Hats = await _context.Hats
+                .Where(h => h.IsDeleted == false && h.HatType.Name == "StandardHatt")
+                .Select(x => new HatViewModel
                 {
                     Id = x.Id,
                     Name = x.Name,
@@ -327,6 +328,7 @@ public class OrderController : Controller
             Quantity = 0
         }).ToListAsync()
         };
+
         return View(model);
     }
 
@@ -334,27 +336,31 @@ public class OrderController : Controller
     public async Task<IActionResult> GetCustomerById(int id)
     {
         var customer = await _context.Customers
-            .Include(c => c.Address)
-            .FirstOrDefaultAsync(c => c.Id == id);
+         .Include(c => c.Address)
+         .OrderBy(c => c.FirstName)
+         .FirstOrDefaultAsync(c => c.Id == id);
 
-        if (customer == null)
+        if (customer.IsDeleted == false)
+        {
+            return Json(new
+            {
+                firstName = customer.FirstName,
+                lastName = customer.LastName,
+                headMeasurements = customer.HeadMeasurements,
+                email = customer.Email,
+                phone = customer.PhoneNumber,
+                billingAddress = customer.Address?.BillingAddress,
+                deliveryAddress = customer.Address?.DeliveryAddress,
+                city = customer.Address?.City,
+                postalCode = customer.Address?.PostalCode,
+                country = customer.Address?.Country
+            });
+        }
+        else
         {
             return NotFound();
         }
-
-        return Json(new
-        {
-            firstName = customer.FirstName,
-            lastName = customer.LastName,
-            headMeasurements = customer.HeadMeasurements,
-            email = customer.Email,
-            phone = customer.PhoneNumber,
-            billingAddress = customer.Address?.BillingAddress,
-            deliveryAddress = customer.Address?.DeliveryAddress,
-            city = customer.Address?.City,
-            postalCode = customer.Address?.PostalCode,
-            country = customer.Address?.Country
-        });
+        
     }
 
     [HttpPost("new")]

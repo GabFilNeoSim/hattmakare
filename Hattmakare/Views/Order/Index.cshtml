@@ -13,7 +13,7 @@
             <button type="submit" class="btn btn-primary btn-sm btn-blue" >Sök</button>
         </form>
         <form method="get">
-            <select asp-for="HatId" asp-items="Model.HatNames" class="form-control" onchange="this.form.submit()">
+            <select asp-for="HatId" asp-items="Model.HatNames" class="form-select" onchange="this.form.submit()">
                 <option value="">Alla hattar</option>
             </select>
         </form>

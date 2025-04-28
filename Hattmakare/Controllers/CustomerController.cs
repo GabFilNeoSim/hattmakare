@@ -1,8 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.Metrics;
-using System.Net.Mail;
-using System.Text.RegularExpressions;
-using Castle.Core.Resource;
+﻿using System.Text.RegularExpressions;
 using Hattmakare.Data;
 using Hattmakare.Data.Entities;
 using Hattmakare.Models.Customer;
@@ -45,11 +41,20 @@ public class CustomerController : Controller
             customers = _context.Customers.Where(c => c.IsDeleted == false);
         }
 
-        var result = await customers.ToListAsync();
+        // Sortera kunderna i alfabetisk ordning baserat på förnamn och efternamn
+        var sortedCustomers = await customers
+            .OrderBy(c => c.FirstName)
+            .ToListAsync();
 
-        var viewModel = new CustomerViewModel
+        var viewModel = new CustomersViewModel
         {
-            customers = result,
+            Customers = sortedCustomers.Select(c => new CustomerViewModel
+            {
+                CustomerId = c.Id,
+                FirstName = c.FirstName,
+                LastName = c.LastName,
+                Phone = c.PhoneNumber
+            }).ToList(),
             AddCustomer = new AddCustomerViewModel()
         };
 
@@ -58,16 +63,16 @@ public class CustomerController : Controller
 
     [HttpPost("add")]
     public async Task<IActionResult> AddCustomer(
-    string firstName,
-    string lastName,
-    string email,
-    string headMeasurements,
-    string billingAddress,
-    string deliveryAddress,
-    string city,
-    string postalCode,
-    string country,
-    string phone 
+        string firstName,
+        string lastName,
+        string email,
+        string headMeasurements,
+        string billingAddress,
+        string deliveryAddress,
+        string city,
+        string postalCode,
+        string country,
+        string phone 
 )
     {
         bool isValid = true;
@@ -131,7 +136,7 @@ public class CustomerController : Controller
             isValid = false;
         }
 
-        var phoneRegex = @"^\+?\d{7,15}$"; 
+        var phoneRegex = @"^\+?\d[\d\s\-]{6,19}$"; 
 
         if (string.IsNullOrWhiteSpace(phone) || !Regex.IsMatch(phone, phoneRegex))
         {
@@ -141,18 +146,33 @@ public class CustomerController : Controller
 
         if (!isValid)
         {
-            var customers = await _context.Customers.ToListAsync();
-            var model = new CustomerViewModel
+            var model = new CustomersViewModel
             {
-                customers = customers,
-                AddCustomer = new AddCustomerViewModel()
-                
+                Customers = await _context.Customers.Select(x => new CustomerViewModel
+                {
+                    CustomerId = x.Id,
+                    FirstName = x.FirstName,
+                    LastName = x.LastName,
+                    Phone = x.PhoneNumber
+                }).ToListAsync(),
+                AddCustomer = new AddCustomerViewModel
+                {
+                    FirstName = firstName,
+                    LastName = lastName,
+                    HeadMeasurements = double.TryParse(headMeasurements, out var headMeasurement) ? headMeasurement : 0,
+                    Email = email,
+                    Phone = phone,
+                    BillingAddress = billingAddress,
+                    DeliveryAddress = deliveryAddress,
+                    City = city,
+                    PostalCode = postalCode,
+                    Country = country
+                }
             };
 
             return View("Index", model);
         }
 
-        
         var customer = new Customer
         {
             FirstName = firstName,
@@ -162,20 +182,16 @@ public class CustomerController : Controller
             PhoneNumber = phone,
 
             Address = new Address
-
             {
                 BillingAddress = billingAddress,
                 DeliveryAddress = deliveryAddress,
                 City = city,
                 PostalCode = postalCode,
-                Country = country,
-
+                Country = country
             }
-            
         };
 
         await _context.Customers.AddAsync(customer);
-
         await _context.SaveChangesAsync();
 
         TempData["NotifyType"] = "success";

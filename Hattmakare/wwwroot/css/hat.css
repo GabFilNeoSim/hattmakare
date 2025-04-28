@@ -1,9 +1,38 @@
-﻿#hat #hatList {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 40px;
+﻿#hat-header {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
 
-  #addNewHat
+#show-specials {
+    height: 50px;
+}
+
+#hat-lists {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4rem;
+}
+
+#special-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#special-list-content {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 40px;
+}
+
+#hat .hatList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    #addNewHat
 {
     background-color: transparent;
     border: none;
@@ -11,8 +40,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 270px;
-    height: 100%px;
+    width: 300px;
     transition: all ease-in-out 300ms;
     border-radius: 8px;
     text-decoration: none;
@@ -45,7 +73,7 @@
     justify-content: flex-start;
     align-items: center;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
-    width: 270px;
+    width: 300px;
     padding: 40px 20px 10px 20px;
     box-sizing: border-box;
     background: rgba(255,255,255,1);
@@ -87,7 +115,7 @@
 
       .info{
         display: flex;
-        justify-content: space-between;
+        gap: 40px;
 
         .text {
             height: max-content;
@@ -145,6 +173,10 @@
     }
     }
   }
+
+#special-list.hatList.show {
+    display: none;
+}
 
 #hat #search {
     margin-bottom: 16px;

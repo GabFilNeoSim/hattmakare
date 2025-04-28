@@ -52,8 +52,12 @@
 
         <div>
             <label class="form-label fw-bold" for="CustomerId">Välj kund</label>
-            <select id="CustomerId" class="form-select" asp-for="CustomerId" asp-items="Model.Customers">
-                <option value="">Ny kund</option>
+            <select id="CustomerId" name="CustomerId" class="form-control">
+                <option value="" disabled selected>Välj kund eller skapa ny</option>
+                @foreach (var customer in Model.Customers)
+                {
+                    <option value="@customer.Value">@customer.Text</option>
+                }
             </select>
         </div>
 
