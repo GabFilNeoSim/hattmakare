@@ -7,6 +7,7 @@
 }
 
 <div class="order-container">
+    <a asp-controller="Order" asp-action="New" class="btn btn-blue order-create">Skapa order</a>
     <div class="order-options">
         <form asp-controller="Order" asp-action="Index" method="get" id="search">
             <input type="text" name="searchQuery" value="@Context.Request.Query["query"]" placeholder="Sök kund..." class="form-control" />

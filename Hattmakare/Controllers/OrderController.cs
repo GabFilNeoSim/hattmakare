@@ -1,21 +1,15 @@
 ﻿using Hattmakare.Data;
 using Hattmakare.Models.Hats;
-using Hattmakare.Models.Material;
 using Microsoft.AspNetCore.Mvc;
 using Hattmakare.Models.Order;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using Hattmakare.Data.Entities;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Hattmakare.Services;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-using Hattmakare.Models.Customer;
-using System.Text.RegularExpressions;
-using System.Reflection.Metadata.Ecma335;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Hattmakare.Controllers;
+
 [Authorize]
 [Route("order")]
 public class OrderController : Controller
@@ -23,13 +17,12 @@ public class OrderController : Controller
     private readonly AppDbContext _context;
     private readonly IImageService _imageService;
     private ILogger<OrderController> _logger;
-
-
-    public OrderController(AppDbContext context, IImageService imageService, ILogger<OrderController> _logger)
+    
+    public OrderController(AppDbContext context, IImageService imageService, ILogger<OrderController> logger)
     {
         _context = context;
         _imageService = imageService;
-        _logger = _logger;
+        _logger = logger;
     }
 
     [HttpGet("materialorder")]
@@ -220,6 +213,7 @@ public class OrderController : Controller
             Price = order.Price,
             Priority = order.Priority,
             Status = order.OrderStatus?.Name,
+            DiscountPercentage = order.DiscountPercentage,
             Hats = order.OrderHats.Select(x => new EditOrderHatViewModel
             {
                 HatId = x.HatId,
@@ -254,7 +248,7 @@ public class OrderController : Controller
         order.StartDate = DateTime.Parse(request.StartDate);
         order.EndDate = DateTime.Parse(request.EndDate);
         order.Priority = request.Priority;
-
+        order.DiscountPercentage = request.DiscountPercentage;
 
         if (request.Hats is not null)
         {
