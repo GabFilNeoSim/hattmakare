@@ -45,13 +45,23 @@ public class CustomerController : Controller
             customers = _context.Customers.Where(c => c.IsDeleted == false);
         }
 
-        var result = await customers.ToListAsync();
+        // Sortera kunderna i alfabetisk ordning baserat på förnamn och efternamn
+        var sortedCustomers = await customers
+            .OrderBy(c => c.FirstName)
+            .ToListAsync();
 
-        var viewModel = new CustomerViewModel
+        var viewModel = new CustomersViewModel
         {
-            customers = result,
+            Customers = sortedCustomers.Select(c => new CustomerViewModel
+            {
+                CustomerId = c.Id,
+                FirstName = c.FirstName,
+                LastName = c.LastName,
+                Phone = c.PhoneNumber
+            }).ToList(),
             AddCustomer = new AddCustomerViewModel()
         };
+
 
         return View(viewModel);
     }
@@ -142,9 +152,8 @@ public class CustomerController : Controller
         if (!isValid)
         {
             var customers = await _context.Customers.ToListAsync();
-            var model = new CustomerViewModel
+            var model = new CustomersViewModel  
             {
-                customers = customers,
                 AddCustomer = new AddCustomerViewModel()
                 
             };
