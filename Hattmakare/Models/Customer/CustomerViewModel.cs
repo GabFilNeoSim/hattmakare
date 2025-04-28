@@ -1,14 +1,22 @@
-﻿using Hattmakare.Data.Entities;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace Hattmakare.Models.Customer
+namespace Hattmakare.Models.Customer;
+
+public class CustomerViewModel
 {
-    public class CustomerViewModel
-    {
-        public int Id { get; set; }
-        public List<Data.Entities.Customer> customers { get; set; }
+    public int CustomerId { get; set; }
 
-        public UpdateCustomerViewModel UpdateCustomer { get; set; }
+    [Required(ErrorMessage = "Vänligen ange ett förnamn")]
+    [MaxLength(50)]
+    public string FirstName { get; set; }
 
-        public AddCustomerViewModel AddCustomer { get; set; }
-    }
+    [Required(ErrorMessage = "Vänligen ange ett efternamn")]
+    [MaxLength(50)]
+    public string LastName { get; set; }
+
+    [Required(ErrorMessage = "Vänligen ange ett telefonnummer")]
+    [Phone]
+    public string Phone { get; set; }
+
+    public bool IsDeleted { get; set; } = false;
 }
