@@ -43,10 +43,6 @@ namespace Hattmakare.Data
                 .WithMany(x => x.HatMaterials)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            // Order hat
-            //builder.Entity<OrderHat>()
-            //    .HasKey(x => new { x.HatId, x.OrderId, x.UserId });
-
             builder.Entity<OrderHat>()
                 .HasOne(x => x.Order)
                 .WithMany(x => x.OrderHats)
@@ -66,34 +62,76 @@ namespace Hattmakare.Data
                 .HasData(new Customer
                 {
                     Id = 1,
-                    Email = "testmejl",
+                    Email = "olof.svensson@epost.se",
                     FirstName = "Olof",
                     LastName = "Svensson",
-                    PhoneNumber = "1234567890",
+                    PhoneNumber = "0723338282",
                     AddressId = 1,
                 },
                 new Customer
                 {
                     Id = 2,
-                    Email = "testmejl",
+                    Email = "jan.jansson@epost.se",
                     FirstName = "Jan",
                     LastName = "Jansson",
-                    PhoneNumber = "1234567890",
-                    AddressId = 1,
-                }
-            );
+                    PhoneNumber = "0723557781",
+                    AddressId = 2,
+                },
+                new Customer
+                {
+                    Id = 3,
+                    Email = "julia.smith@epost.se",
+                    FirstName = "Julia",
+                    LastName = "Smith",
+                    PhoneNumber = "0723219981",
+                    AddressId = 3,
+                },
+                new Customer
+                {
+                    Id = 4,
+                    Email = "kajsa.fisk@epost.se",
+                    FirstName = "Kajsa",
+                    LastName = "Fisk",
+                    PhoneNumber = "0733447785",
+                    AddressId = 4,
+                });
 
             builder.Entity<Address>()
                 .HasData(new Address
                 {
                     Id = 1,
-                    BillingAddress = "Adress 1",
-                    DeliveryAddress = "Adress 2",
-                    PostalCode = "12345",
+                    BillingAddress = "Blåbärsstigen 99",
+                    DeliveryAddress = "Solrosvägen 88",
+                    PostalCode = "11322",
                     City = "Örebro",
                     Country = "Sverige",
-                     
-
+                },
+                new Address
+                {
+                    Id = 2,
+                    BillingAddress = "Krickelinsväg 101",
+                    DeliveryAddress = "Snöflingegatan 202",
+                    PostalCode = "55667",
+                    City = "Stockholm",
+                    Country = "Sverige",
+                },
+                new Address
+                {
+                    Id = 3,
+                    BillingAddress = "Månstrålevägen 45",
+                    DeliveryAddress = "Regnbågsgatan 12",
+                    PostalCode = "22433",
+                    City = "Umeå",
+                    Country = "Sverige",
+                },
+                new Address
+                {
+                    Id = 4,
+                    BillingAddress = "Silverbäcksvägen 77",
+                    DeliveryAddress = "Älvdalsvägen 34",
+                    PostalCode = "77889",
+                    City = "Paris",
+                    Country = "Frankrike",
                 });
 
             builder.Entity<OrderStatus>()
@@ -131,58 +169,66 @@ namespace Hattmakare.Data
 
                 });
 
-
-            //builder.Entity<Material>()
-            //   .HasData(new Material
-            //   {
-            //       Id = 1,
-            //       Name = "tyg",
-            //       Price = 10,
-            //       Unit = "M",
-            //       IsDecoration = false,
-            //       Supplier = "Olhsson"
-
-            //   });
-
-            //builder.Entity<HatMaterial>()
-            //  .HasData(new HatMaterial
-            //  {
-            //      HatId = 1,
-            //      MaterialId = 1,
-            //      Quantity = 1,
-
-            //  },
-            //  new HatMaterial
-            //  {
-            //      HatId = 2,
-            //      MaterialId = 2,
-            //      Quantity = 6,
-
-            //  });
-
-
             builder.Entity<Hat>()
                .HasData(new Hat
                {
                    Id = 1,
-                   Comment = "Testcomment",
-                   ImageUrl = null,
+                   Comment = "En vit, rund mössa med svart skärm och en kokard framtill, traditionellt buren vid svenska studentexamina",
+                   ImageUrl = "/assets/hats/Student.jpg",
                    IsDeleted = false,
                    Name = "Studenthatt",
-                   Price = 5,
+                   Price = 1500,
                    Quantity = 2,
                    Size = 10,
                    HatTypeId = 1
-               }, new Hat
+               }, 
+               new Hat
                {
                    Id = 2,
-                   Comment = "Testcomment",
-                   ImageUrl = null,
+                   Comment = "En formell vit hatt med svart skärm och guldbroderad dekoration, som symboliserar sjöfartsbefäl.",
+                   ImageUrl = "/assets/hats/Kaptenshatt.jpg",
                    IsDeleted = false,
                    Name = "Kaptenshatt",
-                   Price = 52,
-                   Quantity = 5,
-                   Size = 8
+                   Price = 1000,
+                   Quantity = 3,
+                   Size = 9,
+                   HatTypeId = 1
+               },
+               new Hat
+               {
+                   Id = 3,
+                   Comment = "En röd, cylinderformad hatt utan brätten, ofta prydd med en tofs, traditionellt buren i delar av Mellanöstern och Nordafrika.",
+                   ImageUrl = "/assets/hats/Fez.jpg",
+                   IsDeleted = false,
+                   Name = "Fez",
+                   Price = 1700,
+                   Quantity = 2,
+                   Size = 8,
+                   HatTypeId = 1
+               },
+               new Hat
+               {
+                   Id = 4,
+                   Comment = "En bredbrättad hatt av filt eller halm, designad för att skydda mot sol och regn på den amerikanska prärien.",
+                   ImageUrl = "/assets/hats/Cowboyhatt.jpg",
+                   IsDeleted = false,
+                   Name = "Cowboyhatt",
+                   Price = 2000,
+                   Quantity = 1,
+                   Size = 12,
+                   HatTypeId = 1
+               },
+               new Hat
+               {
+                   Id = 5,
+                   Comment = "En lätt och luftig hatt flätad av halm, perfekt för att ge skugga och svalka under soliga sommardagar.",
+                   ImageUrl = "/assets/hats/Halmhatt.jpg",
+                   IsDeleted = false,
+                   Name = "Halmhatt",
+                   Price = 1300,
+                   Quantity = 1,
+                   Size = 11,
+                   HatTypeId = 1
                });
 
             
@@ -203,46 +249,67 @@ namespace Hattmakare.Data
                 new OrderHat
                 {
                     Id = 3,
-                    HatId = 2,
+                    HatId = 5,
                     OrderId = 2,
                     UserId = null
                 },
                 new OrderHat
                 {
                     Id = 4,
+                    HatId = 4,
+                    OrderId = 2,
+                    UserId = null
+                },
+                new OrderHat
+                {
+                    Id = 5,
+                    HatId = 2,
+                    OrderId = 2,
+                    UserId = null
+                },
+                new OrderHat
+                {
+                    Id = 6,
                     HatId = 2,
                     OrderId = 3,
                     UserId = null
+                }, 
+                new OrderHat
+                {
+                    Id = 7,
+                    HatId = 3,
+                    OrderId = 4,
+                    UserId = null
+                },
+                new OrderHat
+                {
+                    Id = 8,
+                    HatId = 5,
+                    OrderId = 4,
+                    UserId = null
+                },
+                new OrderHat
+                {
+                    Id = 9,
+                    HatId = 2,
+                    OrderId = 5,
+                    UserId = null
+                },
+                new OrderHat
+                {
+                    Id = 10,
+                    HatId = 4,
+                    OrderId = 5,
+                    UserId = null
+                },
+                new OrderHat
+                {
+                    Id = 11,
+                    HatId = 1,
+                    OrderId = 6,
+                    UserId = null
                 }
                 );
-
-            //builder.Entity<HatMaterial>()
-            //    .HasData(
-            //        new HatMaterial
-            //        {
-            //            HatId = 1,
-            //            MaterialId = 1,
-            //            Quantity = 5
-            //        },
-            //        new HatMaterial
-            //        {
-            //            HatId = 1,
-            //            MaterialId = 2,
-            //            Quantity = 1
-            //        },
-            //        new HatMaterial
-            //        {
-            //            HatId = 2,
-            //            MaterialId = 4,
-            //            Quantity = 54
-            //        },
-            //        new HatMaterial
-            //        {
-            //            HatId = 2,
-            //            MaterialId = 5,
-            //            Quantity = 5
-            //        }
-            //    );
 
             builder.Entity<Order>()
                 .HasData(
@@ -251,10 +318,10 @@ namespace Hattmakare.Data
                         Id = 1,
                         CustomerId = 1,
                         OrderStatusId = 1,
-                        StartDate = new DateTime(2025, 04, 16),
-                        EndDate = new DateTime(2025, 04, 17),
+                        StartDate = new DateTime(2025, 04, 01),
+                        EndDate = new DateTime(2025, 11, 22),
                         Priority = false,
-                        Price = 500,
+                        Price = 3125,
                         
                     },
                     new Order
@@ -262,10 +329,10 @@ namespace Hattmakare.Data
                         Id = 2,
                         CustomerId = 2,
                         OrderStatusId = 2,
-                        StartDate = new DateTime(2025, 04, 16),
-                        EndDate = new DateTime(2025, 04, 17),
+                        StartDate = new DateTime(2025, 04, 12),
+                        EndDate = new DateTime(2025, 10, 14),
                         Priority = true,
-                        Price = 600
+                        Price = 6450
                         
                     },
                     new Order
@@ -273,11 +340,41 @@ namespace Hattmakare.Data
                         Id = 3,
                         CustomerId = 2,
                         OrderStatusId = 2,
-                        StartDate = new DateTime(2025, 04, 16),
-                        EndDate = new DateTime(2025, 04, 17),
+                        StartDate = new DateTime(2025, 03, 19),
+                        EndDate = new DateTime(2025, 04, 30),
                         Priority = true,
                         Price = 600
 
+                    },
+                    new Order
+                    {
+                        Id = 4,
+                        CustomerId = 3,
+                        OrderStatusId = 3,
+                        StartDate = new DateTime(2025, 04, 16),
+                        EndDate = new DateTime(2025, 04, 21),
+                        Priority = false,
+                        Price = 600
+                    },
+                    new Order
+                    {
+                        Id = 5,
+                        CustomerId = 4,
+                        OrderStatusId = 1,
+                        StartDate = new DateTime(2025, 04, 16),
+                        EndDate = new DateTime(2025, 08, 29),
+                        Priority = true,
+                        Price = 600
+                    },
+                    new Order
+                    {
+                        Id = 6,
+                        CustomerId = 4,
+                        OrderStatusId = 2,
+                        StartDate = new DateTime(2025, 04, 10),
+                        EndDate = new DateTime(2025, 04, 30),
+                        Priority = false,
+                        Price = 600
                     }
                 );
         }
