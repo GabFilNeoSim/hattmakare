@@ -291,22 +291,34 @@ public class OrderController : Controller
         var model = new NewOrderIndexViewModel
         {
             Hats = await _context.Hats
-                .Where(h => h.IsDeleted == false && h.HatType.Name == "StandardHatt")
-                .Select(x => new HatViewModel
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                    Price = x.Price,
-                    Size = x.Size,
-                    Comment = x.Comment,
-                    ImageUrl = x.ImageUrl,
-                    Length = x.Length,
-                    Width = x.Width,
-                    Depth = x.Depth,
-                }
-
-        ).ToListAsync(),
-            Customers = await _context.Customers
+              .Where(h => h.IsDeleted == false && h.HatType.Name == "StandardHatt")
+              .Select(x => new HatViewModel
+              {
+                  Id = x.Id,
+                  Name = x.Name,
+                  Price = x.Price,
+                  Size = x.Size,
+                  Comment = x.Comment,
+                  ImageUrl = x.ImageUrl,
+                  Length = x.Length,
+                  Width = x.Width,
+                  Depth = x.Depth,
+              }).ToListAsync(),
+          SpecialHats = await _context.Hats
+              .Where(h => h.IsDeleted == false && h.HatType.Name == "SpecialHatt")
+              .Select(x => new HatViewModel
+              {
+                Id = x.Id,
+                Name = x.Name,
+                Price = x.Price,
+                Size = x.Size,
+                Comment = x.Comment,
+                ImageUrl = x.ImageUrl,
+                Length = x.Length,
+                Width = x.Width,
+                Depth = x.Depth,
+              }).ToListAsync(),
+        Customers = await _context.Customers
         .Select(c => new SelectListItem
         {
             Value = c.Id.ToString(),
@@ -333,8 +345,8 @@ public class OrderController : Controller
          .Include(c => c.Address)
          .OrderBy(c => c.FirstName)
          .FirstOrDefaultAsync(c => c.Id == id);
-
-        if (customer.IsDeleted == false)
+        
+        if (customer?.IsDeleted == false)
         {
             return Json(new
             {
@@ -422,7 +434,8 @@ public class OrderController : Controller
             Price = 0,
             CustomerId = model.Customer.Id,
             OrderStatusId = 1,
-            OrderHats = new List<OrderHat>()
+            OrderHats = new List<OrderHat>(),
+            DiscountPercentage = 0
         };
 
         _context.Orders.Add(order);
@@ -483,6 +496,6 @@ public class OrderController : Controller
 
         await _context.SaveChangesAsync();
 
-        return Ok(order);
-    }
+    return Ok();
+  }
 }
