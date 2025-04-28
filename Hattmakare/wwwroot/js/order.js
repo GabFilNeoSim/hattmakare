@@ -113,19 +113,6 @@ class Cart {
 }
 
 const cart = new Cart();
-let specialHat = {
-  Name: "",
-  Size: 0,
-  Length: 0,
-  Width: 0,
-  Depth: 0,
-  Price: 0,
-  Quantity: 0,
-  Comment: "",
-  ImageUrl: "",
-  HatTypeId: 3,
-  Materials: [],
-}
 let availableMaterials = [];
 let selectedMaterials = [];
 
@@ -255,66 +242,6 @@ $(document).ready(async function () {
     // Re-render cart and list
     updateCart(cart.items);
   });
-
-  //Add special hat material
-  $(document).on("click", ".add-special-material", function (e) {
-    console.log("clicked")
-    const $parent = $(this).closest('.material-group');
-    const $dropdown = $parent.find('.material-dropdown');
-    const $qtyInput = $parent.find('.material-qty');
-
-    const selectedMaterialId = $dropdown.val();
-    const quantity = parseInt($qtyInput.val(), 10);
-
-    if (!selectedMaterialId || isNaN(quantity) || quantity <= 0) {
-        alert("Välj ett material och ange en korrekt mängd.");
-        return;
-    }
-  
-    const selectedMaterial = availableMaterials.find(m => m.materialId == selectedMaterialId);
-    if (!selectedMaterial) {
-      alert("Material hittades inte.");
-      return;
-    }
-    const material = {
-      materialId: selectedMaterialId, 
-      quantity: quantity, 
-      name: selectedMaterial.name,
-      price: selectedMaterial.price, 
-      unit: selectedMaterial.unit
-    }
-    // Add the material to the item's material list
-    specialHat.Materials.push(material)
-
-  
-    // Save to localStorage
-    cart.syncToStorage();
-
-    //Update UI
-    const materialHtml = `
-      <div class="material-entry" data-material-id="${selectedMaterialId}">
-        <p>Material: ${selectedMaterial.name}</p>
-        <input 
-          type="number" 
-          value="${quantity}" 
-          class="material-quantity" 
-          data-material-id="${selectedMaterialId}" 
-          min="0"
-        />
-        <button class="remove-material" data-material-id="${selectedMaterialId}">Remove</button>
-      </div>
-    `;
-    $parent.append(materialHtml);
-  
-    // Re-render cart and list
-    updateCart(cart.items);
-  });
-
-  $(document).on("click", "#add-special-hat", function (e) {
-    e.preventDefault();
-    console.log(specialHat)
-  })
-})
 
 function updateCart(cartItems) {
   const cartEl = $("#cart");
@@ -488,46 +415,47 @@ $(document).ready(function () {
 //     });
 //   });
 
-  // $('#orderForm').on('submit', function (e) {
-  //   e.preventDefault(); // prevent normal submit
+  $('#orderForm').on('submit', function (e) {
+    e.preventDefault(); // prevent normal submit
 
-  //   const orderData = {
-  //     Customer: {
-  //       Id: parseInt($('#CustomerId').val()),
-  //         FirstName: $('#FirstName').val(),
-  //         LastName: $('#LastName').val(),
-  //         HeadMeasurements: parseFloat($('#HeadMeasurements').val()) || 0,
-  //         BillingAddress: $('#BillingAddress').val(),
-  //         DeliveryAddress: $('#DeliveryAddress').val(),
-  //         City: $('#City').val(),
-  //         PostalCode: $('#PostalCode').val(),
-  //         Country: $('#Country').val(),
-  //         Email: $('#Email').val(),
-  //         Phone: $('#Phone').val()
-  //     },
-  //     Hats: cart.items,
+    const orderData = {
+      Customer: {
+        Id: parseInt($('#CustomerId').val()),
+          FirstName: $('#FirstName').val(),
+          LastName: $('#LastName').val(),
+          HeadMeasurements: parseFloat($('#HeadMeasurements').val()) || 0,
+          BillingAddress: $('#BillingAddress').val(),
+          DeliveryAddress: $('#DeliveryAddress').val(),
+          City: $('#City').val(),
+          PostalCode: $('#PostalCode').val(),
+          Country: $('#Country').val(),
+          Email: $('#Email').val(),
+          Phone: $('#Phone').val()
+      },
+      Hats: cart.items,
 
-  //     StartDate: $('#StartDate').val(),
-  //     EndDate: $('#EndDate').val(),
-  //     Priority: $('#Priority').is(':checked') // checkbox handling
-  //       };
-  //   console.log(orderData)
+      StartDate: $('#StartDate').val(),
+      EndDate: $('#EndDate').val(),
+      Priority: $('#Priority').is(':checked') // checkbox handling
+        };
+    console.log(orderData)
   
-  //   $.ajax({
-  //     type: "POST",
-  //     url: '/Order/New', // it will use /Order/CreateOrder
-  //     contentType: 'application/json',
-  //     data: JSON.stringify(orderData),
-  //     success: function (response) {
-  //       console.log("Order created successfully!");
-  //       console.log(response)
-  //       addHatsToOrder();
-  //     },
-  //     error: function (xhr, status, error) {
-  //       console.error("Failed to create order:", error);
-  //     }
-  //   });
-  // });
+    $.ajax({
+      type: "POST",
+      url: '/Order/New', // it will use /Order/CreateOrder
+      contentType: 'application/json',
+      data: JSON.stringify(orderData),
+      success: function (response) {
+        console.log("Order created successfully!");
+        console.log(response)
+        addHatsToOrder();
+      },
+      error: function (xhr, status, error) {
+        console.error("Failed to create order:", error);
+      }
+    });
+  });
+});
 });
 
 // Populera formulär med vald kunds uppgifter
