@@ -16,7 +16,7 @@ namespace Hattmakare.Data.Entities
        
 
         // Foreign keys
-        public int? CustomerId { get; set; }
+        public int? CustomerId { get; set; }  
         public int? OrderStatusId { get; set; }
 
         // Navigation props

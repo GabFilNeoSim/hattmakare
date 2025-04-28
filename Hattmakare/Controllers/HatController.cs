@@ -269,6 +269,7 @@ public class HatController : Controller
       Width = hat.Width,
       ImageUrl = hat.ImageUrl,
       Comment = hat.Comment,
+      HatTypeId = hat.HatTypeId
     };
     return Ok(model);
   }
