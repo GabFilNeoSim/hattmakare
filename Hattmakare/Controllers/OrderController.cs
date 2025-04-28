@@ -323,8 +323,7 @@ public class OrderController : Controller
         return View(model);
     }
 
-
-    [HttpPost("AddSpecialHat")]
+  [HttpPost("AddSpecialHat")]
   public async Task<IActionResult> AddSpecialHat([FromForm] AddHatViewModel newHat)
   {
 

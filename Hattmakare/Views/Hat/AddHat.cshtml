@@ -10,13 +10,11 @@
     <div class="col-md-8 col-lg-6">
         <form method="post" asp-action="AddHat" enctype="multipart/form-data" class="p-4 shadow rounded bg-light">
             <h2 class="mb-4 text-center">Lägg till en ny hatt</h2>
-
             <div class="form-group mb-3">
                 <label asp-for="Name" class="form-label fw-bold">Hattens namn</label>
                 <input asp-for="Name" class="form-control" placeholder="Skriv namn på hatten" required />
                 <span asp-validation-for="Name" class="text-danger small"></span>
             </div>
-
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label asp-for="Price" class="form-label fw-bold">Pris</label>
@@ -29,13 +27,11 @@
                     <span asp-validation-for="Quantity" class="text-danger small"></span>
                 </div>
             </div>
-
             <div class="form-group mb-3">
                 <label asp-for="Size" class="form-label fw-bold">Storlek</label>
                 <input asp-for="Size" class="form-control" placeholder="Ange storlek (t.ex. 58cm...)" required />
                 <span asp-validation-for="Size" class="text-danger small"></span>
             </div>
-
             <div class="row mb-3">
                 <div class="col-md-4">
                     <label asp-for="Length" class="form-label fw-bold">Längd</label>
@@ -53,15 +49,17 @@
                     <span asp-validation-for="Width" class="text-danger small"></span>
                 </div>
             </div>
-   
             <div class="form-group mb-4">
                 <label asp-for="Image" class="form-label fw-bold">Ladda upp bild</label>
                 <input asp-for="Image" type="file" class="form-control" />
                 <span asp-validation-for="Image" class="text-danger small"></span>
             </div>
-
+            <div class="form-check mb-4">
+                <input type="checkbox" class="form-check-input" asp-for="IsSpecial">
+                <label class="form-check-label" asp-for="IsSpecial">Markera som specialhatt</label>
+                <span asp-validation-for="IsSpecial" class="text-danger small"></span>
+            </div>
             <h4 class="mt-4">Materialval</h4>
-
             <div id="material-selection" class="mb-3">
                 <div class="input-group material-group">
                     <select id="material-dropdown" class="form-select">
@@ -78,13 +76,9 @@
                     </button>
                 </div>
             </div>
-
             <ul id="material-list" class="list-group mb-3"></ul>
-
-           
-
             <div class="text-end">
-                <a href="@Url.Action("Index", "Hat")" class="btn btn-secondary mt-4">Tillbaka</a> <br />
+                <a asp-controller="Hat" asp-action="Index" class="btn btn-secondary mt-4">Tillbaka</a> <br />
                 <button type="submit" class="btn btn-blue px-4 mt-4 text-light">
                     <i class="fa-solid fa-plus"></i>
                     Skapa hatt
