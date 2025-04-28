@@ -387,7 +387,7 @@
     flex-direction: column;
     gap: 100px;
     margin-top: 50px;
-    #hatList {
+    .hatList {
         display: flex;
         flex-wrap: wrap;
         gap:

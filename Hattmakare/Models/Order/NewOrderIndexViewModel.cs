@@ -17,7 +17,7 @@ namespace Hattmakare.Models.Order
         public AddCustomerViewModel AddCustomer { get; set; }
 
         public List<HatViewModel> Hats { get; set; }
-
+        public List<HatViewModel> SpecialHats { get; set; }
         public List<SelectListItem> Customers { get; set; } //Dropdown lista
     }
 }
