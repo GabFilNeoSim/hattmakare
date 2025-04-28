@@ -17,7 +17,7 @@ namespace Hattmakare.Data.Entities
         public int? DiscountPercentage { get; set; }
 
         // Foreign keys
-        public int? CustomerId { get; set; }
+        public int? CustomerId { get; set; }  
         public int? OrderStatusId { get; set; }
 
         // Navigation props

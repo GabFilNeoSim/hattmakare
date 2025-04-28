@@ -35,135 +35,20 @@
             }
     </div>
 
-    <div class="container d-flex justify-content-center">
-        <div class="col-md-8 col-lg-6">
-            <form enctype="multipart/form-data" class="p-4 shadow rounded bg-light">
-                <h2 class="mb-4 text-center">Skapa en specialhatt</h2>
-
-                <div class="form-group mb-3">
-                    <label for="Name" class="form-label fw-bold">Hattens namn</label>
-                    <input id="Name" class="form-control" placeholder="Skriv namn på hatten" required />
-                </div>
-
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label for="Price" class="form-label fw-bold">Pris</label>
-                        <input id="Price" type="number" class="form-control" placeholder="Ange pris i SEK" required />
-                    </div>
-                    <div class="col-md-6">
-                        <label for="Quantity" class="form-label fw-bold">Antal</label>
-                        <input id="Quantity" type="number" class="form-control" placeholder="Hur många ska beställas?" required />
-                    </div>
-                </div>
-
-                <div class="form-group mb-3">
-                    <label for="Size" class="form-label fw-bold">Storlek</label>
-                    <input id="Size" class="form-control" placeholder="Ange storlek (t.ex. S, M, L, 58cm...)" required />
-                </div>
-
-                <div class="row mb-3">
-                    <div class="col-md-4">
-                        <label for="Length" class="form-label fw-bold">Längd</label>
-                        <input id="Length" class="form-control" placeholder="cm" required />
-                    </div>
-                    <div class="col-md-4">
-                        <label for="Depth" class="form-label fw-bold">Djup</label>
-                        <input id="Depth" class="form-control" placeholder="cm" required />
-                    </div>
-                    <div class="col-md-4">
-                        <label for="Width" class="form-label fw-bold">Bredd</label>
-                        <input id="Width" class="form-control" placeholder="cm" required />
-                    </div>
-                </div>
-
-                <div class="form-group mb-3">
-                    <label for="Comment" class="form-label fw-bold">Beskrivning</label>
-                    <input id="Comment" class="form-control" placeholder="Ange en beskrivning" required />
-                </div>
-
-                <div class="form-group mb-4">
-                    <label for="Image" class="form-label fw-bold">Ladda upp bild</label>
-                    <input id="Image" type="file" class="form-control" />
-                </div>
-
-                <h4 class="mt-4">Materialval</h4>
-
-               @*  <div id="material-selection" class="mb-3">
-                    <div class="input-group material-group">
-                        <select id="material-dropdown" class="form-select">
-                            <option value="">-- Välj material --</option>
-                            @foreach (var mat in Model.AvailableMaterials)
-                            {
-                                <option value="@mat.MaterialId" data-name="@mat.Name" data-unit="@mat.Unit">@mat.Name (@mat.Unit)</option>
-                            }
-                        </select>
-                        <input type="number" id="material-qty" class="form-control" placeholder="Mängd" min="1" />
-                        <button type="button" id="add-material-btn" class="btn btn-blue btn-sm">
-                            <i class="fa-solid fa-plus"></i>
-                            Lägg till
-                        </button>
-                    </div>
-                </div> *@
-
-                <ul id="material-list" class="list-group mb-3"></ul>
-
-                <div class="text-end">
-                    <button type="submit" class="btn btn-blue px-4 mt-4 text-light">
-                        <i class="fa-solid fa-plus"></i>
-                        Skapa hatt
-                    </button>
-                </div>
-
-                 @section Scripts {
-                <script>
-                    const dropdown = document.getElementById('material-dropdown');
-                    const qtyInput = document.getElementById('material-qty');
-                    const addBtn = document.getElementById('add-material-btn');
-                    const list = document.getElementById('material-list');
-
-                    let index = 0;
-
-                    addBtn.addEventListener('click', () => {
-                        const id = dropdown.value;
-                        const name = dropdown.options[dropdown.selectedIndex].dataset.name;
-                        const unit = dropdown.options[dropdown.selectedIndex].dataset.unit;
-                        const qty = qtyInput.value;
-
-                        if (!id || qty < 1) return;
-
-                        // Create list item UI
-                        const li = document.createElement('li');
-                        li.className = 'list-group-item d-flex justify-content-between align-items-center';
-                        li.innerHTML = `
-                                    ${name} - ${qty} ${unit}
-                            <button type="button" class="btn btn-sm btn-danger ms-2" onclick="this.parentElement.remove()">
-                                        <i class="fa-solid fa-xmark"></i>
-                            </button>
-                            <input type="hidden" name="SelectedMaterials[${index}].MaterialId" value="${id}" />
-                            <input type="hidden" name="SelectedMaterials[${index}].Quantity" value="${qty}" />
-                        `;
-                        list.appendChild(li);
-
-                        index++;
-                        qtyInput.value = '';
-                        dropdown.selectedIndex = 0;
-                    });
-                    </script>
-                    }
-            </form>
-        </div>
-    </div>
-
 
     <div id="cartContainer">
         <div id="cart">
         </div>
         <p id="total">Total: 0:- </p>
     </div>
+  <div id="orderItems">
+
+  </div>
   </div>
 
-<div id="settings" class="container mt-5">
-    <form asp-action="CreateOrder" asp-controller="Order" method="post" enctype="multipart/form-data">
+
+    <div id="settings" class="container mt-5">
+        <form asp-action="CreateOrder" asp-controller="Order" method="post" enctype="multipart/form-data" id="orderForm">
 
         <div>
             <label class="form-label fw-bold" for="CustomerId">Välj kund</label>
