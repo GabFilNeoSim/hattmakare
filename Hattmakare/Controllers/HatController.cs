@@ -53,7 +53,9 @@ public class HatController : Controller
     [HttpGet("AddHat")]
     public async Task<IActionResult> Addhat()
     {
-        var materials = await _context.Materials.ToListAsync();
+        var materials = await _context.Materials
+            .OrderBy(materials => materials.Name)
+            .ToListAsync();
 
         var viewModel = new AddHatViewModel
         {

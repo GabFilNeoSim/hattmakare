@@ -10,31 +10,32 @@
     <div class="col-md-8 col-lg-6">
         <form method="post" asp-action="AddHat" enctype="multipart/form-data" class="p-4 shadow rounded bg-light">
             <h2 class="mb-4 text-center">Lägg till en ny hatt</h2>
-
-            <div class="form-group mb-3">
+            
+            <div class="row mb-3">
+                <div class="col-md-6">
                 <label asp-for="Name" class="form-label fw-bold">Hattens namn</label>
                 <input asp-for="Name" class="form-control" placeholder="Skriv namn på hatten" required />
                 <span asp-validation-for="Name" class="text-danger small"></span>
             </div>
-
-            <div class="row mb-3">
                 <div class="col-md-6">
-                    <label asp-for="Price" class="form-label fw-bold">Pris</label>
-                    <input asp-for="Price" type="number" class="form-control" placeholder="Ange pris i SEK" required />
-                    <span asp-validation-for="Price" class="text-danger small"></span>
-                </div>
+                <label asp-for="Image" class="form-label fw-bold">Ladda upp bild</label>
+                <input asp-for="Image" type="file" class="form-control" />
+                <span asp-validation-for="Image" class="text-danger small"></span>
+            </div>
+            </div>
+            <div class="row mb-3">
                 <div class="col-md-6">
                     <label asp-for="Quantity" class="form-label fw-bold">Antal i lager</label>
                     <input asp-for="Quantity" type="number" class="form-control" placeholder="Hur många finns i lager?" required />
                     <span asp-validation-for="Quantity" class="text-danger small"></span>
                 </div>
+                <div class="col-md-6">
+                    <label asp-for="Size" class="form-label fw-bold">Storlek</label>
+                    <input asp-for="Size" class="form-control" placeholder="Ange storlek" required />
+                    <span asp-validation-for="Size" class="text-danger small"></span>
+                </div>
             </div>
 
-            <div class="form-group mb-3">
-                <label asp-for="Size" class="form-label fw-bold">Storlek</label>
-                <input asp-for="Size" class="form-control" placeholder="Ange storlek (t.ex. 58cm...)" required />
-                <span asp-validation-for="Size" class="text-danger small"></span>
-            </div>
 
             <div class="row mb-3">
                 <div class="col-md-4">
@@ -54,12 +55,7 @@
                 </div>
             </div>
    
-            <div class="form-group mb-4">
-                <label asp-for="Image" class="form-label fw-bold">Ladda upp bild</label>
-                <input asp-for="Image" type="file" class="form-control" />
-                <span asp-validation-for="Image" class="text-danger small"></span>
-            </div>
-
+            <hr />
             <h4 class="mt-4">Materialval</h4>
 
             <div id="material-selection" class="mb-3">
@@ -68,10 +64,11 @@
                         <option value="">-- Välj material --</option>
                         @foreach (var mat in Model.AvailableMaterials)
                         {
-                            <option value="@mat.MaterialId" data-name="@mat.Name" data-unit="@mat.Unit">@mat.Name (@mat.Unit)</option>
+                            <option value="@mat.MaterialId" data-name="@mat.Name" data-unit="@mat.Unit" data-price="@mat.Price">@mat.Name - @mat.Price kr</option>
                         }
                     </select>
-                    <input type="number" id="material-qty" class="form-control" placeholder="Mängd" min="1" />
+                    <input type="number" id="material-qty" class="form-control" style="width: 50px;" placeholder="Mängd" min="1" />
+                    <div class="material-unit" id="material-unit-val">-</div>
                     <button type="button" id="add-material-btn" class="btn btn-blue btn-sm">
                         <i class="fa-solid fa-plus"></i>
                         Lägg till
@@ -80,8 +77,16 @@
             </div>
 
             <ul id="material-list" class="list-group mb-3"></ul>
+            <div class="mb-3">
+                <strong id="total-price">Totalt materialpris: </strong>
+            </div>
+            <hr />
 
-           
+            <div class="col-md-6">
+                <label asp-for="Price" class="form-label fw-bold">Försäljningspris</label>
+                <input asp-for="Price" type="number" class="form-control" placeholder="Ange pris i SEK" required />
+                <span asp-validation-for="Price" class="text-danger small"></span>
+            </div>
 
             <div class="text-end">
                 <a href="@Url.Action("Index", "Hat")" class="btn btn-secondary mt-4">Tillbaka</a> <br />
@@ -97,23 +102,37 @@
                     const qtyInput = document.getElementById('material-qty');
                     const addBtn = document.getElementById('add-material-btn');
                     const list = document.getElementById('material-list');
+                    const totalPriceDisplay = document.getElementById('total-price');
 
                     let index = 0;
+                    let totalMaterialPrice = 0;
+
+                    dropdown.addEventListener("change", () => {
+                        const unit = dropdown.options[dropdown.selectedIndex].dataset.unit;
+                        console.log(unit);
+                        const materialVal = document.getElementById("material-unit-val");
+                        materialVal.innerText = unit;
+
+                        console.log("HEHE")
+                    });
 
                     addBtn.addEventListener('click', () => {
                         const id = dropdown.value;
                         const name = dropdown.options[dropdown.selectedIndex].dataset.name;
                         const unit = dropdown.options[dropdown.selectedIndex].dataset.unit;
+                        const pricePerUnit = parseFloat(dropdown.options[dropdown.selectedIndex].dataset.price);
                         const qty = qtyInput.value;
 
                         if (!id || qty < 1) return;
+
+                        const totalPrice = (pricePerUnit * qty).toFixed(2);
 
                         // Create list item UI
                         const li = document.createElement('li');
                         li.className = 'list-group-item d-flex justify-content-between align-items-center';
                         li.innerHTML = `
-                                    ${name} - ${qty} ${unit}
-                            <button type="button" class="btn btn-sm btn-danger ms-2" onclick="this.parentElement.remove()">
+                                    ${name} - ${totalPrice} kr
+                            <button type="button" class="btn btn-sm btn-danger ms-2" onclick="removeMaterial(this, ${totalPrice})">
                                         <i class="fa-solid fa-xmark"></i>
                             </button>
                             <input type="hidden" name="SelectedMaterials[${index}].MaterialId" value="${id}" />
@@ -121,10 +140,19 @@
                         `;
                         list.appendChild(li);
 
+                        totalMaterialPrice += parseFloat(totalPrice);
+                        totalPriceDisplay.textContent = `Totalt materialpris: ${totalMaterialPrice.toFixed(2)} kr`;
+
                         index++;
                         qtyInput.value = '';
                         dropdown.selectedIndex = 0;
                     });
+
+                        function removeMaterial(button, price) {
+                            button.parentElement.remove();
+                            totalMaterialPrice -= price;
+                            totalPriceDisplay.textContent = `Totalt materialpris: ${totalMaterialPrice.toFixed(2)} kr`;
+                        }
                     </script>
                 }
 

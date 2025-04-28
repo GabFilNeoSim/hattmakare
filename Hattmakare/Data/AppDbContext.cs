@@ -180,6 +180,9 @@ namespace Hattmakare.Data
                    Price = 1500,
                    Quantity = 2,
                    Size = 10,
+                   Depth = 5,
+                   Length = 12,
+                   Width = 10,
                    HatTypeId = 1
                }, 
                new Hat
@@ -192,6 +195,9 @@ namespace Hattmakare.Data
                    Price = 1000,
                    Quantity = 3,
                    Size = 9,
+                   Depth = 4,
+                   Length = 9,
+                   Width = 7,
                    HatTypeId = 1
                },
                new Hat
@@ -204,6 +210,9 @@ namespace Hattmakare.Data
                    Price = 1700,
                    Quantity = 2,
                    Size = 8,
+                   Depth = 7,
+                   Length = 8,
+                   Width = 7,
                    HatTypeId = 1
                },
                new Hat
@@ -216,6 +225,9 @@ namespace Hattmakare.Data
                    Price = 2000,
                    Quantity = 1,
                    Size = 12,
+                   Depth = 6,
+                   Length = 14,
+                   Width = 10,
                    HatTypeId = 1
                },
                new Hat
@@ -228,6 +240,9 @@ namespace Hattmakare.Data
                    Price = 1300,
                    Quantity = 1,
                    Size = 11,
+                   Depth = 5,
+                   Length = 12,
+                   Width = 9,
                    HatTypeId = 1
                });
 

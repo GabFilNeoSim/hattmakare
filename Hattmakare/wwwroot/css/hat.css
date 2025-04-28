@@ -188,3 +188,16 @@
     display: flex;
     gap: 10px;
 }
+
+.material-unit {
+    background: lightgray;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+}
+
+.text-end {
+    display: flex;
+    justify-content: space-between;
+}
