@@ -4,6 +4,7 @@
     display: flex;
     flex-direction: column;
     gap: 25px;
+    position: relative;
 }
 
 #orderCompleted {
@@ -349,9 +350,30 @@
     background-color: lightgrey;
 }
 
+.order-info-discount {
+    border: none !important;
+    outline: none !important;
+    width: 100%;
+}
 
-.form-check-input:checked {
+.order-info-title.action.small {
+    width: 100px;
+}
 
+.order-info-discount::-webkit-outer-spin-button,
+.order-info-discount::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.order-info-discount[type=number] {
+    -moz-appearance: textfield;
+}
+
+.order-create {
+    position: absolute;
+    top: 0;
+    right: 0;
 }
 
 .order-delete {
