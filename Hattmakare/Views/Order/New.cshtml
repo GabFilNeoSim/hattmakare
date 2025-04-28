@@ -10,31 +10,60 @@
     }
 
 <div id="hat" class="order">
-    <div id="hatList">
-            @foreach (var hat in Model.Hats)
-            {
-            <div class="hatItem" data-name="@hat.Name" data-id="@hat.Id">
-                <img src="/assets/hats/@(hat.ImageUrl ?? "placeholder-image.png")" />
-                <h2 class="name">@hat.Name</h2>
-                <div class="details">
-                    <div class="item">
-                        <p>Storlek: </p>
-                        <p class="size">@hat.Size</p>
-                    </div>
-                    <div class="item">
-                        <p>Pris: </p>
-                        <p class="price">@hat.Price:-</p>
-                    </div>
+  <div>
+      <h2>Standardhattar</h2>
+      <div class="hatList">
+        @foreach (var hat in Model.Hats)
+        {
+        <div class="hatItem" data-name="@hat.Name" data-id="@hat.Id">
+            <img src="/assets/hats/@(hat.ImageUrl ?? "placeholder-image.png")" />
+            <h2 class="name">@hat.Name</h2>
+            <div class="details">
+                <div class="item">
+                    <p>Storlek: </p>
+                    <p class="size">@hat.Size</p>
                 </div>
-                <div class="counter">
-                    <button class="count-remove">-</button>
-                    <p class="count">0</p>
-                    <button class="count-add">+</button>
+                <div class="item">
+                    <p>Pris: </p>
+                    <p class="price">@hat.Price:-</p>
                 </div>
             </div>
-            }
-    </div>
-
+            <div class="counter">
+                <button class="count-remove">-</button>
+                <p class="count">0</p>
+                <button class="count-add">+</button>
+            </div>
+        </div>
+        }
+      </div>
+  </div>
+  <div>
+    <h2>Specialhattar</h2>
+    <div class="hatList">
+          @foreach (var hat in Model.SpecialHats)
+          {
+          <div class="hatItem" data-name="@hat.Name" data-id="@hat.Id">
+              <img src="/assets/hats/@(hat.ImageUrl ?? "placeholder-image.png")" />
+              <h2 class="name">@hat.Name</h2>
+              <div class="details">
+                  <div class="item">
+                      <p>Storlek: </p>
+                      <p class="size">@hat.Size</p>
+                  </div>
+                  <div class="item">
+                      <p>Pris: </p>
+                      <p class="price">@hat.Price:-</p>
+                  </div>
+              </div>
+              <div class="counter">
+                  <button class="count-remove">-</button>
+                  <p class="count">0</p>
+                  <button class="count-add">+</button>
+              </div>
+          </div>
+          }
+          </div>
+  </div>
 
     <div id="cartContainer">
         <div id="cart">
@@ -53,7 +82,7 @@
         <div>
             <label class="form-label fw-bold" for="CustomerId">Välj kund</label>
             <select id="CustomerId" name="CustomerId" class="form-control">
-                <option value="" disabled selected>Välj kund eller skapa ny</option>
+                <option value="0"  selected>Välj kund eller skapa ny</option>
                 @foreach (var customer in Model.Customers)
                 {
                     <option value="@customer.Value">@customer.Text</option>

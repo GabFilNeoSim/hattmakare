@@ -135,7 +135,7 @@ $(document).ready(async function () {
   cart.loadFromStorage();
   updateCart(cart.items);
   updateHatList(cart.items);
-  $('#hatList').on('click', '.count-add', async function () {
+  $('.hatList').on('click', '.count-add', async function () {
     const id = $(this).closest('.hatItem').data('id');
     await cart.addItem(id);
     updateCart(cart.items);
@@ -148,7 +148,7 @@ $(document).ready(async function () {
   //   updateHatList(cart.items);
   // });
 
-  $('#hatList').on('click', '.count-remove', function () {
+  $('.hatList').on('click', '.count-remove', function () {
     const id = $(this).closest('.hatItem').data('id');
     cart.removeItem(id);
     updateCart(cart.items);
@@ -420,7 +420,7 @@ $(document).ready(function () {
 
     const orderData = {
       Customer: {
-        Id: parseInt($('#CustomerId').val()),
+          Id: parseInt($('#CustomerId').val()) ? 0 : parseInt($('#CustomerId').val()),
           FirstName: $('#FirstName').val(),
           LastName: $('#LastName').val(),
           HeadMeasurements: parseFloat($('#HeadMeasurements').val()) || 0,
@@ -433,11 +433,10 @@ $(document).ready(function () {
           Phone: $('#Phone').val()
       },
       Hats: cart.items,
-
       StartDate: $('#StartDate').val(),
       EndDate: $('#EndDate').val(),
-      Priority: $('#Priority').is(':checked') // checkbox handling
-        };
+      Priority: $('#Priority').is(':checked')
+      };
     console.log(orderData)
   
     $.ajax({
@@ -445,14 +444,6 @@ $(document).ready(function () {
       url: '/Order/New', // it will use /Order/CreateOrder
       contentType: 'application/json',
       data: JSON.stringify(orderData),
-      success: function (response) {
-        console.log("Order created successfully!");
-        console.log(response)
-        addHatsToOrder();
-      },
-      error: function (xhr, status, error) {
-        console.error("Failed to create order:", error);
-      }
     });
   });
 });
@@ -461,9 +452,7 @@ $(document).ready(function () {
 // Populera formulär med vald kunds uppgifter
 document.querySelector('select[name="CustomerId"]').addEventListener('change', function () {
     const customerId = this.value;
- 
-
-    if (customerId) {
+    if (customerId > 0) {
         fetch(`/order/get-customer/${customerId}`)
             .then(res => res.json())
             .then(data => {
