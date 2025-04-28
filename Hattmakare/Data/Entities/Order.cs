@@ -14,9 +14,10 @@ namespace Hattmakare.Data.Entities
         [Column(TypeName = "decimal(18,2)")]
         public decimal Price { get; set; }
        
+        public int? DiscountPercentage { get; set; }
 
         // Foreign keys
-        public int? CustomerId { get; set; }
+        public int? CustomerId { get; set; }  
         public int? OrderStatusId { get; set; }
 
         // Navigation props

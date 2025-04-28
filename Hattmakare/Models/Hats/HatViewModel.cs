@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Hattmakare.Models.Order;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Hattmakare.Models.Hats;
 
@@ -17,6 +18,6 @@ public class HatViewModel
     public double Length { get; set; }
     public double Width { get; set; }
     public double Depth { get; set; }
-    public int HatTypeId { get; set; }
+    public int? HatTypeId { get; set; }
     public string HatTypeName { get; set; }
 }

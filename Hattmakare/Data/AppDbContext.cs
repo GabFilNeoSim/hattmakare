@@ -164,7 +164,7 @@ namespace Hattmakare.Data
                     Name = "Standardhatt med tillägg"
                 }, new HatType
                 {
-                    Id = 3,
+                    Id = 3, 
                     Name = "Specialhatt"
 
                 });

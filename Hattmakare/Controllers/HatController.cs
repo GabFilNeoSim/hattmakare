@@ -5,6 +5,8 @@ using Hattmakare.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Hattmakare.Services;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Hattmakare.Controllers;
 
@@ -276,4 +278,30 @@ public class HatController : Controller
 
         return View("Index", model);  
     }
+
+  [HttpGet("details")]
+  public async Task<IActionResult> getHatDetails(int id)
+  {
+    var hat = await _context.Hats
+        .FirstOrDefaultAsync(h => h.Id == id);
+    if (hat == null)
+    {
+      return NotFound();
+    }
+    var model = new HatViewModel
+    {
+      Id = hat.Id,
+      Name = hat.Name,
+      Price = hat.Price,
+      Size = hat.Size,
+      Length = hat.Length,
+      Depth = hat.Depth,
+      Width = hat.Width,
+      ImageUrl = hat.ImageUrl,
+      Comment = hat.Comment,
+      HatTypeId = hat.HatTypeId
+    };
+    return Ok(model);
+  }
+
 }

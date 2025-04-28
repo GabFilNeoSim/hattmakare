@@ -4,6 +4,7 @@
     display: flex;
     flex-direction: column;
     gap: 25px;
+    position: relative;
 }
 
 #orderCompleted {
@@ -349,9 +350,30 @@
     background-color: lightgrey;
 }
 
+.order-info-discount {
+    border: none !important;
+    outline: none !important;
+    width: 100%;
+}
 
-.form-check-input:checked {
+.order-info-title.action.small {
+    width: 100px;
+}
 
+.order-info-discount::-webkit-outer-spin-button,
+.order-info-discount::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.order-info-discount[type=number] {
+    -moz-appearance: textfield;
+}
+
+.order-create {
+    position: absolute;
+    top: 0;
+    right: 0;
 }
 
 .order-delete {
@@ -366,16 +388,25 @@
     gap: 100px;
     margin-top: 50px;
     #hatList {
-
-    #addNewHat{
-      height: 320px !important;
-      width: 200px !important;
-    }
+        display: flex;
+        flex-wrap: wrap;
+        gap:
+      40px;
 
     .hatItem{
-      height: 320px !important;
-      width: 200px !important;
-      
+        position: relative;
+        border-radius: 8px;
+        overflow:hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+        width: 300px;
+        padding: 40px 20px 10px 20px;
+        box-sizing: border-box;
+        background:rgba(255,255,255,1);
+        
       .details {
         width: 100%;
         display: flex;
@@ -391,7 +422,13 @@
           flex-direction: column;
           gap: 0px;
         }
-      }
+
+    }
+    img{
+        object-fit: contain;
+        width: 100%;
+        height: 180px;
+    }
 
       .counter {
         display: flex;
@@ -415,12 +452,74 @@
     }
   }
 
+  #orderItems{
+    box-shadow: 0px 0px 8px 0px hsla(0,0%,80%, 0.2);
+    border-radius: 8px;
+    border: 0.5px solid hsla(0,0%,60%, 0.2);
+    padding-left: 0px;
+    counter-reset: list-counter;
+    .entry{
+        border: 0.5px solid hsla(0,0%,60%, 0.2);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        counter-increment: list-counter;
+        position: relative;
+        padding-left: 2em;
+        width: 100%;
+
+        details{
+            width: 100%;
+        }
+        details summary #icon{
+            align-self: flex-end;
+            font-weight: bold;
+            transition: all ease 300ms;
+        }
+        details summary #icon::after{
+            content: "+";
+            font-size: 20px;
+        }
+        details[open] summary #icon::after{
+            content: "-";
+            font-size: 24px;
+        }
+        summary{
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            list-style: none;
+            padding: 8px;
+
+            svg{
+                height: 16px;
+                margin-left: auto;
+            }
+        }
+    }
+    .entry::before {
+        content: counter(list-counter) ".";
+        position: absolute;
+        left: 0;
+        width: 1.5em;
+        text-align: right;
+      }
+    }
+    #orderItems:not(:has(*)){
+        display: none;
+    }
+
   #cartContainer {
     position: fixed;
     right: 0px;
-    top: 60px;
-    background-color: hsl(0,0%, 95%);
-    width: 200px;
+    top: 100px;
+    padding: 8px;
+    background-color: #eff2f8;
+    z-index: 10;
+    width: 150px;
+    border-bottom-left-radius: 8px;
+    border-top-left-radius: 8px;
+    box-shadow: 0px 0px 16px 0px hsl(0,0%,20%, 0.1);
 
     .entry{
       display: flex;
@@ -437,8 +536,7 @@
         font-weight: 400;
         line-height: 10px;
       }
-
-}
+    }
     }
   }
 
