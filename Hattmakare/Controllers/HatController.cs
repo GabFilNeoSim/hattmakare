@@ -4,9 +4,7 @@ using Hattmakare.Data;
 using Hattmakare.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography;
 using Hattmakare.Services;
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 
 namespace Hattmakare.Controllers;
 
@@ -15,42 +13,54 @@ namespace Hattmakare.Controllers;
 public class HatController : Controller
 {
     private readonly AppDbContext _context;
-    private readonly ILogger<HatController> _logger;
     private readonly IImageService _imageService;
 
-    public HatController(AppDbContext context, ILogger<HatController> logger, IImageService imageService)
+    public HatController(AppDbContext context, IImageService imageService)
     {
         _context = context;
-        _logger = logger;
         _imageService = imageService;
     }
 
     [HttpGet]
     public async Task<IActionResult> Index()
     {
-        var hats = await _context.Hats
-              .Where(x => !x.IsDeleted && x.HatType.Name == "StandardHatt")
+        var model = new HatIndexViewModel
+        {
+            StandardHats = await _context.Hats
+             .Where(x => !x.IsDeleted && x.HatType.Name == "StandardHatt")
              .Select(x => new HatViewModel
              {
-            Name = x.Name,
-            Price = x.Price,
-            Quantity = x.Quantity,
-            Size = x.Size,
-            Length = x.Length,
-            Depth = x.Depth,
-            Width = x.Width,
-            ImageUrl = x.ImageUrl,
-            Id = x.Id,
-            
-            
-        }).ToListAsync();
-       
-        return View(hats);
+                 Name = x.Name,
+                 Price = x.Price,
+                 Quantity = x.Quantity,
+                 Size = x.Size,
+                 Length = x.Length,
+                 Depth = x.Depth,
+                 Width = x.Width,
+                 ImageUrl = x.ImageUrl,
+                 Id = x.Id
+             }).ToListAsync(),
+
+            SpecialHats = await _context.Hats
+             .Where(x => !x.IsDeleted && x.HatType.Name == "Specialhatt")
+             .Select(x => new HatViewModel
+             {
+                 Name = x.Name,
+                 Price = x.Price,
+                 Quantity = x.Quantity,
+                 Size = x.Size,
+                 Length = x.Length,
+                 Depth = x.Depth,
+                 Width = x.Width,
+                 ImageUrl = x.ImageUrl,
+                 Id = x.Id
+             }).ToListAsync()
+        };
+
+        return View(model);
     }
 
-
-    //[Authorize]
-    [HttpGet("AddHat")]
+    [HttpGet("add")]
     public async Task<IActionResult> Addhat()
     {
         var materials = await _context.Materials.ToListAsync();
@@ -69,20 +79,28 @@ public class HatController : Controller
         return View(viewModel);
     }
 
-    //[Authorize]
-    [HttpPost("AddHat")]
+    [HttpPost("add")]
     public async Task<IActionResult> AddHat([FromForm] AddHatViewModel newHat)
     {
-        var hat = new Hat();
-        hat.Name = newHat.Name;
-        hat.Size = newHat.Size;
-        hat.Length = newHat.Length ?? 0;
-        hat.Depth = newHat.Depth ?? 0;
-        hat.Width = newHat.Width?? 0;
-        hat.Quantity = newHat.Quantity;
-        hat.Price = newHat.Price ?? 0;
-        hat.HatMaterials = new List<HatMaterial>();
-        hat.HatTypeId = 1;
+        int hatTypeId = (int)HatTypes.StandardHat;
+        if (newHat.IsSpecial)
+        {
+            hatTypeId = (int)HatTypes.SpecialHat;
+        }
+
+        var hat = new Hat
+        {
+            Name = newHat.Name,
+            Size = newHat.Size,
+            Length = newHat.Length,
+            Depth = newHat.Depth,
+            Width = newHat.Width,
+            Quantity = newHat.Quantity,
+            Price = newHat.Price,
+            HatMaterials = new List<HatMaterial>(),
+            HatTypeId = hatTypeId,
+        };
+        
 
         var image = await _imageService.UploadImageAsync(newHat.Image);
         hat.ImageUrl = image;
@@ -105,7 +123,7 @@ public class HatController : Controller
         return RedirectToAction("Index");
     }
 
-    [HttpGet("EditHat/{hid}")]
+    [HttpGet("{hid}/edit")]
     public async Task<IActionResult> EditHat(int Hid)
     {
         var hat = await _context.Hats
@@ -133,15 +151,22 @@ public class HatController : Controller
             Price = m.Price
         }).ToListAsync();
 
+        bool isSpecial = false;
+        if (hat.HatTypeId == (int)HatTypes.SpecialHat)
+        {
+            isSpecial = true;
+        }
+
         var model = new EditHatViewModel
         {
             Name = hat.Name,
             Price = hat.Price,
-            Size = hat.Size,
+            Size = (int)hat.Size,
             Length = hat.Length,
             Depth = hat.Depth,
             Width = hat.Width,
-            Quantity = hat.Quantity,
+            Quantity = (int)hat.Quantity,
+            IsSpecial = isSpecial,
             SelectedMaterials = selectedMaterials,
             AvailableMaterials = allMaterials
         };
@@ -149,7 +174,7 @@ public class HatController : Controller
         return View(model);
     }
 
-    [HttpPost("EditHat/{hid}")]
+    [HttpPost("{hid}/edit")]
     public async Task<IActionResult> EditHat(EditHatViewModel selectedHat)
     {
         var hat = await _context.Hats
@@ -168,6 +193,13 @@ public class HatController : Controller
         hat.Depth = selectedHat.Depth;
         hat.Width = selectedHat.Width;
         hat.Quantity = selectedHat.Quantity;
+
+        int hatTypeId = (int)HatTypes.StandardHat;
+        if (selectedHat.IsSpecial)
+        {
+            hatTypeId = (int)HatTypes.SpecialHat;
+        }
+        hat.HatTypeId = hatTypeId;
 
         if (selectedHat.Image != null)
         {
@@ -192,10 +224,9 @@ public class HatController : Controller
         return RedirectToAction("Index");
     }
 
-    [HttpPost("remove/{hid}")]
+    [HttpPost("{hid}/remove")]
     public async Task<IActionResult> RemoveHat(int hid)
     {
-        _logger.LogWarning("Failed to find: {a}", hid);
         var hat = await _context.Hats.FirstOrDefaultAsync(x => x.Id == hid);
         if (hat is null)
         {
@@ -213,7 +244,6 @@ public class HatController : Controller
         
         await _context.SaveChangesAsync();
         return RedirectToAction("Index");
-        //throw new NotImplementedException();
     }
 
     [HttpGet("SearchHat")]
@@ -222,11 +252,8 @@ public class HatController : Controller
         
         var allHats = _context.Hats.AsEnumerable();  
 
-       
         allHats = allHats.Where(h => !h.IsDeleted);
 
-
-       
         if (!string.IsNullOrEmpty(searchTerm))
         {
             allHats = allHats.Where(h => h.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase));
@@ -247,5 +274,4 @@ public class HatController : Controller
 
         return View("Index", model);  
     }
-
 }

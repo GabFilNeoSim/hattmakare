@@ -1,11 +1,11 @@
-$(".editHat").on("click", function (e) {
-    console.log("Clicked edit")
-    console.log($(this).data("item"))
-})
+﻿$(document).on("click", "#show-specials", function (e) {
+    const list = $("#special-list.hatList");
+    const btn = $("#show-specials");
 
-$(".deleteHat").on("click", function (e) {
-    console.log("Clicked delete")
-    console.log($(this).data("text"))
-    e.preventDefault()
-
-})
+    if (list.hasClass("show")) {
+        btn.html("Dölj specialhattar");
+    } else {
+        btn.html("Visa specialhattar");
+    }
+    list.toggleClass("show");
+});
