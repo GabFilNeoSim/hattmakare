@@ -4,6 +4,7 @@ using Hattmakare.Data;
 using Hattmakare.Models.Material;
 using Microsoft.EntityFrameworkCore;
 using Hattmakare.Data.Entities;
+using Hattmakare.Models.Hats;
 
 namespace Hattmakare.Controllers;
 
@@ -146,4 +147,43 @@ public class MaterialController : Controller
 
         return RedirectToAction(nameof(Index));
     }
+
+  [HttpGet("allMaterials")]
+  public async Task<IActionResult> getAllMaterials()
+  {
+    var materials = await _context.Materials
+        .Select(m => new MaterialQuantityViewModel
+        {
+          MaterialId = m.Id,
+          Name = m.Name,
+          Unit = m.Unit,
+          Price = m.Price,
+        }).ToListAsync();
+    if (materials == null)
+    {
+      return NotFound();
+    }
+    return Ok(materials);
+  }
+
+  [HttpGet("hatMaterials")]
+  public async Task<IActionResult> getHatMaterials(int hatId)
+  {
+    var materials = await _context.Materials
+        .Include(m => m.HatMaterials)
+        .Where(m => m.HatMaterials.Any(hm => hm.HatId == hatId))
+        .Select(m => new MaterialQuantityViewModel
+        {
+          MaterialId = m.Id,
+          Name = m.Name,
+          Unit = m.Unit,
+          Price = m.Price,
+          Quantity = m.HatMaterials.FirstOrDefault(hm => hm.HatId == hatId).Quantity
+        }).ToListAsync();
+    if (materials == null)
+    {
+      return NotFound();
+    }
+    return Ok(materials);
+  }
 }

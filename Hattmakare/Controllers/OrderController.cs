@@ -12,7 +12,7 @@ namespace Hattmakare.Controllers;
 
 [Authorize]
 [Route("order")]
-public class OrderController : Controller 
+public class OrderController : Controller
 {
     private readonly AppDbContext _context;
     private readonly IImageService _imageService;
@@ -24,7 +24,7 @@ public class OrderController : Controller
         _imageService = imageService;
         _logger = logger;
     }
-   
+
     [HttpGet("materialorder")]
     public async Task<IActionResult> MaterialOrder(int orderId)
     {
@@ -38,7 +38,7 @@ public class OrderController : Controller
         if (order == null)
         {
             _logger.LogWarning("Ingen order hittades med ID {OrderId}", orderId);
-            
+
         }
 
         var allHatMaterials = order.OrderHats
@@ -63,15 +63,15 @@ public class OrderController : Controller
 
         var order = await _context.Orders
             .Include(o => o.Customer)
-            .ThenInclude(c => c.Address) 
+            .ThenInclude(c => c.Address)
             .FirstOrDefaultAsync(o => o.Id == orderId);
 
         decimal totalPrice = order.OrderHats
-        .Where(oh => oh.Hat is Hat) 
+        .Where(oh => oh.Hat is Hat)
         .Sum(oh => ((Hat)oh.Hat).Price);
 
         if (order == null)
-        return Content($"No order found with ID {orderId}");
+            return Content($"No order found with ID {orderId}");
 
         var model = new WayBilViewModel
         {
@@ -281,7 +281,7 @@ public class OrderController : Controller
 
         TempData["NotifyType"] = "success";
         TempData["NotifyMessage"] = "Ordern togs bort.";
-         
+
         return RedirectToAction("Index");
     }
 
@@ -299,19 +299,28 @@ public class OrderController : Controller
                     Price = x.Price,
                     Size = x.Size,
                     Comment = x.Comment,
-                    ImageUrl = x.ImageUrl
-                })
-                .ToListAsync(),
+                    ImageUrl = x.ImageUrl,
+                    Length = x.Length,
+                    Width = x.Width,
+                    Depth = x.Depth,
+                }
 
+        ).ToListAsync(),
             Customers = await _context.Customers
-                .Where(c => c.IsDeleted == false)
-                .OrderBy(c => c.FirstName)
-                .Select(c => new SelectListItem
-                {
-                    Value = c.Id.ToString(),
-                    Text = c.FirstName + " " + c.LastName
-                })
-                .ToListAsync()
+        .Select(c => new SelectListItem
+        {
+            Value = c.Id.ToString(),
+            Text = c.FirstName + " " + c.LastName
+        }).ToListAsync(),
+            AvailableMaterials = await _context.Materials
+        .Select(m => new MaterialQuantityViewModel
+        {
+            MaterialId = m.Id,
+            Name = m.Name,
+            Unit = m.Unit,
+            Price = m.Price,
+            Quantity = 0
+        }).ToListAsync()
         };
 
         return View(model);
@@ -349,15 +358,14 @@ public class OrderController : Controller
     }
 
     [HttpPost("new")]
-    public async Task<IActionResult> CreateOrder(NewOrderIndexViewModel viewModel)
+    public async Task<IActionResult> CreateOrder([FromBody] AddOrderViewModel model)
     {
-        Customer customer;
 
-        if (viewModel.CustomerId > 0)
+        if (model.Customer.Id > 0)
         {
-            customer = await _context.Customers
+            var customer = await _context.Customers
                 .Include(c => c.Address)
-                .FirstOrDefaultAsync(c => c.Id == viewModel.CustomerId);
+                .FirstOrDefaultAsync(c => c.Id == model.Customer.Id);
 
             if (customer == null)
             {
@@ -366,52 +374,115 @@ public class OrderController : Controller
                 return RedirectToAction("New");
             }
 
+            customer.FirstName = model.Customer.FirstName;
+            customer.LastName = model.Customer.LastName;
+            customer.HeadMeasurements = model.Customer.HeadMeasurements;
+            customer.Email = model.Customer.Email;
+            customer.PhoneNumber = model.Customer.Phone;
+
+            customer.Address.BillingAddress = model.Customer.BillingAddress;
+            customer.Address.DeliveryAddress = model.Customer.DeliveryAddress;
+            customer.Address.City = model.Customer.City;
+            customer.Address.PostalCode = model.Customer.PostalCode;
+            customer.Address.Country = model.Customer.Country;
+
+            await _context.SaveChangesAsync();
         }
         else
         {
-
             var address = new Address
             {
-                BillingAddress = viewModel.AddCustomer.BillingAddress,
-                DeliveryAddress = viewModel.AddCustomer.DeliveryAddress,
-                City = viewModel.AddCustomer.City,
-                PostalCode = viewModel.AddCustomer.PostalCode,
-                Country = viewModel.AddCustomer.Country
+                BillingAddress = model.Customer.BillingAddress,
+                DeliveryAddress = model.Customer.DeliveryAddress,
+                City = model.Customer.City,
+                PostalCode = model.Customer.PostalCode,
+                Country = model.Customer.Country
             };
 
-            customer = new Customer
+            var newCustomer = new Customer
             {
-                FirstName = viewModel.AddCustomer.FirstName,
-                LastName = viewModel.AddCustomer.LastName,
-                HeadMeasurements = viewModel.AddCustomer.HeadMeasurements,
-                Email = viewModel.AddCustomer.Email,
-                PhoneNumber = viewModel.AddCustomer.Phone,
-
+                FirstName = model.Customer.FirstName,
+                LastName = model.Customer.LastName,
+                HeadMeasurements = model.Customer.HeadMeasurements,
+                Email = model.Customer.Email,
+                PhoneNumber = model.Customer.Phone,
+                Address = address,
             };
 
-            _context.Customers.Add(customer);
+            _context.Customers.Add(newCustomer);
             await _context.SaveChangesAsync();
+            model.Customer.Id = newCustomer.Id;
         }
 
         var order = new Order
         {
-            Priority = viewModel.NewOrders.Priority,
-            StartDate = viewModel.NewOrders.StartDate,
-            EndDate = viewModel.NewOrders.EndDate,
-            Price = viewModel.NewOrders.Price,
-            CustomerId = customer.Id
-        };
-
-        var orderStatus = new OrderStatus
-        {
-            Id = viewModel.OrderStatusId,
+            Priority = model.Priority,
+            StartDate = model.StartDate,
+            EndDate = model.EndDate,
+            Price = 0,
+            CustomerId = model.Customer.Id,
+            OrderStatusId = 1,
+            OrderHats = new List<OrderHat>()
         };
 
         _context.Orders.Add(order);
         await _context.SaveChangesAsync();
 
-        return RedirectToAction("Index");
-        
-    }
+        foreach (var hat in model.Hats)
+        {
+            switch (hat.HatTypeId)
+            {
+                case 1:
+                    for (int i = 0; i < hat.Quantity; i++)
+                    {
+                        var orderHat = new OrderHat
+                        {
+                            OrderId = order.Id,
+                            HatId = hat.Id
+                        };
+                        //Minska saldo med hattens quantity
+                        order.OrderHats.Add(orderHat);
 
+                    }
+                    break;
+                default:
+                    for (int i = 0; i < hat.Quantity; i++)
+                    {
+                        var newHat = new Hat
+                        {
+                            Name = hat.Name,
+                            Size = hat.Size,
+                            Length = hat.Length,
+                            Width = hat.Width,
+                            Depth = hat.Depth,
+                            Price = hat.Price,
+                            Comment = hat.Comment,
+                            ImageUrl = hat.ImageUrl,
+                            HatTypeId = hat.HatTypeId,
+                            HatMaterials = hat.Materials.Select(x => new HatMaterial
+                            {
+                                Quantity = x.Quantity,
+                                MaterialId = x.MaterialId,
+                            }).ToList(),
+                        };
+
+                        _context.Hats.Add(newHat);
+                        await _context.SaveChangesAsync();
+
+                        var orderHat = new OrderHat
+                        {
+                            OrderId = order.Id,
+                            HatId = newHat.Id
+                        };
+
+                        order.OrderHats.Add(orderHat);
+                    }
+                    break;
+            }
+        }
+
+        await _context.SaveChangesAsync();
+
+        return Ok(order);
+    }
 }

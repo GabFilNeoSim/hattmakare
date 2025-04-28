@@ -1,110 +1,341 @@
-﻿const cart = {};
+﻿class CartHatItem {
+  constructor({id, name, size, length, width, depth, price, quantity, comment, imageUrl, hatTypeId, materials = []}) {
+      this.id = id;
+      this.name = name;
+      this.size = size;
+      this.length = length;
+      this.width = width;
+      this.depth = depth;
+      this.price = price;
+      this.quantity = quantity;
+      this.comment = comment;
+      this.imageUrl = imageUrl,
+      this.hatTypeId = hatTypeId,
+      this.materials = materials.map(m => new HatMaterial(m.materialId, m.quantity, m.name, m.price, m.unit));
+  }
 
-$(document).ready(function () {
-  let obj = localStorage.getItem("cart") ? JSON.parse(localStorage.getItem("cart")) : {}; // Load cart from local storage")
-  Object.entries(obj).forEach(([key, value]) => {
-    cart[key] = value;
+  static async fromApi(id) {
+    const [details, materials] = await Promise.all([
+      $.get('/hats/details', { id }),
+      $.get('/materials/hatMaterials', { hatId: id })
+    ]);
+
+    const item = new CartHatItem({
+      id: id,
+      name: details.name,
+      size: details.size,
+      length: details.length,
+      width: details.width,
+      depth: details.depth,
+      price: details.price,
+      quantity: 1,
+      comment: details.comment,
+      imageUrl: details.imageUrl,
+      hatTypeId: details.hatTypeId,
+    });
+
+    item.materials = materials.map(m => new HatMaterial(m.materialId, m.quantity, m.name, m.price, m.unit));
+    return item;
+  }
+
+  addMaterial(hatMaterial){
+    this.materials.push(hatMaterial)
+  }
+
+  removeMaterial(materialId){
+    this.materials = this.materials.filter(x => x.materialId != materialId);
+  }
+} 
+
+class HatMaterial {
+  constructor(materialId, quantity, name, price, unit){
+    this.materialId = materialId,
+    this.quantity = quantity
+    this.name = name,
+    this.price = price
+    this.unit = unit
+  }
+
+  changeQuantity(quantity){
+    this.quantity = quantity;
+  }
+}
+
+class Cart {
+  constructor() {
+      this.items = []
+  }
+
+  async addItem(itemId) {
+    let item = this.items.find(x => x.id == itemId);
+    if (item) {
+      item.quantity += 1;
+    } else {
+      item = await CartHatItem.fromApi(itemId);
+      this.items.push(item)
+    }
+    this.syncToStorage();
+  }
+
+  removeItem(itemId) {
+    let item = this.items.find(x => x.id == itemId);
+    if (item) {
+      if (item.quantity > 1) item.quantity -= 1;
+      else{
+        this.items = this.items.filter(x => x.id !== itemId);
+      }
+    }
+    this.syncToStorage();
+  }
+
+  getItem(id) {
+    return this.items.find(x => x.id == id);
+  }
+
+  syncToStorage() {
+    const plain = this.items.map(i => ({ ...i }));
+    localStorage.setItem('cart', JSON.stringify(plain));
+  }
+
+  loadFromStorage() {
+    const saved = JSON.parse(localStorage.getItem('cart') || '{}');
+    console.log( Object.values(saved).map(data => new CartHatItem(data)))
+    if (typeof saved === 'object' && saved !== null) {
+      this.items = Object.values(saved).map(data => new CartHatItem(data));
+    } else {
+      this.items = [];
+    }
+  }
+
+  total() {
+    return this.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  }
+}
+
+const cart = new Cart();
+let availableMaterials = [];
+let selectedMaterials = [];
+
+async function loadAvailableMaterials() {
+  try {
+    const response = await fetch('/Materials/allMaterials');
+    if (!response.ok) {
+      throw new Error('Failed to fetch materials');
+    }
+    const data = await response.json();
+    availableMaterials = data; // Save the array of materials here
+    console.log('Loaded materials:', availableMaterials);
+  } catch (error) {
+    console.error('Error loading materials:', error);
+  }
+}
+
+$(document).ready(async function () {
+  await loadAvailableMaterials();
+  cart.loadFromStorage();
+  updateCart(cart.items);
+  updateHatList(cart.items);
+  $('#hatList').on('click', '.count-add', async function () {
+    const id = $(this).closest('.hatItem').data('id');
+    await cart.addItem(id);
+    updateCart(cart.items);
+    updateHatList(cart.items);
+  });
+  // $('#hatList').on('click', '#special-count-add', async function () {
+  //   const id = $(this).closest('.hatItem').data('id');
+  //   await cart.addItem(id);
+  //   updateCart(cart.items);
+  //   updateHatList(cart.items);
+  // });
+
+  $('#hatList').on('click', '.count-remove', function () {
+    const id = $(this).closest('.hatItem').data('id');
+    cart.removeItem(id);
+    updateCart(cart.items);
+    updateHatList(cart.items);
+  });
+  
+  $(document).on("input", ".material-quantity", function (e) {
+    const materialId = $(this).attr('data-material-id');
+    const itemId = $(this).attr('data-item-id');
+    const item = cart.getItem(itemId);
+    const material = item.materials.find(m => m.materialId == materialId);
+    const val = parseInt($(this).val(), 10);
+    // Find the item and the material inside the item
+    if (material) {
+      if (item.hatTypeId != 3) item.hatTypeId = 2
+      material.changeQuantity(val)
+      cart.syncToStorage();
+      updateCart(cart.items);
+    }
   })
-  updateCart();
-})
-
-document.addEventListener("DOMContentLoaded", function () {
-    const createBtn = document.getElementById("createOrderBtn");
-    const popup = document.getElementById("orderCompleted");
-    const okBtn = document.getElementById("confirm-yes");
-
-    createBtn.addEventListener("click", function (e) {
-        e.preventDefault(); // hindra form från att skickas direkt
-        popup.style.display = "flex"; // visa popup
-    });
-
-    $(document).on("click", "#confirm-yes", function (e) {
-        e.preventDefault()
-        window.location.href = "/order";
-    });
-});
-
-
-document.addEventListener("DOMContentLoaded", function () {
-    const orderForm = document.querySelector('#settings form');
-
-    if (orderForm) {
-        orderForm.addEventListener('submit', function (e) {
-            alert("Order är lagd");
-        });
-    }
-});
-
-
-document.querySelectorAll('.hatItem').forEach(hatItem => {
-  const plusBtn = hatItem.querySelector('.count-add');
-  const minusBtn = hatItem.querySelector('.count-remove');
-  const counterElement = hatItem.querySelector('.count');
-  const nameElement = hatItem.querySelector('.name');
-  const priceElement = hatItem.querySelector('.price');
-  const sizeElement = hatItem.querySelector('.size');
-  const id = hatItem.getAttribute('data-id');
-
-  plusBtn.addEventListener('click', () => {
-    cart[id] =
-    {
-      Name: nameElement.textContent,
-      Price: parseInt(priceElement.textContent),
-      Size: parseInt(sizeElement.textContent),
-      Quantity: (cart[id]?.Quantity || 0) + 1
-
-    }
-    updateCart();
-    updateHatList();
+  $(document).on("click", ".remove-material", function (e) {
+      const materialId = $(this).attr('data-material-id');
+      const itemId = $(this).attr('data-item-id');
+      // Find the item and the material inside the item
+      const item = cart.getItem(itemId);
+      if (item) {
+        $(this).closest('.material-entry').remove();
+        item.removeMaterial(materialId)
+        if (item.hatTypeId != 3) item.hatTypeId = 2
+        cart.syncToStorage();
+        updateCart(cart.items);
+      }
   });
-
-  minusBtn.addEventListener('click', () => {
-    if (cart[id].Quantity > 0) {
-      cart[id].Quantity -= 1;
-      updateCart();
-      updateHatList();
+  $(document).on("click", ".add-material-btn", function (e) {
+  
+    const $parent = $(this).closest(".entry");
+    const itemId = $(this).data('item-id');
+    const $dropdown = $(this).siblings('.material-dropdown');
+    const $qtyInput = $(this).siblings('.material-add-quantity');
+    
+    const selectedMaterialId = $dropdown.val();
+    const quantity = parseInt($qtyInput.val(), 10);
+    
+    if (!selectedMaterialId || isNaN(quantity) || quantity <= 0) {
+      alert("Välj ett material och ange en korrekt mängd.");
+      return;
     }
-  });
-});
+  
+    const selectedMaterial = availableMaterials.find(m => m.materialId == selectedMaterialId);
+    if (!selectedMaterial) {
+      alert("Material hittades inte.");
+      return;
+    }
+  
+    const item = cart.getItem(itemId);
+    if (!item) {
+      alert("Objektet hittades inte.");
+      return;
+    }
+    const material = new HatMaterial(
+      selectedMaterialId, 
+      quantity, 
+      selectedMaterial.name, 
+      selectedMaterial.price, 
+      selectedMaterial.unit
+    )
+    // Add the material to the item's material list
+    item.addMaterial(material)
+    if (item.hatTypeId != 3) item.hatTypeId = 2
+  
+    // Save to localStorage
+    cart.syncToStorage();
 
-function updateCart() {
-  localStorage.setItem("cart", JSON.stringify(cart)); // Save cart to local storage
-  const cartEl = $("#cart")
-  cartEl.empty(); // Clear previous entries
-  Object.entries(cart).forEach(([key, value]) => {
-    let html = ""
-    if (value.Quantity > 0) {
-      html = `
-      <div class="entry">
-        <p>${value.Quantity} x  ${value.Name}</p>
-        <p class="size"> Storlek: ${value.Size} </p>
+    //Update UI
+    const materialHtml = `
+      <div class="material-entry" data-material-id="${selectedMaterialId}">
+        <p>Material: ${selectedMaterial.name}</p>
+        <input 
+          type="number" 
+          value="${quantity}" 
+          class="material-quantity" 
+          data-material-id="${selectedMaterialId}" 
+          data-item-id="${itemId}" 
+          min="0"
+        />
+        <button class="remove-material" data-material-id="${selectedMaterialId}" data-item-id="${itemId}">Remove</button>
       </div>
-      `;
-    }
-
-    cartEl.append(html);
+    `;
+    $parent.find(".settings").append(materialHtml);
+  
+    // Re-render cart and list
+    updateCart(cart.items);
   });
 
-  // Update Quantity texts
+function updateCart(cartItems) {
+  const cartEl = $("#cart");
+  cartEl.empty();
+
+  cartItems.forEach(item => {
+    if (item.quantity > 0) {
+      const html = `
+        <div class="entry">
+          <p>${item.quantity} x ${item.name}</p>
+          <p class="size">Storlek: ${item.size}</p>
+        </div>
+      `;
+      cartEl.append(html);
+    }
+  });
+
   document.querySelectorAll('.hatItem').forEach(hatItem => {
     const counterElement = hatItem.querySelector('.count');
     const id = hatItem.getAttribute('data-id');
-    counterElement.textContent = cart[id].Quantity;
-  })
+    const cartItem = cart.getItem(id)
+    if (cartItem) {
+      counterElement.textContent = cartItem.quantity;
+    }
+    else{
+      counterElement.textContent = 0;
+    }
+  });
 
-  const priceEl = $("#total")
-  const total = calculateTotal()
-  priceEl.text("Total: " + total + ":-")
+  const total = calculateTotal(cartItems);
+  $("#total").text("Total: " + total + ":-");
+
+  if (cartItems.length === 0) {
+    $("#cartContainer").hide();
+  } else {
+    $("#cartContainer").show();
+  }
 }
 
-function updateHatList() {
-  console.log("UpdatehatList")
-  //Loop through each hat in the order
-  Object.entries(cart).forEach(([k1, value]) => {
-    console.log(value.Name)
-    for (let i = 0; i < value.Quantity; i++){
-      console.log(i + " " + value.Name)
-    }
+
+function updateHatList(cartItems) {
+  const itemsEl = $("#orderItems");
+  itemsEl.empty();
+
+  cartItems.forEach(item => {
+    const html = `
+        <li class="entry" id="${item.id}">
+          <details>
+            <summary>
+              <p>${item.name}</p>
+              <p>Storlek: ${item.size}</p>
+              <p>Längd: ${item.length}</p>
+              <p>Bredd: ${item.width}</p>
+              <p>Djup: ${item.depth}</p>
+              <p> Antal: ${item.quantity} </p>
+              <svg id="remove" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                <path d="..."/>
+              </svg>
+              <p id="icon"></p>
+            </summary>
+
+            <div class="settings">
+            ${item.materials.map(material => `
+              <div class="material-entry" data-material-id="${material.materialId}">
+                <p>Material: ${material.name}</p>
+                <input 
+                  type="number" 
+                  value="${material.quantity}" 
+                  class="material-quantity" 
+                  data-material-id="${material.materialId}" 
+                  data-item-id="${item.id}" 
+                  min="0"
+                />
+                <button class="remove-material" data-material-id="${material.materialId}" data-item-id="${item.id}">Remove</button>
+              </div>
+            `).join('')}
+            </div>
+
+            <div class="add-material-form">
+              <select class="material-dropdown" data-item-id="${item.id}">
+                <option value="">-- Välj material --</option>
+                ${availableMaterials.map(mat => `
+                  <option value="${mat.materialId}" data-name="${mat.name}" data-unit="${mat.unit}">
+                    ${mat.name} (${mat.unit})
+                  </option>
+                `).join('')}
+              </select>
+              <input type="number" class="material-add-quantity" placeholder="Mängd" min="1" data-item-id="${item.id}" />
+              <button class="add-material-btn" data-item-id="${item.id}">Lägg till material</button>
+            </div>
+          </details>
+        </li>
+      `;
+      itemsEl.append(html);
   });
 }
 
@@ -125,66 +356,109 @@ $(document).on('click', '#order-hat-all', function (e) {
 $(document).ready(function () {
   console.log("document ready");
   
-  $("#SpecialHat").on("click", function (e) {
-    console.log("Submitted form");
-    e.preventDefault();
+//   $("#specialHat").on("click", function (e) {
+//     console.log("Submitted form");
+//     e.preventDefault();
 
-    let hat = {
-      Name: $("#Name").val(),
-      Price: parseFloat($("#Price").val()),
-      Quantity: parseInt($("#Quantity").val()),
-      Size: parseInt($("#Size").val()),
-      Length: parseFloat($("#Length").val()),
-      Depth: parseFloat($("#Depth").val()),
-      Width: parseFloat($("#Width").val()),
-      Comment: $("#Comment").val()
-    }
+//     let hat = {
+//       Name: $("#Name").val(),
+//       Price: parseFloat($("#Price").val()),
+//       Quantity: parseInt($("#Quantity").val()),
+//       Size: parseInt($("#Size").val()),
+//       Length: parseFloat($("#Length").val()),
+//       Depth: parseFloat($("#Depth").val()),
+//       Width: parseFloat($("#Width").val()),
+//       Comment: $("#Comment").val()
+//     }
 
-    const formData = new FormData();
+//     const formData = new FormData();
 
-    formData.append("Name", hat.Name);
-    formData.append("Price", hat.Price);
-    formData.append("Quantity", hat.Quantity);
-    formData.append("Size", hat.Size);
-    formData.append("Length", hat.Length);
-    formData.append("Depth", hat.Depth);
-    formData.append("Width", hat.Width);
-    formData.append("Comment", hat.Comment);
+//     formData.append("Name", hat.Name);
+//     formData.append("Price", hat.Price);
+//     formData.append("Quantity", hat.Quantity);
+//     formData.append("Size", hat.Size);
+//     formData.append("Length", hat.Length);
+//     formData.append("Depth", hat.Depth);
+//     formData.append("Width", hat.Width);
+//     formData.append("Comment", hat.Comment);
 
-    const imageInput = $("#Image")[0];
-    if (imageInput && imageInput.files.length > 0) {
-      formData.append("Image", imageInput.files[0]);
-    }
-    console.log(formData)
+//     const imageInput = $("#Image")[0];
+//     if (imageInput && imageInput.files.length > 0) {
+//       formData.append("Image", imageInput.files[0]);
+//     }
+//     console.log(formData)
+//     $.ajax({
+//       url: '/Order/AddSpecialHat',
+//       method: 'POST',
+//       processData: false,
+//       contentType: false,
+//       data: formData,
+//       success: function (hatId) {
+//         console.log("Post completed hatId: " + hatId);
+//         const temp = {
+//           Name: hat.Name,
+//           Price: hat.Price,
+//           Quantity: hat.Quantity,
+//           Size: hat.Size,
+//           Length: hat.Length,
+//           Depth: hat.Depth,
+//           Width: hat.Width,
+//           Comment: hat.Comment
+//         }
+//         cart[hatId] = temp
+//         updateCart()
+//         updateHatList()
+//       },
+//       error: function (xhr, status, error) {
+//         console.error("POST error", status, error, xhr.responseText);
+//       }
+//     });
+//   });
+
+  $('#orderForm').on('submit', function (e) {
+    e.preventDefault(); // prevent normal submit
+
+    const orderData = {
+      Customer: {
+        Id: parseInt($('#CustomerId').val()),
+          FirstName: $('#FirstName').val(),
+          LastName: $('#LastName').val(),
+          HeadMeasurements: parseFloat($('#HeadMeasurements').val()) || 0,
+          BillingAddress: $('#BillingAddress').val(),
+          DeliveryAddress: $('#DeliveryAddress').val(),
+          City: $('#City').val(),
+          PostalCode: $('#PostalCode').val(),
+          Country: $('#Country').val(),
+          Email: $('#Email').val(),
+          Phone: $('#Phone').val()
+      },
+      Hats: cart.items,
+
+      StartDate: $('#StartDate').val(),
+      EndDate: $('#EndDate').val(),
+      Priority: $('#Priority').is(':checked') // checkbox handling
+        };
+    console.log(orderData)
+  
     $.ajax({
-      url: '/Order/AddSpecialHat',
-      method: 'POST',
-      processData: false,
-      contentType: false,
-      data: formData,
-      success: function (hatId) {
-        console.log("Post completed hatId: " + hatId);
-        const temp = {
-          Name: hat.Name,
-          Price: hat.Price,
-          Quantity: hat.Quantity,
-          Size: hat.Size,
-          Length: hat.Length,
-          Depth: hat.Depth,
-          Width: hat.Width,
-          Comment: hat.Comment
-        }
-        cart[hatId] = temp
-        updateCartItems()
+      type: "POST",
+      url: '/Order/New', // it will use /Order/CreateOrder
+      contentType: 'application/json',
+      data: JSON.stringify(orderData),
+      success: function (response) {
+        console.log("Order created successfully!");
+        console.log(response)
+        addHatsToOrder();
       },
       error: function (xhr, status, error) {
-        console.error("POST error", status, error, xhr.responseText);
+        console.error("Failed to create order:", error);
       }
     });
   });
 });
+});
 
-
+// Populera formulär med vald kunds uppgifter
 document.querySelector('select[name="CustomerId"]').addEventListener('change', function () {
     const customerId = this.value;
  
