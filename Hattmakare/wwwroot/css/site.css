@@ -211,3 +211,9 @@ tbody, td, tfoot, th, thead, tr {
     color: rgb(65, 65, 65);
 
 }
+
+@media print {
+    .no-print {
+        display: none !important;
+    }
+}

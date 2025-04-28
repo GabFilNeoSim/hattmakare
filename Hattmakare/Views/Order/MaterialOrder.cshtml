@@ -12,32 +12,33 @@
             <thead class="table-light">
                 <tr>
                     <th>Namn</th>
-                    <th>Enhet</th>
                     <th>Pris</th>
-                    <th>Leverantör</th>
-                    <th>Dekoration</th>
                     <th>Antal</th>
+                    <th>Enhet</th>
+                    <th>Dekoration</th>
+                    <th>Leverantör</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var material in Model.HatMaterials)
                 {
+                    var materialprice = @material.Material.Price * (decimal)@material.Quantity;
                     <tr>
                         <td>@material.Material.Name</td>
+                        <td>@materialprice.ToString("C")</td>
+                        <td>@material.Quantity</td>
                         <td>@material.Material.Unit</td>
-                        <td>@material.Material.Price.ToString("C")</td>
-                        <td>@material.Material.Supplier</td>
                         <td>
                             @if (material.Material.IsDecoration)
                             {
-                                <span class="badge bg-info">Ja</span>
+                                <span>Ja</span>
                             }
                             else
                             {
-                                <span class="badge bg-secondary">Nej</span>
+                                <span>Nej</span>
                             }
                         </td>
-                        <td>@material.Quantity</td>
+                        <td>@material.Material.Supplier</td>
                     </tr>
                 }
             </tbody>
@@ -50,6 +51,6 @@
         </div>
     }
 
-    <a href="@Url.Action("Index", "Order")" class="btn btn-secondary mt-4">Tillbaka till orderöversikt</a> <br />
-    <button class="btn btn-secondary mt-3" onclick="window.print()">Skriv ut materiallista</button>
+    <a asp-action="Index" asp-controller="Order" class="btn btn-secondary mt-4 no-print">Tillbaka till orderöversikt</a> <br />
+    <button class="btn btn-secondary mt-3 no-print" onclick="window.print()">Skriv ut materiallista</button>
 </div>

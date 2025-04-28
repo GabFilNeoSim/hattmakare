@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hattmakare.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250428152559_init")]
+    [Migration("20250428194501_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -69,11 +69,38 @@ namespace Hattmakare.Migrations
                         new
                         {
                             Id = 1,
-                            BillingAddress = "Adress 1",
+                            BillingAddress = "Blåbärsstigen 99",
                             City = "Örebro",
                             Country = "Sverige",
-                            DeliveryAddress = "Adress 2",
-                            PostalCode = "12345"
+                            DeliveryAddress = "Solrosvägen 88",
+                            PostalCode = "11322"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            BillingAddress = "Krickelinsväg 101",
+                            City = "Stockholm",
+                            Country = "Sverige",
+                            DeliveryAddress = "Snöflingegatan 202",
+                            PostalCode = "55667"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            BillingAddress = "Månstrålevägen 45",
+                            City = "Umeå",
+                            Country = "Sverige",
+                            DeliveryAddress = "Regnbågsgatan 12",
+                            PostalCode = "22433"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            BillingAddress = "Silverbäcksvägen 77",
+                            City = "Paris",
+                            Country = "Frankrike",
+                            DeliveryAddress = "Älvdalsvägen 34",
+                            PostalCode = "77889"
                         });
                 });
 
@@ -125,23 +152,45 @@ namespace Hattmakare.Migrations
                         {
                             Id = 1,
                             AddressId = 1,
-                            Email = "testmejl",
+                            Email = "olof.svensson@epost.se",
                             FirstName = "Olof",
                             HeadMeasurements = 0.0,
                             IsDeleted = false,
                             LastName = "Svensson",
-                            PhoneNumber = "1234567890"
+                            PhoneNumber = "0723338282"
                         },
                         new
                         {
                             Id = 2,
-                            AddressId = 1,
-                            Email = "testmejl",
+                            AddressId = 2,
+                            Email = "jan.jansson@epost.se",
                             FirstName = "Jan",
                             HeadMeasurements = 0.0,
                             IsDeleted = false,
                             LastName = "Jansson",
-                            PhoneNumber = "1234567890"
+                            PhoneNumber = "0723557781"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AddressId = 3,
+                            Email = "julia.smith@epost.se",
+                            FirstName = "Julia",
+                            HeadMeasurements = 0.0,
+                            IsDeleted = false,
+                            LastName = "Smith",
+                            PhoneNumber = "0723219981"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            AddressId = 4,
+                            Email = "kajsa.fisk@epost.se",
+                            FirstName = "Kajsa",
+                            HeadMeasurements = 0.0,
+                            IsDeleted = false,
+                            LastName = "Fisk",
+                            PhoneNumber = "0733447785"
                         });
                 });
 
@@ -198,29 +247,77 @@ namespace Hattmakare.Migrations
                         new
                         {
                             Id = 1,
-                            Comment = "Testcomment",
-                            Depth = 0.0,
+                            Comment = "En vit, rund mössa med svart skärm och en kokard framtill, traditionellt buren vid svenska studentexamina",
+                            Depth = 5.0,
                             HatTypeId = 1,
+                            ImageUrl = "/assets/hats/Student.jpg",
                             IsDeleted = false,
-                            Length = 0.0,
+                            Length = 23.0,
                             Name = "Studenthatt",
-                            Price = 5m,
+                            Price = 1500m,
                             Quantity = 2,
                             Size = 10,
-                            Width = 0.0
+                            Width = 20.0
                         },
                         new
                         {
                             Id = 2,
-                            Comment = "Testcomment",
-                            Depth = 0.0,
+                            Comment = "En formell vit hatt med svart skärm och guldbroderad dekoration, som symboliserar sjöfartsbefäl.",
+                            Depth = 4.0,
+                            HatTypeId = 1,
+                            ImageUrl = "/assets/hats/Kaptenshatt.jpg",
                             IsDeleted = false,
-                            Length = 0.0,
+                            Length = 22.0,
                             Name = "Kaptenshatt",
-                            Price = 52m,
-                            Quantity = 5,
+                            Price = 1000m,
+                            Quantity = 3,
+                            Size = 9,
+                            Width = 18.0
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Comment = "En röd, cylinderformad hatt utan brätten, ofta prydd med en tofs, traditionellt buren i delar av Mellanöstern och Nordafrika.",
+                            Depth = 9.0,
+                            HatTypeId = 1,
+                            ImageUrl = "/assets/hats/Fez.jpg",
+                            IsDeleted = false,
+                            Length = 16.0,
+                            Name = "Fez",
+                            Price = 800m,
+                            Quantity = 2,
                             Size = 8,
-                            Width = 0.0
+                            Width = 16.0
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Comment = "En bredbrättad hatt av filt eller halm, designad för att skydda mot sol och regn på den amerikanska prärien.",
+                            Depth = 8.0,
+                            HatTypeId = 1,
+                            ImageUrl = "/assets/hats/Cowboyhatt.jpg",
+                            IsDeleted = false,
+                            Length = 35.0,
+                            Name = "Cowboyhatt",
+                            Price = 2000m,
+                            Quantity = 1,
+                            Size = 12,
+                            Width = 30.0
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Comment = "En lätt och luftig hatt flätad av halm, perfekt för att ge skugga och svalka under soliga sommardagar.",
+                            Depth = 7.0,
+                            HatTypeId = 1,
+                            ImageUrl = "/assets/hats/Halmhatt.jpg",
+                            IsDeleted = false,
+                            Length = 32.0,
+                            Name = "Halmhatt",
+                            Price = 600m,
+                            Quantity = 1,
+                            Size = 11,
+                            Width = 30.0
                         });
                 });
 
@@ -232,14 +329,106 @@ namespace Hattmakare.Migrations
                     b.Property<int>("MaterialId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
+                    b.Property<double>("Quantity")
+                        .HasColumnType("float");
 
                     b.HasKey("HatId", "MaterialId");
 
                     b.HasIndex("MaterialId");
 
                     b.ToTable("HatsMaterial");
+
+                    b.HasData(
+                        new
+                        {
+                            HatId = 1,
+                            MaterialId = 8,
+                            Quantity = 0.5
+                        },
+                        new
+                        {
+                            HatId = 1,
+                            MaterialId = 12,
+                            Quantity = 0.29999999999999999
+                        },
+                        new
+                        {
+                            HatId = 1,
+                            MaterialId = 22,
+                            Quantity = 5.0
+                        },
+                        new
+                        {
+                            HatId = 1,
+                            MaterialId = 21,
+                            Quantity = 1.0
+                        },
+                        new
+                        {
+                            HatId = 2,
+                            MaterialId = 8,
+                            Quantity = 0.5
+                        },
+                        new
+                        {
+                            HatId = 2,
+                            MaterialId = 12,
+                            Quantity = 0.29999999999999999
+                        },
+                        new
+                        {
+                            HatId = 2,
+                            MaterialId = 24,
+                            Quantity = 1.0
+                        },
+                        new
+                        {
+                            HatId = 3,
+                            MaterialId = 10,
+                            Quantity = 0.69999999999999996
+                        },
+                        new
+                        {
+                            HatId = 3,
+                            MaterialId = 24,
+                            Quantity = 0.5
+                        },
+                        new
+                        {
+                            HatId = 4,
+                            MaterialId = 15,
+                            Quantity = 1.0
+                        },
+                        new
+                        {
+                            HatId = 4,
+                            MaterialId = 5,
+                            Quantity = 0.5
+                        },
+                        new
+                        {
+                            HatId = 4,
+                            MaterialId = 19,
+                            Quantity = 1.0
+                        },
+                        new
+                        {
+                            HatId = 5,
+                            MaterialId = 4,
+                            Quantity = 0.69999999999999996
+                        },
+                        new
+                        {
+                            HatId = 5,
+                            MaterialId = 21,
+                            Quantity = 1.0
+                        },
+                        new
+                        {
+                            HatId = 5,
+                            MaterialId = 20,
+                            Quantity = 2.0
+                        });
                 });
 
             modelBuilder.Entity("Hattmakare.Data.Entities.HatType", b =>
@@ -309,6 +498,224 @@ namespace Hattmakare.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Materials");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            IsDecoration = false,
+                            Name = "Ullfilt",
+                            Price = 124.50m,
+                            Supplier = "Nordic Felt AB",
+                            Unit = "m"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            IsDecoration = false,
+                            Name = "Kaninfilt",
+                            Price = 499.90m,
+                            Supplier = "Hatter’s Choice Ltd",
+                            Unit = "m"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            IsDecoration = false,
+                            Name = "Toquillastrå",
+                            Price = 419.75m,
+                            Supplier = "Ecuador Weaves Co.",
+                            Unit = "kg"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            IsDecoration = false,
+                            Name = "Rishalm",
+                            Price = 109.20m,
+                            Supplier = "StrawCraft Asia",
+                            Unit = "kg"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            IsDecoration = false,
+                            Name = "Palmlöv",
+                            Price = 94.60m,
+                            Supplier = "Tropic Naturals",
+                            Unit = "kg"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            IsDecoration = false,
+                            Name = "Majsblad",
+                            Price = 134.95m,
+                            Supplier = "EcoFiber Mexico",
+                            Unit = "kg"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            IsDecoration = false,
+                            Name = "Hampfibrer",
+                            Price = 159.50m,
+                            Supplier = "GreenTextiles GmbH",
+                            Unit = "kg"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            IsDecoration = false,
+                            Name = "Bomull",
+                            Price = 59.90m,
+                            Supplier = "CottonLine Textiles",
+                            Unit = "m"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            IsDecoration = false,
+                            Name = "Linne",
+                            Price = 84.75m,
+                            Supplier = "NordTextil AB",
+                            Unit = "m"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            IsDecoration = false,
+                            Name = "Ull",
+                            Price = 109.00m,
+                            Supplier = "NordTextil AB",
+                            Unit = "m"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            IsDecoration = false,
+                            Name = "Silke",
+                            Price = 399.90m,
+                            Supplier = "Silken Touch Co.",
+                            Unit = "m"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            IsDecoration = false,
+                            Name = "Satin",
+                            Price = 129.50m,
+                            Supplier = "Fabric Elegance",
+                            Unit = "m"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            IsDecoration = false,
+                            Name = "Tweed",
+                            Price = 179.90m,
+                            Supplier = "Highland Textiles",
+                            Unit = "m"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            IsDecoration = false,
+                            Name = "Polyester",
+                            Price = 49.95m,
+                            Supplier = "GlobalPoly Ltd",
+                            Unit = "m"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            IsDecoration = false,
+                            Name = "Läder",
+                            Price = 849.00m,
+                            Supplier = "Scandi Leatherworks",
+                            Unit = "st"
+                        },
+                        new
+                        {
+                            Id = 16,
+                            IsDecoration = false,
+                            Name = "Lackerat papper",
+                            Price = 0.75m,
+                            Supplier = "CraftMaterials.se",
+                            Unit = "st"
+                        },
+                        new
+                        {
+                            Id = 17,
+                            IsDecoration = false,
+                            Name = "Fuskpäls",
+                            Price = 144.60m,
+                            Supplier = "FauxFur Fabrics",
+                            Unit = "m"
+                        },
+                        new
+                        {
+                            Id = 18,
+                            IsDecoration = true,
+                            Name = "Strutsfjäder",
+                            Price = 35.00m,
+                            Supplier = "Bendigo Farm Inc",
+                            Unit = "st"
+                        },
+                        new
+                        {
+                            Id = 19,
+                            IsDecoration = true,
+                            Name = "Påfågelfjäder",
+                            Price = 64.90m,
+                            Supplier = "FeatherWorks Ltd",
+                            Unit = "st"
+                        },
+                        new
+                        {
+                            Id = 20,
+                            IsDecoration = true,
+                            Name = "Hönsfjäder",
+                            Price = 0.90m,
+                            Supplier = "FeatherWorks Ltd",
+                            Unit = "st"
+                        },
+                        new
+                        {
+                            Id = 21,
+                            IsDecoration = true,
+                            Name = "Tygblommor",
+                            Price = 29.95m,
+                            Supplier = "DecoFlora AB",
+                            Unit = "st"
+                        },
+                        new
+                        {
+                            Id = 22,
+                            IsDecoration = true,
+                            Name = "Pärlor",
+                            Price = 11.50m,
+                            Supplier = "Pearl Paradise",
+                            Unit = "g"
+                        },
+                        new
+                        {
+                            Id = 23,
+                            IsDecoration = true,
+                            Name = "Spets",
+                            Price = 39.90m,
+                            Supplier = "Lace & Grace",
+                            Unit = "m"
+                        },
+                        new
+                        {
+                            Id = 24,
+                            IsDecoration = true,
+                            Name = "Lurextråd",
+                            Price = 59.00m,
+                            Supplier = "ShinyThreads Co.",
+                            Unit = "m"
+                        });
                 });
 
             modelBuilder.Entity("Hattmakare.Data.Entities.Order", b =>
@@ -353,31 +760,61 @@ namespace Hattmakare.Migrations
                         {
                             Id = 1,
                             CustomerId = 1,
-                            EndDate = new DateTime(2025, 4, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EndDate = new DateTime(2025, 11, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             OrderStatusId = 1,
-                            Price = 500m,
+                            Price = 3125m,
                             Priority = false,
-                            StartDate = new DateTime(2025, 4, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            StartDate = new DateTime(2025, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 2,
                             CustomerId = 2,
-                            EndDate = new DateTime(2025, 4, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EndDate = new DateTime(2025, 10, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             OrderStatusId = 2,
+                            Price = 6450m,
+                            Priority = true,
+                            StartDate = new DateTime(2025, 4, 12, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CustomerId = 2,
+                            EndDate = new DateTime(2025, 4, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            OrderStatusId = 2,
+                            Price = 600m,
+                            Priority = true,
+                            StartDate = new DateTime(2025, 3, 19, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CustomerId = 3,
+                            EndDate = new DateTime(2025, 4, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            OrderStatusId = 3,
+                            Price = 600m,
+                            Priority = false,
+                            StartDate = new DateTime(2025, 4, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CustomerId = 4,
+                            EndDate = new DateTime(2025, 8, 29, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            OrderStatusId = 1,
                             Price = 600m,
                             Priority = true,
                             StartDate = new DateTime(2025, 4, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
-                            Id = 3,
-                            CustomerId = 2,
-                            EndDate = new DateTime(2025, 4, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Id = 6,
+                            CustomerId = 4,
+                            EndDate = new DateTime(2025, 4, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             OrderStatusId = 2,
                             Price = 600m,
-                            Priority = true,
-                            StartDate = new DateTime(2025, 4, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            Priority = false,
+                            StartDate = new DateTime(2025, 4, 10, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
 
@@ -424,14 +861,56 @@ namespace Hattmakare.Migrations
                         new
                         {
                             Id = 3,
-                            HatId = 2,
+                            HatId = 5,
                             OrderId = 2
                         },
                         new
                         {
                             Id = 4,
+                            HatId = 4,
+                            OrderId = 2
+                        },
+                        new
+                        {
+                            Id = 5,
+                            HatId = 2,
+                            OrderId = 2
+                        },
+                        new
+                        {
+                            Id = 6,
                             HatId = 2,
                             OrderId = 3
+                        },
+                        new
+                        {
+                            Id = 7,
+                            HatId = 3,
+                            OrderId = 4
+                        },
+                        new
+                        {
+                            Id = 8,
+                            HatId = 5,
+                            OrderId = 4
+                        },
+                        new
+                        {
+                            Id = 9,
+                            HatId = 2,
+                            OrderId = 5
+                        },
+                        new
+                        {
+                            Id = 10,
+                            HatId = 4,
+                            OrderId = 5
+                        },
+                        new
+                        {
+                            Id = 11,
+                            HatId = 1,
+                            OrderId = 6
                         });
                 });
 
