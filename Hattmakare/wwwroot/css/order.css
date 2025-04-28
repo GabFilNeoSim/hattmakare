@@ -366,10 +366,25 @@
     gap: 100px;
     margin-top: 50px;
     #hatList {
-
+        display: flex;
+        flex-wrap: wrap;
+        gap:
+      40px;
 
     .hatItem{
-      
+        position: relative;
+        border-radius: 8px;
+        overflow:hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+        width: 300px;
+        padding: 40px 20px 10px 20px;
+        box-sizing: border-box;
+        background:rgba(255,255,255,1);
+        
       .details {
         width: 100%;
         display: flex;
@@ -385,7 +400,13 @@
           flex-direction: column;
           gap: 0px;
         }
-      }
+
+    }
+    img{
+        object-fit: contain;
+        width: 100%;
+        height: 180px;
+    }
 
       .counter {
         display: flex;
