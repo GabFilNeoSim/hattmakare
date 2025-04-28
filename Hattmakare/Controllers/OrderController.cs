@@ -296,8 +296,9 @@ public class OrderController : Controller
     {
         var model = new NewOrderIndexViewModel
         {
-            Hats = await _context.Hats.Where(h => h.IsDeleted == false && h.HatType.Name == "StandardHatt").Select(x =>
-                new HatViewModel
+            Hats = await _context.Hats
+                .Where(h => h.IsDeleted == false && h.HatType.Name == "StandardHatt")
+                .Select(x => new HatViewModel
                 {
                     Id = x.Id,
                     Name = x.Name,
@@ -305,44 +306,94 @@ public class OrderController : Controller
                     Size = x.Size,
                     Comment = x.Comment,
                     ImageUrl = x.ImageUrl
-                }
+                })
+                .ToListAsync(),
 
-            ).ToListAsync(),
             Customers = await _context.Customers
-            .Select(c => new SelectListItem
-            {
-                Value = c.Id.ToString(),
-                Text = c.FirstName + " " + c.LastName
-            }).ToListAsync()
+                .Where(c => c.IsDeleted == false)
+                .OrderBy(c => c.FirstName)
+                .Select(c => new SelectListItem
+                {
+                    Value = c.Id.ToString(),
+                    Text = c.FirstName + " " + c.LastName
+                })
+                .ToListAsync()
         };
+
         return View(model);
     }
+
+  [HttpPost("AddSpecialHat")]
+  public async Task<IActionResult> AddSpecialHat([FromForm] AddHatViewModel newHat)
+  {
+
+    var hat = new Hat();
+
+    hat.Name = newHat.Name;
+    hat.Size = newHat.Size ?? 0;
+    hat.Length = newHat.Length ?? 0;
+    hat.Depth = newHat.Depth ?? 0;
+    hat.Width = newHat.Width ?? 0;
+    hat.Quantity = newHat.Quantity;
+    hat.Price = newHat.Price ?? 0;
+    hat.Comment = newHat.Comment ?? "";
+    hat.HatMaterials = new List<HatMaterial>();
+    hat.HatType = await _context.HatTypes
+        .FirstOrDefaultAsync(x => x.Name == "SpecialHatt");
+
+
+    var image = await _imageService.UploadImageAsync(newHat.Image);
+    
+    hat.ImageUrl = image;
+
+
+        foreach (var material in newHat.SelectedMaterials)
+        {
+            if (material.Quantity > 0)
+            {
+                hat.HatMaterials.Add(new HatMaterial
+                {
+                    MaterialId = material.MaterialId,
+                    Quantity = material.Quantity
+                });
+            }
+        }
+
+        await _context.Hats.AddAsync(hat);
+        await _context.SaveChangesAsync();
+
+    return Ok(hat.Id);
+  }
 
     [HttpGet("get-customer/{id}")]
     public async Task<IActionResult> GetCustomerById(int id)
     {
         var customer = await _context.Customers
-            .Include(c => c.Address)
-            .FirstOrDefaultAsync(c => c.Id == id);
+         .Include(c => c.Address)
+         .OrderBy(c => c.FirstName)
+         .FirstOrDefaultAsync(c => c.Id == id);
 
-        if (customer == null)
+        if (customer.IsDeleted == false)
+        {
+            return Json(new
+            {
+                firstName = customer.FirstName,
+                lastName = customer.LastName,
+                headMeasurements = customer.HeadMeasurements,
+                email = customer.Email,
+                phone = customer.PhoneNumber,
+                billingAddress = customer.Address?.BillingAddress,
+                deliveryAddress = customer.Address?.DeliveryAddress,
+                city = customer.Address?.City,
+                postalCode = customer.Address?.PostalCode,
+                country = customer.Address?.Country
+            });
+        }
+        else
         {
             return NotFound();
         }
-
-        return Json(new
-        {
-            firstName = customer.FirstName,
-            lastName = customer.LastName,
-            headMeasurements = customer.HeadMeasurements,
-            email = customer.Email,
-            phone = customer.PhoneNumber,
-            billingAddress = customer.Address?.BillingAddress,
-            deliveryAddress = customer.Address?.DeliveryAddress,
-            city = customer.Address?.City,
-            postalCode = customer.Address?.PostalCode,
-            country = customer.Address?.Country
-        });
+        
     }
 
     [HttpPost("new")]

@@ -8,7 +8,8 @@ namespace Hattmakare.Models.Order
     {
         public int CustomerId { get; set; }
         public int OrderStatusId { get; set; }
-        //public List<CustomerViewModel> Customers { get; set; }
+
+        public CustomerViewModel Customer { get; set; }
 
         public NewOrderViewModel NewOrders { get; set; }
 
