@@ -6,7 +6,7 @@ namespace Hattmakare.Data.Entities
     public class HatMaterial
     {
         [Required]
-        public int Quantity { get; set; }
+        public double Quantity { get; set; }
 
         // Foreign keys
         public int HatId { get; set; }
