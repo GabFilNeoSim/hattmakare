@@ -48,7 +48,6 @@ public class HatController : Controller
     [HttpGet("add")]
     public async Task<IActionResult> Addhat(string? redirectAction, string? redirectController)
     {
-        _logger.LogWarning("{a} {b}", redirectAction, redirectController);
         var materials = await _context.Materials
             .OrderBy(materials => materials.Name)
             .ToListAsync();

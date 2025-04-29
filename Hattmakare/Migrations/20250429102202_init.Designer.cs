@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hattmakare.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250428194501_init")]
+    [Migration("20250429102202_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -250,7 +250,7 @@ namespace Hattmakare.Migrations
                             Comment = "En vit, rund mössa med svart skärm och en kokard framtill, traditionellt buren vid svenska studentexamina",
                             Depth = 5.0,
                             HatTypeId = 1,
-                            ImageUrl = "/assets/hats/Student.jpg",
+                            ImageUrl = "Student.jpg",
                             IsDeleted = false,
                             Length = 23.0,
                             Name = "Studenthatt",
@@ -265,7 +265,7 @@ namespace Hattmakare.Migrations
                             Comment = "En formell vit hatt med svart skärm och guldbroderad dekoration, som symboliserar sjöfartsbefäl.",
                             Depth = 4.0,
                             HatTypeId = 1,
-                            ImageUrl = "/assets/hats/Kaptenshatt.jpg",
+                            ImageUrl = "Kaptenshatt.jpg",
                             IsDeleted = false,
                             Length = 22.0,
                             Name = "Kaptenshatt",
@@ -280,7 +280,7 @@ namespace Hattmakare.Migrations
                             Comment = "En röd, cylinderformad hatt utan brätten, ofta prydd med en tofs, traditionellt buren i delar av Mellanöstern och Nordafrika.",
                             Depth = 9.0,
                             HatTypeId = 1,
-                            ImageUrl = "/assets/hats/Fez.jpg",
+                            ImageUrl = "Fez.jpg",
                             IsDeleted = false,
                             Length = 16.0,
                             Name = "Fez",
@@ -295,7 +295,7 @@ namespace Hattmakare.Migrations
                             Comment = "En bredbrättad hatt av filt eller halm, designad för att skydda mot sol och regn på den amerikanska prärien.",
                             Depth = 8.0,
                             HatTypeId = 1,
-                            ImageUrl = "/assets/hats/Cowboyhatt.jpg",
+                            ImageUrl = "Cowboyhatt.jpg",
                             IsDeleted = false,
                             Length = 35.0,
                             Name = "Cowboyhatt",
@@ -310,7 +310,7 @@ namespace Hattmakare.Migrations
                             Comment = "En lätt och luftig hatt flätad av halm, perfekt för att ge skugga och svalka under soliga sommardagar.",
                             Depth = 7.0,
                             HatTypeId = 1,
-                            ImageUrl = "/assets/hats/Halmhatt.jpg",
+                            ImageUrl = "Halmhatt.jpg",
                             IsDeleted = false,
                             Length = 32.0,
                             Name = "Halmhatt",
