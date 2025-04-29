@@ -278,29 +278,29 @@ namespace Hattmakare.Data
 
             builder.Entity<HatMaterial>().HasData(
                 // Studenthatt (Id = 1)
-                new HatMaterial { HatId = 1, MaterialId = 8, Quantity = 0.5 },  // Bomull
-                new HatMaterial { HatId = 1, MaterialId = 12, Quantity = 0.3 }, // Satin
-                new HatMaterial { HatId = 1, MaterialId = 22, Quantity = 5 },   // Pärlor
-                new HatMaterial { HatId = 1, MaterialId = 21, Quantity = 1 },   // Tygblommor
+                new HatMaterial { HatId = 1, MaterialId = 8, Quantity = 0.5 },  
+                new HatMaterial { HatId = 1, MaterialId = 12, Quantity = 0.3 }, 
+                new HatMaterial { HatId = 1, MaterialId = 22, Quantity = 5 },   
+                new HatMaterial { HatId = 1, MaterialId = 21, Quantity = 1 },   
 
                 // Kaptenshatt (Id = 2)
-                new HatMaterial { HatId = 2, MaterialId = 8, Quantity = 0.5 },  // Bomull
-                new HatMaterial { HatId = 2, MaterialId = 12, Quantity = 0.3 }, // Satin
-                new HatMaterial { HatId = 2, MaterialId = 24, Quantity = 1 },   // Lurextråd
+                new HatMaterial { HatId = 2, MaterialId = 8, Quantity = 0.5 },  
+                new HatMaterial { HatId = 2, MaterialId = 12, Quantity = 0.3 }, 
+                new HatMaterial { HatId = 2, MaterialId = 24, Quantity = 1 },   
 
                 // Fez (Id = 3)
-                new HatMaterial { HatId = 3, MaterialId = 10, Quantity = 0.7 }, // Ull
-                new HatMaterial { HatId = 3, MaterialId = 24, Quantity = 0.5 }, // Lurextråd
+                new HatMaterial { HatId = 3, MaterialId = 10, Quantity = 0.7 }, 
+                new HatMaterial { HatId = 3, MaterialId = 24, Quantity = 0.5 }, 
 
                 // Cowboyhatt (Id = 4)
-                new HatMaterial { HatId = 4, MaterialId = 15, Quantity = 1 },   // Läder
-                new HatMaterial { HatId = 4, MaterialId = 5, Quantity = 0.5 },  // Palmlöv
-                new HatMaterial { HatId = 4, MaterialId = 19, Quantity = 1 },   // Påfågelfjäder
+                new HatMaterial { HatId = 4, MaterialId = 15, Quantity = 1 },   
+                new HatMaterial { HatId = 4, MaterialId = 5, Quantity = 0.5 },  
+                new HatMaterial { HatId = 4, MaterialId = 19, Quantity = 1 },   
 
                 // Halmhatt (Id = 5)
-                new HatMaterial { HatId = 5, MaterialId = 4, Quantity = 0.7 },  // Rishalm
-                new HatMaterial { HatId = 5, MaterialId = 21, Quantity = 1 },   // Tygblommor
-                new HatMaterial { HatId = 5, MaterialId = 20, Quantity = 2 }    // Hönsfjäder
+                new HatMaterial { HatId = 5, MaterialId = 4, Quantity = 0.7 },  
+                new HatMaterial { HatId = 5, MaterialId = 21, Quantity = 1 },   
+                new HatMaterial { HatId = 5, MaterialId = 20, Quantity = 2 } 
             );
 
 

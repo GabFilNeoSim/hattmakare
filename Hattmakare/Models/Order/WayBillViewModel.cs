@@ -26,10 +26,6 @@ public class WayBilViewModel
 
     public List<OrderHat> OrderHats { get; set; } = new();
 
-    //public List<User> Users { get; set; }
-
-    //public List<Hattmakare.Data.Entities.Customer> customers { get; set; }
-
 
 }
 
