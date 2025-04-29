@@ -9,28 +9,30 @@
 <div class="container d-flex justify-content-center">
     <div class="col-md-8 col-lg-6">
         <form method="post" asp-action="EditHat" enctype="multipart/form-data" class="p-4 shadow rounded bg-light">
-            <h2 class="mb-4 text-center">Redigera Hatt</h2>
-            <div class="form-group mb-3">
-                <label asp-for="Name" class="form-label fw-bold">Hattens namn</label>
-                <input asp-for="Name" class="form-control" placeholder="Skriv namn på hatten" required />
-                <span asp-validation-for="Name" class="text-danger small"></span>
-            </div>
+            <h2 class="mb-4 text-center">Ändra hatt</h2>
             <div class="row mb-3">
                 <div class="col-md-6">
-                    <label asp-for="Price" class="form-label fw-bold">Pris</label>
-                    <input asp-for="Price" type="number" class="form-control" placeholder="Ange pris i SEK" required />
-                    <span asp-validation-for="Price" class="text-danger small"></span>
+                    <label asp-for="Name" class="form-label fw-bold">Hattens namn</label>
+                    <input asp-for="Name" class="form-control" placeholder="Skriv namn på hatten" required />
+                    <span asp-validation-for="Name" class="text-danger small"></span>
                 </div>
+                <div class="col-md-6">
+                    <label asp-for="Image" class="form-label fw-bold">Ladda upp bild</label>
+                    <input asp-for="Image" type="file" class="form-control" />
+                    <span asp-validation-for="Image" class="text-danger small"></span>
+                </div>
+            </div>
+            <div class="row mb-3">
                 <div class="col-md-6">
                     <label asp-for="Quantity" class="form-label fw-bold">Antal i lager</label>
                     <input asp-for="Quantity" type="number" class="form-control" placeholder="Hur många finns i lager?" required />
                     <span asp-validation-for="Quantity" class="text-danger small"></span>
                 </div>
-            </div>
-            <div class="form-group mb-3">
-                <label asp-for="Size" class="form-label fw-bold">Storlek</label>
-                <input asp-for="Size" class="form-control" placeholder="Ange storlek (t.ex. S, M, L, 58cm...)" required />
-                <span asp-validation-for="Size" class="text-danger small"></span>
+                <div class="col-md-6">
+                    <label asp-for="Size" class="form-label fw-bold">Storlek</label>
+                    <input asp-for="Size" class="form-control" placeholder="Ange storlek" required />
+                    <span asp-validation-for="Size" class="text-danger small"></span>
+                </div>
             </div>
             <div class="row mb-3">
                 <div class="col-md-4">
@@ -49,16 +51,16 @@
                     <span asp-validation-for="Width" class="text-danger small"></span>
                 </div>
             </div>
-            <div class="form-group mb-4">
-                <label asp-for="Image" class="form-label fw-bold">Ladda upp bild</label>
-                <input asp-for="Image" type="file" class="form-control" />
-                <span asp-validation-for="Image" class="text-danger small"></span>
-            </div>
             <div class="form-check mb-4">
                 <input type="checkbox" class="form-check-input" asp-for="IsSpecial">
                 <label class="form-check-label" asp-for="IsSpecial">Markera som specialhatt</label>
                 <span asp-validation-for="IsSpecial" class="text-danger small"></span>
             </div>
+            <div class="mb-3">
+                <label asp-for="Comment" class="form-label"><strong>Kommentar</strong></label>
+                <textarea class="form-control" asp-for="Comment" rows="4"></textarea>
+            </div>
+            <hr />
             <h4 class="mt-4">Materialval</h4>
             <div id="material-selection" class="mb-3">
                 <div class="input-group material-group">
@@ -66,10 +68,11 @@
                         <option value="">-- Välj material --</option>
                         @foreach (var mat in Model.AvailableMaterials)
                         {
-                            <option value="@mat.MaterialId" data-name="@mat.Name" data-unit="@mat.Unit">@mat.Name (@mat.Unit)</option>
+                            <option value="@mat.MaterialId" data-name="@mat.Name" data-unit="@mat.Unit" data-price="@mat.Price">@mat.Name - @mat.Price kr</option>
                         }
                     </select>
-                    <input type="number" id="material-qty" class="form-control" placeholder="Mängd" min="1" />
+                    <input type="number" id="material-qty" class="form-control" style="width: 50px;" placeholder="Mängd" min="0" step="0.01" />
+                    <div class="material-unit" id="material-unit-val">-</div>
                     <button type="button" id="add-material-btn" class="btn btn-blue btn-sm">
                         <i class="fa-solid fa-plus"></i>
                         Lägg till
@@ -80,9 +83,10 @@
                 @for (int i = 0; i < Model.SelectedMaterials.Count; i++)
                 {
                     var mat = Model.SelectedMaterials[i];
+                    var materialPrice = mat.Price * (decimal)mat.Quantity;
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                        @mat.Name - @mat.Quantity @mat.Unit
-                        <button type="button" class="btn btn-sm btn-danger ms-2" onclick="this.parentElement.remove()">
+                        @mat.Name (@mat.Quantity @mat.Unit) - @materialPrice.ToString("C").Replace(",", ".")
+                        <button type="button" class="btn btn-sm btn-danger ms-2" onclick="removeMaterial(this, @materialPrice)">
                             <i class="fa-solid fa-xmark"></i>
                         </button>
                         <input type="hidden" name="SelectedMaterials[@i].MaterialId" value="@mat.MaterialId" />
@@ -90,50 +94,153 @@
                     </li>
                 }
             </ul>
+            <div class="mb-3">
+                <strong id="total-price">Totalt materialpris: </strong>
+            </div>
+            <div class="mb-3">
+                <strong id="profit">Marginal:  </strong>
+            </div>
+            <hr />
+
+            <div class="col-md-6">
+                <label asp-for="Price" class="form-label fw-bold">Försäljningspris</label>
+                <input asp-for="Price" type="number" class="form-control" placeholder="Ange pris i SEK" required />
+                <span asp-validation-for="Price" class="text-danger small"></span>
+            </div>
+
             <div class="text-end">
                 <a asp-controller="Hat" asp-action="Index" class="btn btn-secondary mt-4">Tillbaka</a> <br />
                 <button type="submit" class="btn btn-blue px-4 mt-4 text-light">
-                    <i class="fa-solid fa-floppy-disk"></i>
-                    Spara hatt
+                    <i class="fa-solid fa-plus"></i>
+                    Spara
                 </button>
             </div>
 
             @section Scripts {
                 <script>
+
                     const dropdown = document.getElementById('material-dropdown');
                     const qtyInput = document.getElementById('material-qty');
                     const addBtn = document.getElementById('add-material-btn');
                     const list = document.getElementById('material-list');
+                    const totalPriceDisplay = document.getElementById('total-price');
+                    const priceInput = document.getElementById('Price');
+                    const profitPriceDisplay = document.getElementById('profit');
+                    const unitLabel = document.getElementById("material-unit-val");
 
-                    let index = @Model.SelectedMaterials.Count;
+                    let totalMaterialPrice = 0;
+
+                    dropdown.addEventListener("change", () => {
+                        let unit = dropdown.options[dropdown.selectedIndex].dataset.unit || "-";
+                        unitLabel.innerText = unit;
+                    });
 
                     addBtn.addEventListener('click', () => {
                         const id = dropdown.value;
                         const name = dropdown.options[dropdown.selectedIndex].dataset.name;
                         const unit = dropdown.options[dropdown.selectedIndex].dataset.unit;
-                        const qty = qtyInput.value;
+                        const pricePerUnit = parseFloat(dropdown.options[dropdown.selectedIndex].dataset.price.replace(",", "."));
+                        const qty = parseFloat(qtyInput.value.replace(",", "."));
 
-                        if (!id || qty < 1) return;
+                        if (!id || qty <= 0 || isNaN(qty)) return;
 
-                        const li = document.createElement('li');
-                        li.className = 'list-group-item d-flex justify-content-between align-items-center';
-                        li.innerHTML = `
-                            ${name} - ${qty} ${unit}
-                            <button type="button" class="btn btn-sm btn-danger ms-2 text-light" onclick="this.parentElement.remove()">
-                                <i class="fa-solid fa-xmark"></i>
-                            </button>
-                            <input type="hidden" name="SelectedMaterials[${index}].MaterialId" value="${id}" />
-                            <input type="hidden" name="SelectedMaterials[${index}].Quantity" value="${qty}" />
-                        `;
-                        list.appendChild(li);
+                        const existingItem = Array.from(list.children).find(li => {
+                            const input = li.querySelector(`input[name*="MaterialId"]`);
+                            return input && input.value === id;
+                        });
 
-                        index++;
+                        if (existingItem) {
+
+                            const qtyInputHidden = existingItem.querySelector(`input[name*="Quantity"]`);
+                            let currentQty = parseFloat(qtyInputHidden.value);
+                            const newQty = currentQty + qty;
+                            qtyInputHidden.value = newQty;
+
+                            const newTotalPrice = newQty * pricePerUnit;
+                            existingItem.firstChild.textContent = `${name} (${newQty} ${unit}) - ${newTotalPrice.toFixed(2)} kr`;
+
+                            totalMaterialPrice += pricePerUnit * qty;
+                        } else {
+
+                            const totalPrice = pricePerUnit * qty;
+                            const index = list.children.length;
+
+                            const li = document.createElement('li');
+                            li.className = 'list-group-item d-flex justify-content-between align-items-center';
+                            li.innerHTML = `
+                                ${name} (${qty} ${unit}) - ${totalPrice.toFixed(2)} kr
+                                <button type="button" class="btn btn-sm btn-danger ms-2" onclick="removeMaterial(this)">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </button>
+                                <input type="hidden" name="SelectedMaterials[${index}].MaterialId" value="${id}" />
+                                <input type="hidden" name="SelectedMaterials[${index}].Quantity" value="${qty}" />
+                            `;
+                            list.appendChild(li);
+
+                            totalMaterialPrice += totalPrice;
+                        }
+
+                        updateTotal();
                         qtyInput.value = '';
                         dropdown.selectedIndex = 0;
                     });
+
+                    function removeMaterial(button) {
+                        const li = button.closest("li");
+
+                        const text = li.textContent;
+                        const priceMatch = text.match(/- ([\d.,]+) kr/);
+                        if (priceMatch) {
+                            const price = parseFloat(priceMatch[1].replace(",", "."));
+                            if (!isNaN(price)) {
+                                totalMaterialPrice -= price;
+                            }
+                        }
+
+                        li.remove();
+                        reindexMaterials();
+                        updateTotal();
+                    }
+
+                    function reindexMaterials() {
+                        const items = list.querySelectorAll("li");
+                        items.forEach((li, i) => {
+                            const materialIdInput = li.querySelector('input[name*="MaterialId"]');
+                            const quantityInput = li.querySelector('input[name*="Quantity"]');
+                            materialIdInput.name = `SelectedMaterials[${i}].MaterialId`;
+                            quantityInput.name = `SelectedMaterials[${i}].Quantity`;
+                        });
+                    }
+
+                    function updateTotal() {
+                        totalPriceDisplay.textContent = `Totalt materialpris: ${totalMaterialPrice.toFixed(2)} kr`;
+                        updateProfit();
+                    }
+
+                    function updateProfit() {
+                        const salePrice = parseFloat(priceInput.value) || 0;
+                        const profit = salePrice - totalMaterialPrice;
+                        profitPriceDisplay.textContent = `Vinstmarginal vid försäljning: ${profit.toFixed(2)} kr`;
+                    }
+
+                    document.addEventListener("DOMContentLoaded", function () {
+                        const items = list.querySelectorAll("li");
+                        items.forEach(item => {
+                            const text = item.textContent;
+                            const priceMatch = text.match(/- ([\d.,]+) kr/);
+                            if (priceMatch) {
+                                const price = parseFloat(priceMatch[1].replace(",", "."));
+                                if (!isNaN(price)) {
+                                    totalMaterialPrice += price;
+                                }
+                            }
+                        });
+                        updateTotal();
+                    });
+
+                    priceInput.addEventListener('input', updateProfit);
                 </script>
             }
-
-            </form>
-        </div>
+        </form>
+    </div>
 </div>

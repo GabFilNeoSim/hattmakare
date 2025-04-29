@@ -49,7 +49,7 @@ namespace Hattmakare.Services
 
             image.Mutate(x => x.Resize(new ResizeOptions
             {
-                Size = new Size(400, 400),
+                Size = new Size(260, 180),
                 Mode = ResizeMode.Crop
             }));
 
