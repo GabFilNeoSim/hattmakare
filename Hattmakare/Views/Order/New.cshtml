@@ -16,7 +16,7 @@
         @foreach (var hat in Model.Hats)
         {
         <div class="hatItem" data-name="@hat.Name" data-id="@hat.Id">
-            <img src="/assets/hats/@(hat.ImageUrl ?? "placeholder-image.png")" />
+            <img src="@(hat.ImageUrl ?? "placeholder-image.png")" />
             <h2 class="name">@hat.Name</h2>
             <div class="details">
                 <div class="item">
@@ -43,7 +43,7 @@
           @foreach (var hat in Model.SpecialHats)
           {
           <div class="hatItem" data-name="@hat.Name" data-id="@hat.Id">
-              <img src="/assets/hats/@(hat.ImageUrl ?? "placeholder-image.png")" />
+              <img src="/asstets/hats/@(hat.ImageUrl ?? "placeholder-image.png")" />
               <h2 class="name">@hat.Name</h2>
               <div class="details">
                   <div class="item">
@@ -62,6 +62,9 @@
               </div>
           </div>
           }
+          </div>
+          <div>
+            <a asp-controller="Hat" asp-action="AddHat" asp-route-redirectAction="New" asp-route-redirectController="Order" class="btn btn-blue mt-3">Lägg till specialhatt</a>
           </div>
   </div>
 
