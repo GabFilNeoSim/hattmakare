@@ -107,6 +107,8 @@
 
             @section Scripts {
                 <script>
+
+
                     const dropdown = document.getElementById('material-dropdown');
                     const qtyInput = document.getElementById('material-qty');
                     const addBtn = document.getElementById('add-material-btn');
@@ -114,68 +116,188 @@
                     const totalPriceDisplay = document.getElementById('total-price');
                     const priceInput = document.getElementById('Price');
                     const profitPriceDisplay = document.getElementById('profit');
+                    const unitLabel = document.getElementById("material-unit-val");
 
-                    let index = 0;
                     let totalMaterialPrice = 0;
 
                     dropdown.addEventListener("change", () => {
-                        let unit = dropdown.options[dropdown.selectedIndex].dataset.unit;
-                        console.log(unit);
-                        const materialVal = document.getElementById("material-unit-val");
-                        if(!unit) {
-                            unit = "-";
-                        }
-                        materialVal.innerText = unit;
+                        let unit = dropdown.options[dropdown.selectedIndex].dataset.unit || "-";
+                        unitLabel.innerText = unit;
                     });
 
                     addBtn.addEventListener('click', () => {
                         const id = dropdown.value;
                         const name = dropdown.options[dropdown.selectedIndex].dataset.name;
                         const unit = dropdown.options[dropdown.selectedIndex].dataset.unit;
-                        const pricePerUnit = parseFloat(dropdown.options[dropdown.selectedIndex].dataset.price);
-                        const qty = qtyInput.value;
+                        const pricePerUnit = parseFloat(dropdown.options[dropdown.selectedIndex].dataset.price.replace(",", "."));
+                        const qty = parseFloat(qtyInput.value.replace(",", "."));
 
-                        if (!id || qty < 0.001) return;
-                        
-                        const totalPrice = (pricePerUnit * qty).toFixed(2);
+                        if (!id || qty <= 0 || isNaN(qty)) return;
 
-                        // Create list item UI
-                        const li = document.createElement('li');
-                        li.className = 'list-group-item d-flex justify-content-between align-items-center';
-                        li.innerHTML = `
-                                    ${name} (${qty } ${unit}) - ${totalPrice} kr
-                            <button type="button" class="btn btn-sm btn-danger ms-2" onclick="removeMaterial(this, ${totalPrice})">
-                                        <i class="fa-solid fa-xmark"></i>
-                            </button>
-                            <input type="hidden" name="SelectedMaterials[${index}].MaterialId" value="${id}" />
-                            <input type="hidden" name="SelectedMaterials[${index}].Quantity" value="${qty}" />
-                        `;
-                        list.appendChild(li);
+                        const existingItem = Array.from(list.children).find(li => {
+                            const input = li.querySelector(`input[name*="MaterialId"]`);
+                            return input && input.value === id;
+                        });
 
-                        totalMaterialPrice += parseFloat(totalPrice);
-                        totalPriceDisplay.textContent = `Totalt materialpris: ${totalMaterialPrice.toFixed(2)} kr`;
-                        
-                        updateProfit();
+                        if (existingItem) {
 
-                        index++;
+                            const qtyInputHidden = existingItem.querySelector(`input[name*="Quantity"]`);
+                            let currentQty = parseFloat(qtyInputHidden.value);
+                            const newQty = currentQty + qty;
+                            qtyInputHidden.value = newQty;
+
+                            const newTotalPrice = newQty * pricePerUnit;
+                            existingItem.firstChild.textContent = `${name} (${newQty} ${unit}) - ${newTotalPrice.toFixed(2)} kr`;
+
+                            totalMaterialPrice += pricePerUnit * qty;
+                        } else {
+
+                            const totalPrice = pricePerUnit * qty;
+                            const index = list.children.length;
+
+                            const li = document.createElement('li');
+                            li.className = 'list-group-item d-flex justify-content-between align-items-center';
+                            li.innerHTML = `
+                                ${name} (${qty} ${unit}) - ${totalPrice.toFixed(2)} kr
+                                <button type="button" class="btn btn-sm btn-danger ms-2" onclick="removeMaterial(this)">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </button>
+                                <input type="hidden" name="SelectedMaterials[${index}].MaterialId" value="${id}" />
+                                <input type="hidden" name="SelectedMaterials[${index}].Quantity" value="${qty}" />
+                            `;
+                            list.appendChild(li);
+
+                            totalMaterialPrice += totalPrice;
+                        }
+
+                        updateTotal();
                         qtyInput.value = '';
                         dropdown.selectedIndex = 0;
                     });
 
-                        function removeMaterial(button, price) {
-                            button.parentElement.remove();
-                            totalMaterialPrice -= price;
-                            totalPriceDisplay.textContent = `Totalt materialpris: ${totalMaterialPrice.toFixed(2)} kr`;
-                            updateProfit();
+                    function removeMaterial(button) {
+                        const li = button.closest("li");
+
+                        const text = li.textContent;
+                        const priceMatch = text.match(/- ([\d.,]+) kr/);
+                        if (priceMatch) {
+                            const price = parseFloat(priceMatch[1].replace(",", "."));
+                            if (!isNaN(price)) {
+                                totalMaterialPrice -= price;
+                            }
                         }
 
-                        function updateProfit() {
-                            const salePrice = parseFloat(priceInput.value) || 0;
-                            const profit = (salePrice - totalMaterialPrice).toFixed(2);
-                            profitPriceDisplay.textContent = `Vinstmarginal vid försäljning: ${profit} kr`;
-                        }
+                        li.remove();
+                        reindexMaterials();
+                        updateTotal();
+                    }
 
-                        priceInput.addEventListener('input', updateProfit);
+                    function reindexMaterials() {
+                        const items = list.querySelectorAll("li");
+                        items.forEach((li, i) => {
+                            const materialIdInput = li.querySelector('input[name*="MaterialId"]');
+                            const quantityInput = li.querySelector('input[name*="Quantity"]');
+                            materialIdInput.name = `SelectedMaterials[${i}].MaterialId`;
+                            quantityInput.name = `SelectedMaterials[${i}].Quantity`;
+                        });
+                    }
+
+                    function updateTotal() {
+                        totalPriceDisplay.textContent = `Totalt materialpris: ${totalMaterialPrice.toFixed(2)} kr`;
+                        updateProfit();
+                    }
+
+                    function updateProfit() {
+                        const salePrice = parseFloat(priceInput.value) || 0;
+                        const profit = salePrice - totalMaterialPrice;
+                        profitPriceDisplay.textContent = `Vinstmarginal vid försäljning: ${profit.toFixed(2)} kr`;
+                    }
+
+                    document.addEventListener("DOMContentLoaded", function () {
+                        const items = list.querySelectorAll("li");
+                        items.forEach(item => {
+                            const text = item.textContent;
+                            const priceMatch = text.match(/- ([\d.,]+) kr/);
+                            if (priceMatch) {
+                                const price = parseFloat(priceMatch[1].replace(",", "."));
+                                if (!isNaN(price)) {
+                                    totalMaterialPrice += price;
+                                }
+                            }
+                        });
+                        updateTotal();
+                    });
+
+                    priceInput.addEventListener('input', updateProfit);
+                    // const dropdown = document.getElementById('material-dropdown');
+                    // const qtyInput = document.getElementById('material-qty');
+                    // const addBtn = document.getElementById('add-material-btn');
+                    // const list = document.getElementById('material-list');
+                    // const totalPriceDisplay = document.getElementById('total-price');
+                    // const priceInput = document.getElementById('Price');
+                    // const profitPriceDisplay = document.getElementById('profit');
+
+                    // let index = 0;
+                    // let totalMaterialPrice = 0;
+
+                    // dropdown.addEventListener("change", () => {
+                    //     let unit = dropdown.options[dropdown.selectedIndex].dataset.unit;
+                    //     console.log(unit);
+                    //     const materialVal = document.getElementById("material-unit-val");
+                    //     if(!unit) {
+                    //         unit = "-";
+                    //     }
+                    //     materialVal.innerText = unit;
+                    // });
+
+                    // addBtn.addEventListener('click', () => {
+                    //     const id = dropdown.value;
+                    //     const name = dropdown.options[dropdown.selectedIndex].dataset.name;
+                    //     const unit = dropdown.options[dropdown.selectedIndex].dataset.unit;
+                    //     const pricePerUnit = parseFloat(dropdown.options[dropdown.selectedIndex].dataset.price);
+                    //     const qty = qtyInput.value;
+
+                    //     if (!id || qty < 0.001) return;
+                        
+                    //     const totalPrice = (pricePerUnit * qty).toFixed(2);
+
+                    //     // Create list item UI
+                    //     const li = document.createElement('li');
+                    //     li.className = 'list-group-item d-flex justify-content-between align-items-center';
+                    //     li.innerHTML = `
+                    //                 ${name} (${qty } ${unit}) - ${totalPrice} kr
+                    //         <button type="button" class="btn btn-sm btn-danger ms-2" onclick="removeMaterial(this, ${totalPrice})">
+                    //                     <i class="fa-solid fa-xmark"></i>
+                    //         </button>
+                    //         <input type="hidden" name="SelectedMaterials[${index}].MaterialId" value="${id}" />
+                    //         <input type="hidden" name="SelectedMaterials[${index}].Quantity" value="${qty}" />
+                    //     `;
+                    //     list.appendChild(li);
+
+                    //     totalMaterialPrice += parseFloat(totalPrice);
+                    //     totalPriceDisplay.textContent = `Totalt materialpris: ${totalMaterialPrice.toFixed(2)} kr`;
+                        
+                    //     updateProfit();
+
+                    //     index++;
+                    //     qtyInput.value = '';
+                    //     dropdown.selectedIndex = 0;
+                    // });
+
+                    //     function removeMaterial(button, price) {
+                    //         button.parentElement.remove();
+                    //         totalMaterialPrice -= price;
+                    //         totalPriceDisplay.textContent = `Totalt materialpris: ${totalMaterialPrice.toFixed(2)} kr`;
+                    //         updateProfit();
+                    //     }
+
+                    //     function updateProfit() {
+                    //         const salePrice = parseFloat(priceInput.value) || 0;
+                    //         const profit = (salePrice - totalMaterialPrice).toFixed(2);
+                    //         profitPriceDisplay.textContent = `Vinstmarginal vid försäljning: ${profit} kr`;
+                    //     }
+
+                    //     priceInput.addEventListener('input', updateProfit);
                     </script>
                 }
             </form>
