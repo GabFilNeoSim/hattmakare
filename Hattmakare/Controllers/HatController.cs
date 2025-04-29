@@ -46,8 +46,9 @@ public class HatController : Controller
     }
 
     [HttpGet("add")]
-    public async Task<IActionResult> Addhat()
+    public async Task<IActionResult> Addhat(string? redirectAction, string? redirectController)
     {
+        _logger.LogWarning("{a} {b}", redirectAction, redirectController);
         var materials = await _context.Materials
             .OrderBy(materials => materials.Name)
             .ToListAsync();
@@ -60,7 +61,9 @@ public class HatController : Controller
                 Name = m.Name,
                 Unit = m.Unit,
                 Price = m.Price
-            }).ToList()
+            }).ToList(),
+            Controller = redirectController,
+            Action = redirectAction
         };
 
         return View(viewModel);
@@ -108,6 +111,10 @@ public class HatController : Controller
         await _context.Hats.AddAsync(hat);
         await _context.SaveChangesAsync();
         
+        if (newHat.Controller is not null && newHat.Action is not null)
+        {
+            return RedirectToAction(newHat.Action, newHat.Controller);
+        }
         return RedirectToAction("Index");
     }
 
