@@ -17,7 +17,7 @@ public class WayBilViewModel
 
     public bool IsPriority { get; set; }
 
-    public decimal prio => IsPriority ? price * 1.20m : 0;
+    public decimal prio => IsPriority ? price * 0.20m : 0;
 
     public decimal totalPrice
     {

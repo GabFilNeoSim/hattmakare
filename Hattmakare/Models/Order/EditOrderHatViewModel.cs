@@ -14,6 +14,8 @@ public class EditOrderHatViewModel
     public double Length { get; set; }
     public double Width { get; set; }
     public double Depth { get; set; }
-    public string? UserId { get; set; }
-    public List<OrderHatMaterialViewModel> Materials { get; set; }
+  public string? UserId { get; set; }
+
+  public string Comment { get; set; }
+  public List<OrderHatMaterialViewModel> Materials { get; set; }
 }
