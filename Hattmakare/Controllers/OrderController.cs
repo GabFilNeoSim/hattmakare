@@ -499,8 +499,13 @@ public class OrderController : Controller
             }
         }
 
-        await _context.SaveChangesAsync();
-
+    int total = 0;
+    foreach (var hat in model.Hats)
+    {
+      total += (int)hat.Price * hat.Quantity;
+    }
+    order.Price = total;
+    await _context.SaveChangesAsync();
     TempData["NotifyType"] = "success";
     TempData["NotifyMessage"] = "Ordern skapades";
     return Ok();
