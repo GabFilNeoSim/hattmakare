@@ -319,6 +319,7 @@ public class OrderController : Controller
                 Depth = x.Depth,
               }).ToListAsync(),
         Customers = await _context.Customers
+        .Where(c => c.IsDeleted == false)
         .Select(c => new SelectListItem
         {
             Value = c.Id.ToString(),
@@ -341,12 +342,16 @@ public class OrderController : Controller
     [HttpGet("get-customer/{id}")]
     public async Task<IActionResult> GetCustomerById(int id)
     {
-        var customer = await _context.Customers
+        if (id <= 0)
+          {
+            return BadRequest("Invalid customer ID.");
+          }
+    var customer = await _context.Customers
          .Include(c => c.Address)
          .OrderBy(c => c.FirstName)
          .FirstOrDefaultAsync(c => c.Id == id);
-        
-        if (customer?.IsDeleted == false)
+
+        if (customer.IsDeleted == false)
         {
             return Json(new
             {
@@ -372,7 +377,6 @@ public class OrderController : Controller
     [HttpPost("new")]
     public async Task<IActionResult> CreateOrder([FromBody] AddOrderViewModel model)
     {
-
         if (model.Customer.Id > 0)
         {
             var customer = await _context.Customers
@@ -496,6 +500,8 @@ public class OrderController : Controller
 
         await _context.SaveChangesAsync();
 
+    TempData["NotifyType"] = "success";
+    TempData["NotifyMessage"] = "Ordern skapades";
     return Ok();
   }
 }

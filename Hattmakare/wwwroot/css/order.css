@@ -453,6 +453,7 @@
   }
 
   #orderItems{
+    width: 80%;
     box-shadow: 0px 0px 8px 0px hsla(0,0%,80%, 0.2);
     border-radius: 8px;
     border: 0.5px solid hsla(0,0%,60%, 0.2);
@@ -465,11 +466,19 @@
         gap: 10px;
         counter-increment: list-counter;
         position: relative;
-        padding-left: 2em;
+        padding: 10px 10px 10px 2em;
         width: 100%;
 
         details{
             width: 100%;
+
+            .add-material-form{
+                margin-top: 16px;
+            }
+
+            .material-quantity, .material-add-quantity{
+                width: 100px;
+            }
         }
         details summary #icon{
             align-self: flex-end;
@@ -508,37 +517,7 @@
     #orderItems:not(:has(*)){
         display: none;
     }
-
-  #cartContainer {
-    position: fixed;
-    right: 0px;
-    top: 100px;
-    padding: 8px;
-    background-color: #eff2f8;
-    z-index: 10;
-    width: 150px;
-    border-bottom-left-radius: 8px;
-    border-top-left-radius: 8px;
-    box-shadow: 0px 0px 16px 0px hsl(0,0%,20%, 0.1);
-
-    .entry{
-      display: flex;
-      flex-direction: column;
-      gap: 0px;
-      padding-bottom: 10px;
-      p{
-        margin: 0px;
-        font-weight: 600;
-      }
-
-      .size{
-        font-size: 14px;
-        font-weight: 400;
-        line-height: 10px;
-      }
-    }
-    }
-  }
+}
 
 #search {
     display: flex;
@@ -561,14 +540,54 @@
     background-color: transparent;
     border-bottom: 1px solid hsl(0,0%, 50%);
 }
+#orderForm{
+    display: flex;
+    gap: 50px;
+}
 
+.remove-material{
+    background-color: transparent;
+    border: none;
+}
+
+.remove-material svg{
+    fill: #d37070;
+    height: 16px;
+}
+.add-material-btn{
+    background-color: #6d75c6;
+    color: white;
+    border-radius: 8px;
+    border: none;
+    padding: 2px 8px;
+    margin-left: 10px;
+}
+#orderForm .left{
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+#orderForm .right{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+#orderForm .right .col-md-6{
+    width: 100%;
+}
+
+#orderForm .right button{
+    margin-top: auto;
+}
 
 .order-info-child input:not([type="checkbox"]) {
     background: none;
 }
 
 .customerFields {
-    width: 45%;
     font-size: 20px;
     margin-top: 1px;
     box-shadow: 0px 0px 16px 0px hsla(0,0%,50%, 0.2);
