@@ -240,6 +240,7 @@
     flex-direction: row;
     align-items: center;
     gap: 15px;
+    height: 65px;
 }
 
 .order-hats-name {
