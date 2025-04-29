@@ -307,7 +307,7 @@ namespace Hattmakare.Migrations
                 {
                     HatId = table.Column<int>(type: "int", nullable: false),
                     MaterialId = table.Column<int>(type: "int", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false)
+                    Quantity = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -358,7 +358,13 @@ namespace Hattmakare.Migrations
             migrationBuilder.InsertData(
                 table: "Addresses",
                 columns: new[] { "Id", "BillingAddress", "City", "Country", "DeliveryAddress", "PostalCode" },
-                values: new object[] { 1, "Adress 1", "Örebro", "Sverige", "Adress 2", "12345" });
+                values: new object[,]
+                {
+                    { 1, "Blåbärsstigen 99", "Örebro", "Sverige", "Solrosvägen 88", "11322" },
+                    { 2, "Krickelinsväg 101", "Stockholm", "Sverige", "Snöflingegatan 202", "55667" },
+                    { 3, "Månstrålevägen 45", "Umeå", "Sverige", "Regnbågsgatan 12", "22433" },
+                    { 4, "Silverbäcksvägen 77", "Paris", "Frankrike", "Älvdalsvägen 34", "77889" }
+                });
 
             migrationBuilder.InsertData(
                 table: "HatTypes",
@@ -371,9 +377,35 @@ namespace Hattmakare.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Hats",
-                columns: new[] { "Id", "Comment", "Depth", "HatTypeId", "ImageUrl", "IsDeleted", "Length", "Name", "Price", "Quantity", "Size", "Width" },
-                values: new object[] { 2, "Testcomment", 0.0, null, null, false, 0.0, "Kaptenshatt", 52m, 5, 8, 0.0 });
+                table: "Materials",
+                columns: new[] { "Id", "IsDecoration", "Name", "Price", "Supplier", "Unit" },
+                values: new object[,]
+                {
+                    { 1, false, "Ullfilt", 124.50m, "Nordic Felt AB", "m" },
+                    { 2, false, "Kaninfilt", 499.90m, "Hatter’s Choice Ltd", "m" },
+                    { 3, false, "Toquillastrå", 419.75m, "Ecuador Weaves Co.", "kg" },
+                    { 4, false, "Rishalm", 109.20m, "StrawCraft Asia", "kg" },
+                    { 5, false, "Palmlöv", 94.60m, "Tropic Naturals", "kg" },
+                    { 6, false, "Majsblad", 134.95m, "EcoFiber Mexico", "kg" },
+                    { 7, false, "Hampfibrer", 159.50m, "GreenTextiles GmbH", "kg" },
+                    { 8, false, "Bomull", 59.90m, "CottonLine Textiles", "m" },
+                    { 9, false, "Linne", 84.75m, "NordTextil AB", "m" },
+                    { 10, false, "Ull", 109.00m, "NordTextil AB", "m" },
+                    { 11, false, "Silke", 399.90m, "Silken Touch Co.", "m" },
+                    { 12, false, "Satin", 129.50m, "Fabric Elegance", "m" },
+                    { 13, false, "Tweed", 179.90m, "Highland Textiles", "m" },
+                    { 14, false, "Polyester", 49.95m, "GlobalPoly Ltd", "m" },
+                    { 15, false, "Läder", 849.00m, "Scandi Leatherworks", "st" },
+                    { 16, false, "Lackerat papper", 0.75m, "CraftMaterials.se", "st" },
+                    { 17, false, "Fuskpäls", 144.60m, "FauxFur Fabrics", "m" },
+                    { 18, true, "Strutsfjäder", 35.00m, "Bendigo Farm Inc", "st" },
+                    { 19, true, "Påfågelfjäder", 64.90m, "FeatherWorks Ltd", "st" },
+                    { 20, true, "Hönsfjäder", 0.90m, "FeatherWorks Ltd", "st" },
+                    { 21, true, "Tygblommor", 29.95m, "DecoFlora AB", "st" },
+                    { 22, true, "Pärlor", 11.50m, "Pearl Paradise", "g" },
+                    { 23, true, "Spets", 39.90m, "Lace & Grace", "m" },
+                    { 24, true, "Lurextråd", 59.00m, "ShinyThreads Co.", "m" }
+                });
 
             migrationBuilder.InsertData(
                 table: "OrderStatuses",
@@ -390,23 +422,57 @@ namespace Hattmakare.Migrations
                 columns: new[] { "Id", "AddressId", "Email", "FirstName", "HeadMeasurements", "IsDeleted", "LastName", "PhoneNumber" },
                 values: new object[,]
                 {
-                    { 1, 1, "testmejl", "Olof", 0.0, false, "Svensson", "1234567890" },
-                    { 2, 1, "testmejl", "Jan", 0.0, false, "Jansson", "1234567890" }
+                    { 1, 1, "olof.svensson@epost.se", "Olof", 0.0, false, "Svensson", "0723338282" },
+                    { 2, 2, "jan.jansson@epost.se", "Jan", 0.0, false, "Jansson", "0723557781" },
+                    { 3, 3, "julia.smith@epost.se", "Julia", 0.0, false, "Smith", "0723219981" },
+                    { 4, 4, "kajsa.fisk@epost.se", "Kajsa", 0.0, false, "Fisk", "0733447785" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Hats",
                 columns: new[] { "Id", "Comment", "Depth", "HatTypeId", "ImageUrl", "IsDeleted", "Length", "Name", "Price", "Quantity", "Size", "Width" },
-                values: new object[] { 1, "Testcomment", 0.0, 1, null, false, 0.0, "Studenthatt", 5m, 2, 10, 0.0 });
+                values: new object[,]
+                {
+                    { 1, "En vit, rund mössa med svart skärm och en kokard framtill, traditionellt buren vid svenska studentexamina", 5.0, 1, "/assets/hats/Student.jpg", false, 23.0, "Studenthatt", 1500m, 2, 10, 20.0 },
+                    { 2, "En formell vit hatt med svart skärm och guldbroderad dekoration, som symboliserar sjöfartsbefäl.", 4.0, 1, "/assets/hats/Kaptenshatt.jpg", false, 22.0, "Kaptenshatt", 1000m, 3, 9, 18.0 },
+                    { 3, "En röd, cylinderformad hatt utan brätten, ofta prydd med en tofs, traditionellt buren i delar av Mellanöstern och Nordafrika.", 9.0, 1, "/assets/hats/Fez.jpg", false, 16.0, "Fez", 800m, 2, 8, 16.0 },
+                    { 4, "En bredbrättad hatt av filt eller halm, designad för att skydda mot sol och regn på den amerikanska prärien.", 8.0, 1, "/assets/hats/Cowboyhatt.jpg", false, 35.0, "Cowboyhatt", 2000m, 1, 12, 30.0 },
+                    { 5, "En lätt och luftig hatt flätad av halm, perfekt för att ge skugga och svalka under soliga sommardagar.", 7.0, 1, "/assets/hats/Halmhatt.jpg", false, 32.0, "Halmhatt", 600m, 1, 11, 30.0 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "HatsMaterial",
+                columns: new[] { "HatId", "MaterialId", "Quantity" },
+                values: new object[,]
+                {
+                    { 1, 8, 0.5 },
+                    { 1, 12, 0.29999999999999999 },
+                    { 1, 21, 1.0 },
+                    { 1, 22, 5.0 },
+                    { 2, 8, 0.5 },
+                    { 2, 12, 0.29999999999999999 },
+                    { 2, 24, 1.0 },
+                    { 3, 10, 0.69999999999999996 },
+                    { 3, 24, 0.5 },
+                    { 4, 5, 0.5 },
+                    { 4, 15, 1.0 },
+                    { 4, 19, 1.0 },
+                    { 5, 4, 0.69999999999999996 },
+                    { 5, 20, 2.0 },
+                    { 5, 21, 1.0 }
+                });
 
             migrationBuilder.InsertData(
                 table: "Orders",
                 columns: new[] { "Id", "CustomerId", "DiscountPercentage", "EndDate", "OrderStatusId", "Price", "Priority", "StartDate" },
                 values: new object[,]
                 {
-                    { 1, 1, null, new DateTime(2025, 4, 17, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, 500m, false, new DateTime(2025, 4, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 2, 2, null, new DateTime(2025, 4, 17, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, 600m, true, new DateTime(2025, 4, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 3, 2, null, new DateTime(2025, 4, 17, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, 600m, true, new DateTime(2025, 4, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) }
+                    { 1, 1, null, new DateTime(2025, 11, 22, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, 3125m, false, new DateTime(2025, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 2, 2, null, new DateTime(2025, 10, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, 6450m, true, new DateTime(2025, 4, 12, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 3, 2, null, new DateTime(2025, 4, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, 600m, true, new DateTime(2025, 3, 19, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 4, 3, null, new DateTime(2025, 4, 21, 0, 0, 0, 0, DateTimeKind.Unspecified), 3, 600m, false, new DateTime(2025, 4, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 5, 4, null, new DateTime(2025, 8, 29, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, 600m, true, new DateTime(2025, 4, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 6, 4, null, new DateTime(2025, 4, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, 600m, false, new DateTime(2025, 4, 10, 0, 0, 0, 0, DateTimeKind.Unspecified) }
                 });
 
             migrationBuilder.InsertData(
@@ -416,8 +482,15 @@ namespace Hattmakare.Migrations
                 {
                     { 1, 1, 1, null },
                     { 2, 2, 1, null },
-                    { 3, 2, 2, null },
-                    { 4, 2, 3, null }
+                    { 3, 5, 2, null },
+                    { 4, 4, 2, null },
+                    { 5, 2, 2, null },
+                    { 6, 2, 3, null },
+                    { 7, 3, 4, null },
+                    { 8, 5, 4, null },
+                    { 9, 2, 5, null },
+                    { 10, 4, 5, null },
+                    { 11, 1, 6, null }
                 });
 
             migrationBuilder.CreateIndex(

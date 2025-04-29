@@ -22,7 +22,6 @@
             <p>
                 @(Model.sender.FirstName + " " + Model.sender.LastName)<br />
                 @Html.Raw(Model.address)
-                @*   @Model.address.PostalCode @Model.address.City *@
             </p>
 
         </div>
@@ -42,9 +41,6 @@
                 {
                     <div class="text-danger">Adress saknas</div>
                 }
-                
-                @* @Model.reciver.Address.DeliveryAddress<br />
-                @Model.reciver.Address.PostalCode @Model.reciver.Address.City *@
             </p>
         </div>
     </div>
@@ -95,6 +91,10 @@
                 <td class="text-end">@Model.tax.ToString("C")</td>
             </tr>
             <tr class="table-light">
+                <td><strong>Rabatt (%):</strong></td>
+                <td class="text-end">@Model.DiscountPercentage</td>
+            </tr>
+            <tr class="table-light">
                 <td><strong>Totalpris inkl. moms:</strong></td>
                 <td class="text-end">@Model.totalPrice.ToString("C")</td>
             </tr>
@@ -102,6 +102,6 @@
     </table>
 </div>
 
-<button class="btn btn-secondary mt-3" onclick="window.print()">Skriv ut fraktsedel</button>
+<button class="btn btn-secondary mt-3 no-print" onclick="window.print()">Skriv ut fraktsedel</button>
 
 
