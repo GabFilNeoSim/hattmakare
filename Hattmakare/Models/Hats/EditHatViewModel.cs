@@ -33,6 +33,8 @@ public class EditHatViewModel
     [Required(ErrorMessage = "Skriv in ett antal i lager")]
     public int Quantity { get; set; }
 
+    public string? Comment { get; set; }
+
     public IFormFile? Image { get; set; }
 
     public bool IsSpecial { get; set; } = false;
