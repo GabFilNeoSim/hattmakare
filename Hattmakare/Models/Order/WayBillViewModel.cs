@@ -19,7 +19,25 @@ public class WayBilViewModel
 
     public decimal prio => IsPriority ? price * 1.20m : 0;
 
-    public decimal totalPrice => price + tax + prio;
+    public decimal totalPrice
+    {
+        get
+        {
+            decimal basePrice = price + tax + prio;
+
+            if (DiscountPercentage is null)
+            {
+                return basePrice;
+            }
+            else
+            {
+                return basePrice * (1 - (DiscountPercentage.Value / 100m));
+            }
+        }
+    }
+
+
+    public int? DiscountPercentage { get; set; }
 
     public Data.Entities.Order order { get; set; }
     public int orderNumber { get; set; }
