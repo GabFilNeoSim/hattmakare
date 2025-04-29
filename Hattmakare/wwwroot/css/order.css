@@ -409,7 +409,7 @@
         justify-content: flex-start;
         align-items: center;
         box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
-        width: 300px;
+        width: 250px;
         padding: 40px 20px 10px 20px;
         box-sizing: border-box;
         background:rgba(255,255,255,1);
@@ -466,6 +466,7 @@
     border: 0.5px solid hsla(0,0%,60%, 0.2);
     padding-left: 0px;
     counter-reset: list-counter;
+    background-color: hsl(0,0%,99%);
     .entry{
         border: 0.5px solid hsla(0,0%,60%, 0.2);
         display: flex;
@@ -561,6 +562,8 @@
     display: flex;
     gap: 4px;
     margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid hsl(0,0%,80%);
 }
 
 .material-total-price{
