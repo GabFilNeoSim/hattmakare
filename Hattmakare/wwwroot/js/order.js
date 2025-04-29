@@ -88,6 +88,11 @@ class Cart {
     this.syncToStorage();
   }
 
+  clearCart(){
+    this.items = [];
+    this.syncToStorage();
+  }
+
   getItem(id) {
     return this.items.find(x => x.id == id);
   }
@@ -133,25 +138,19 @@ async function loadAvailableMaterials() {
 $(document).ready(async function () {
   await loadAvailableMaterials();
   cart.loadFromStorage();
-  updateCart(cart.items);
+  updateQuantity();
   updateHatList(cart.items);
   $('.hatList').on('click', '.count-add', async function () {
     const id = $(this).closest('.hatItem').data('id');
     await cart.addItem(id);
-    updateCart(cart.items);
+    updateQuantity();
     updateHatList(cart.items);
   });
-  // $('#hatList').on('click', '#special-count-add', async function () {
-  //   const id = $(this).closest('.hatItem').data('id');
-  //   await cart.addItem(id);
-  //   updateCart(cart.items);
-  //   updateHatList(cart.items);
-  // });
 
   $('.hatList').on('click', '.count-remove', function () {
     const id = $(this).closest('.hatItem').data('id');
     cart.removeItem(id);
-    updateCart(cart.items);
+    updateQuantity();
     updateHatList(cart.items);
   });
   
@@ -166,7 +165,6 @@ $(document).ready(async function () {
       if (item.hatTypeId != 3) item.hatTypeId = 2
       material.changeQuantity(val)
       cart.syncToStorage();
-      updateCart(cart.items);
     }
   })
   $(document).on("click", ".remove-material", function (e) {
@@ -179,7 +177,7 @@ $(document).ready(async function () {
         item.removeMaterial(materialId)
         if (item.hatTypeId != 3) item.hatTypeId = 2
         cart.syncToStorage();
-        updateCart(cart.items);
+        updateQuantity();
       }
   });
   $(document).on("click", ".add-material-btn", function (e) {
@@ -234,29 +232,11 @@ $(document).ready(async function () {
           data-item-id="${itemId}" 
           min="0"
         />
-        <button class="remove-material" data-material-id="${selectedMaterialId}" data-item-id="${itemId}">Remove</button>
+        <button class="remove-material" data-material-id="${selectedMaterialId}" data-item-id="${itemId}"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0L284.2 0c12.1 0 23.2 6.8 28.6 17.7L320 32l96 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 96C14.3 96 0 81.7 0 64S14.3 32 32 32l96 0 7.2-14.3zM32 128l384 0 0 320c0 35.3-28.7 64-64 64L96 512c-35.3 0-64-28.7-64-64l0-320zm96 64c-8.8 0-16 7.2-16 16l0 224c0 8.8 7.2 16 16 16s16-7.2 16-16l0-224c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16l0 224c0 8.8 7.2 16 16 16s16-7.2 16-16l0-224c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16l0 224c0 8.8 7.2 16 16 16s16-7.2 16-16l0-224c0-8.8-7.2-16-16-16z"/></svg></button>
       </div>
     `;
     $parent.find(".settings").append(materialHtml);
-  
-    // Re-render cart and list
-    updateCart(cart.items);
-  });
 
-function updateCart(cartItems) {
-  const cartEl = $("#cart");
-  cartEl.empty();
-
-  cartItems.forEach(item => {
-    if (item.quantity > 0) {
-      const html = `
-        <div class="entry">
-          <p>${item.quantity} x ${item.name}</p>
-          <p class="size">Storlek: ${item.size}</p>
-        </div>
-      `;
-      cartEl.append(html);
-    }
   });
 
   document.querySelectorAll('.hatItem').forEach(hatItem => {
@@ -270,19 +250,24 @@ function updateCart(cartItems) {
       counterElement.textContent = 0;
     }
   });
+})
 
-  const total = calculateTotal(cartItems);
-  $("#total").text("Total: " + total + ":-");
-
-  if (cartItems.length === 0) {
-    $("#cartContainer").hide();
-  } else {
-    $("#cartContainer").show();
-  }
+function updateQuantity() {
+  document.querySelectorAll('.hatItem').forEach(hatItem => {
+    const counterElement = hatItem.querySelector('.count');
+    const id = hatItem.getAttribute('data-id');
+    const cartItem = cart.getItem(id)
+    if (cartItem) {
+      counterElement.textContent = cartItem.quantity;
+    }
+    else{
+      counterElement.textContent = 0;
+    }
+  });
 }
 
-
 function updateHatList(cartItems) {
+  console.log("updated hat list")
   const itemsEl = $("#orderItems");
   itemsEl.empty();
 
@@ -315,7 +300,7 @@ function updateHatList(cartItems) {
                   data-item-id="${item.id}" 
                   min="0"
                 />
-                <button class="remove-material" data-material-id="${material.materialId}" data-item-id="${item.id}">Remove</button>
+                <button class="remove-material" data-material-id="${material.materialId}" data-item-id="${item.id}"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0L284.2 0c12.1 0 23.2 6.8 28.6 17.7L320 32l96 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 96C14.3 96 0 81.7 0 64S14.3 32 32 32l96 0 7.2-14.3zM32 128l384 0 0 320c0 35.3-28.7 64-64 64L96 512c-35.3 0-64-28.7-64-64l0-320zm96 64c-8.8 0-16 7.2-16 16l0 224c0 8.8 7.2 16 16 16s16-7.2 16-16l0-224c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16l0 224c0 8.8 7.2 16 16 16s16-7.2 16-16l0-224c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16l0 224c0 8.8 7.2 16 16 16s16-7.2 16-16l0-224c0-8.8-7.2-16-16-16z"/></svg></button>
               </div>
             `).join('')}
             </div>
@@ -339,14 +324,6 @@ function updateHatList(cartItems) {
   });
 }
 
-function calculateTotal() {
-  let total = 0;
-  Object.entries(cart).forEach(([key, value]) => {
-    total += parseInt(value.Price) * parseInt(value.Quantity);
-  });
-  return total;
-}
-
 $(document).on('click', '#order-hat-all', function (e) {
     e.preventDefault();
     let userId = $(this).attr("data-userId");
@@ -355,72 +332,13 @@ $(document).on('click', '#order-hat-all', function (e) {
 
 $(document).ready(function () {
   console.log("document ready");
-  
-//   $("#specialHat").on("click", function (e) {
-//     console.log("Submitted form");
-//     e.preventDefault();
 
-//     let hat = {
-//       Name: $("#Name").val(),
-//       Price: parseFloat($("#Price").val()),
-//       Quantity: parseInt($("#Quantity").val()),
-//       Size: parseInt($("#Size").val()),
-//       Length: parseFloat($("#Length").val()),
-//       Depth: parseFloat($("#Depth").val()),
-//       Width: parseFloat($("#Width").val()),
-//       Comment: $("#Comment").val()
-//     }
-
-//     const formData = new FormData();
-
-//     formData.append("Name", hat.Name);
-//     formData.append("Price", hat.Price);
-//     formData.append("Quantity", hat.Quantity);
-//     formData.append("Size", hat.Size);
-//     formData.append("Length", hat.Length);
-//     formData.append("Depth", hat.Depth);
-//     formData.append("Width", hat.Width);
-//     formData.append("Comment", hat.Comment);
-
-//     const imageInput = $("#Image")[0];
-//     if (imageInput && imageInput.files.length > 0) {
-//       formData.append("Image", imageInput.files[0]);
-//     }
-//     console.log(formData)
-//     $.ajax({
-//       url: '/Order/AddSpecialHat',
-//       method: 'POST',
-//       processData: false,
-//       contentType: false,
-//       data: formData,
-//       success: function (hatId) {
-//         console.log("Post completed hatId: " + hatId);
-//         const temp = {
-//           Name: hat.Name,
-//           Price: hat.Price,
-//           Quantity: hat.Quantity,
-//           Size: hat.Size,
-//           Length: hat.Length,
-//           Depth: hat.Depth,
-//           Width: hat.Width,
-//           Comment: hat.Comment
-//         }
-//         cart[hatId] = temp
-//         updateCart()
-//         updateHatList()
-//       },
-//       error: function (xhr, status, error) {
-//         console.error("POST error", status, error, xhr.responseText);
-//       }
-//     });
-//   });
 
   $('#orderForm').on('submit', function (e) {
     e.preventDefault(); // prevent normal submit
-
     const orderData = {
       Customer: {
-          Id: parseInt($('#CustomerId').val()) ? 0 : parseInt($('#CustomerId').val()),
+          Id: $('#CustomerId').val(),
           FirstName: $('#FirstName').val(),
           LastName: $('#LastName').val(),
           HeadMeasurements: parseFloat($('#HeadMeasurements').val()) || 0,
@@ -444,9 +362,14 @@ $(document).ready(function () {
       url: '/Order/New', // it will use /Order/CreateOrder
       contentType: 'application/json',
       data: JSON.stringify(orderData),
+      success: function () {
+        cart.clearCart()
+        updateHatList(cart.items)
+        updateQuantity();
+        notify({ type: "success", text: "Ordern skapades" });
+      },
     });
   });
-});
 });
 
 // Populera formulär med vald kunds uppgifter
