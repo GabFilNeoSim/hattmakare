@@ -100,6 +100,7 @@ public class HatController : Controller
             Depth = newHat.Depth,
             Width = newHat.Width,
             Quantity = newHat.Quantity,
+            Comment = newHat.Comment,
             Price = newHat.Price,
             HatMaterials = new List<HatMaterial>(),
             HatTypeId = hatTypeId,

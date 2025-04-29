@@ -33,8 +33,5 @@ namespace Hattmakare.Data.Entities
 
         [ForeignKey(nameof(HatTypeId))]
         public virtual HatType HatType { get; set; }
-
-
-
     }
 }
