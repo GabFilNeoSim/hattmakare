@@ -82,7 +82,8 @@ public class OrderController : Controller
             IsPriority = order.Priority,
             price = totalPrice,
             weight = 2,
-            OrderHats = order.OrderHats.ToList()
+            OrderHats = order.OrderHats.ToList(),
+            DiscountPercentage = order.DiscountPercentage
         };
 
         return View(model);
