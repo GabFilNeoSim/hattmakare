@@ -3,7 +3,7 @@
     width: 100% !important;
     display: flex;
     flex-direction: column;
-    gap: 25px;
+    gap: 10px;
     position: relative;
 }
 
@@ -36,13 +36,14 @@
     justify-content: center;
     flex-wrap: wrap;
     gap: 15px;
+    margin-top: 20px;
 }
 
 .order-options {
     display: flex;
     align-items: center;
     flex-direction: row;
-    gap: 25px;
+    gap: 10px;
 }
 
 #boards-container p {
@@ -221,6 +222,11 @@
     border: 2px solid #6d75c6;
     color: #009dff;
     padding: 4px 14px;
+}
+
+.order-info-title.action.date input {
+    border: none !important;
+    outline: none !important;
 }
 
 .order-hats-wrapper {
