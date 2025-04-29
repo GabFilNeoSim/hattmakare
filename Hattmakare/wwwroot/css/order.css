@@ -484,7 +484,7 @@
             }
 
             .material-quantity, .material-add-quantity{
-                width: 100px;
+                width: 80px;
             }
         }
         details summary #icon{
@@ -557,9 +557,21 @@
     border: none;
 }
 
+.material-entry{
+    display: flex;
+    gap: 4px;
+    margin-bottom: 10px;
+}
+
+.material-total-price{
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
 .remove-material svg{
     fill: #d37070;
     height: 16px;
+    margin-bottom: 8px;
 }
 .add-material-btn{
     background-color: #6d75c6;

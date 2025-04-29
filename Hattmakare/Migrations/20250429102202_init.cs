@@ -433,11 +433,11 @@ namespace Hattmakare.Migrations
                 columns: new[] { "Id", "Comment", "Depth", "HatTypeId", "ImageUrl", "IsDeleted", "Length", "Name", "Price", "Quantity", "Size", "Width" },
                 values: new object[,]
                 {
-                    { 1, "En vit, rund mössa med svart skärm och en kokard framtill, traditionellt buren vid svenska studentexamina", 5.0, 1, "/assets/hats/Student.jpg", false, 23.0, "Studenthatt", 1500m, 2, 10, 20.0 },
-                    { 2, "En formell vit hatt med svart skärm och guldbroderad dekoration, som symboliserar sjöfartsbefäl.", 4.0, 1, "/assets/hats/Kaptenshatt.jpg", false, 22.0, "Kaptenshatt", 1000m, 3, 9, 18.0 },
-                    { 3, "En röd, cylinderformad hatt utan brätten, ofta prydd med en tofs, traditionellt buren i delar av Mellanöstern och Nordafrika.", 9.0, 1, "/assets/hats/Fez.jpg", false, 16.0, "Fez", 800m, 2, 8, 16.0 },
-                    { 4, "En bredbrättad hatt av filt eller halm, designad för att skydda mot sol och regn på den amerikanska prärien.", 8.0, 1, "/assets/hats/Cowboyhatt.jpg", false, 35.0, "Cowboyhatt", 2000m, 1, 12, 30.0 },
-                    { 5, "En lätt och luftig hatt flätad av halm, perfekt för att ge skugga och svalka under soliga sommardagar.", 7.0, 1, "/assets/hats/Halmhatt.jpg", false, 32.0, "Halmhatt", 600m, 1, 11, 30.0 }
+                    { 1, "En vit, rund mössa med svart skärm och en kokard framtill, traditionellt buren vid svenska studentexamina", 5.0, 1, "Student.jpg", false, 23.0, "Studenthatt", 1500m, 2, 10, 20.0 },
+                    { 2, "En formell vit hatt med svart skärm och guldbroderad dekoration, som symboliserar sjöfartsbefäl.", 4.0, 1, "Kaptenshatt.jpg", false, 22.0, "Kaptenshatt", 1000m, 3, 9, 18.0 },
+                    { 3, "En röd, cylinderformad hatt utan brätten, ofta prydd med en tofs, traditionellt buren i delar av Mellanöstern och Nordafrika.", 9.0, 1, "Fez.jpg", false, 16.0, "Fez", 800m, 2, 8, 16.0 },
+                    { 4, "En bredbrättad hatt av filt eller halm, designad för att skydda mot sol och regn på den amerikanska prärien.", 8.0, 1, "Cowboyhatt.jpg", false, 35.0, "Cowboyhatt", 2000m, 1, 12, 30.0 },
+                    { 5, "En lätt och luftig hatt flätad av halm, perfekt för att ge skugga och svalka under soliga sommardagar.", 7.0, 1, "Halmhatt.jpg", false, 32.0, "Halmhatt", 600m, 1, 11, 30.0 }
                 });
 
             migrationBuilder.InsertData(

@@ -204,7 +204,7 @@ namespace Hattmakare.Data
                {
                    Id = 1,
                    Comment = "En vit, rund mössa med svart skärm och en kokard framtill, traditionellt buren vid svenska studentexamina",
-                   ImageUrl = "/assets/hats/Student.jpg",
+                   ImageUrl = "Student.jpg",
                    IsDeleted = false,
                    Name = "Studenthatt",
                    Price = 1500,
@@ -219,7 +219,7 @@ namespace Hattmakare.Data
                {
                    Id = 2,
                    Comment = "En formell vit hatt med svart skärm och guldbroderad dekoration, som symboliserar sjöfartsbefäl.",
-                   ImageUrl = "/assets/hats/Kaptenshatt.jpg",
+                   ImageUrl = "Kaptenshatt.jpg",
                    IsDeleted = false,
                    Name = "Kaptenshatt",
                    Price = 1000,
@@ -234,7 +234,7 @@ namespace Hattmakare.Data
                {
                    Id = 3,
                    Comment = "En röd, cylinderformad hatt utan brätten, ofta prydd med en tofs, traditionellt buren i delar av Mellanöstern och Nordafrika.",
-                   ImageUrl = "/assets/hats/Fez.jpg",
+                   ImageUrl = "Fez.jpg",
                    IsDeleted = false,
                    Name = "Fez",
                    Price = 800,
@@ -249,7 +249,7 @@ namespace Hattmakare.Data
                {
                    Id = 4,
                    Comment = "En bredbrättad hatt av filt eller halm, designad för att skydda mot sol och regn på den amerikanska prärien.",
-                   ImageUrl = "/assets/hats/Cowboyhatt.jpg",
+                   ImageUrl = "Cowboyhatt.jpg",
                    IsDeleted = false,
                    Name = "Cowboyhatt",
                    Price = 2000,
@@ -264,7 +264,7 @@ namespace Hattmakare.Data
                {
                    Id = 5,
                    Comment = "En lätt och luftig hatt flätad av halm, perfekt för att ge skugga och svalka under soliga sommardagar.",
-                   ImageUrl = "/assets/hats/Halmhatt.jpg",
+                   ImageUrl = "Halmhatt.jpg",
                    IsDeleted = false,
                    Name = "Halmhatt",
                    Price = 600,
