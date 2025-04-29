@@ -9,6 +9,8 @@
 <div class="container d-flex justify-content-center">
     <div class="col-md-8 col-lg-6">
         <form method="post" asp-action="AddHat" enctype="multipart/form-data" class="p-4 shadow rounded bg-light">
+            <input type="hidden" asp-for="Controller" value="@Model.Controller" />
+            <input type="hidden" asp-for="Action" value="@Model.Action" />
             <h2 class="mb-4 text-center">Lägg till en ny hatt</h2>
             <div class="row mb-3">
                 <div class="col-md-6">

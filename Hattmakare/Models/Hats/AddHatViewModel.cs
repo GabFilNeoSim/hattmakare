@@ -36,6 +36,9 @@ public class AddHatViewModel
 
     public bool IsSpecial { get; set; } = false;
 
+    public string? Controller { get; set; }
+    public string? Action { get; set; }
+
     public List<MaterialQuantityViewModel> SelectedMaterials { get; set; } = [];
     public List<MaterialQuantityViewModel> AvailableMaterials { get; set; } = [];
 }
