@@ -66,9 +66,7 @@ public class OrderController : Controller
             .ThenInclude(c => c.Address)
             .FirstOrDefaultAsync(o => o.Id == orderId);
 
-        decimal totalPrice = order.OrderHats
-        .Where(oh => oh.Hat is Hat)
-        .Sum(oh => ((Hat)oh.Hat).Price);
+        decimal totalPrice = order.Price;
 
         if (order == null)
             return Content($"No order found with ID {orderId}");
@@ -226,6 +224,7 @@ public class OrderController : Controller
                 Price = x.Hat.Price,
                 Size = x.Hat.Size,
                 Width = x.Hat.Width,
+                Comment = x.Hat.Comment,
                 Materials = x.Hat.HatMaterials.Select(y => new OrderHatMaterialViewModel
                 {
                     Name = y.Material.Name,

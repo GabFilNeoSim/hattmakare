@@ -78,6 +78,8 @@
                         <div class="order-hats-details">
                             <h3>Studenthatt</h3>
                             <img src="/assets/hats/@Model.Hats[i].HatImageUrl" />
+                            <h4>Kommentar</h4>
+                            <p>@(string.IsNullOrWhiteSpace(Model.Hats[i].Comment) ? "Ingen kommentar har angetts" : Model.Hats[i].Comment)</p>
                             <h4>Information</h4>
                             <table class="table order-info">
                                 <thead>
