@@ -1,11 +1,9 @@
 ﻿#hat-header {
     display: flex;
     flex-direction: row;
+    align-items: center;
     gap: 1rem;
-}
-
-#show-specials {
-    height: 50px;
+    margin-bottom: 16px;
 }
 
 #hat-lists {
@@ -13,19 +11,6 @@
     flex-direction: column;
     justify-content: center;
     gap: 4rem;
-}
-
-#special-list {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-#special-list-content {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 40px;
 }
 
 #hat .hatList {
@@ -173,13 +158,7 @@
     }
     }
   }
-
-#special-list.hatList.show {
-    display: none;
-}
-
 #hat #search {
-    margin-bottom: 16px;
     width: 50%;
     display: flex;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
