@@ -65,20 +65,12 @@
           </div>
   </div>
 
-    <div id="cartContainer">
-        <div id="cart">
-        </div>
-        <p id="total">Total: 0:- </p>
-    </div>
   <div id="orderItems">
 
   </div>
-  </div>
-
-
     <div id="settings" class="container mt-5">
         <form asp-action="CreateOrder" asp-controller="Order" method="post" enctype="multipart/form-data" id="orderForm">
-
+        <div class="left">
         <div>
             <label class="form-label fw-bold" for="CustomerId">Välj kund</label>
             <select id="CustomerId" name="CustomerId" class="form-control">
@@ -157,8 +149,8 @@
                 <span class="text-danger" asp-validation-for="AddCustomer.Phone"></span>
             </div>
         </div>
-
-        <div class="row">
+        </div>
+        <div class="right">
             <div class="col-md-6">
                 <label class="form-label fw-bold" for="StartDate">Startdatum</label>
                 <input id="StartDate" type="date" class="form-control" asp-for="NewOrders.StartDate" />
@@ -167,7 +159,6 @@
                 <label class="form-label fw-bold" for="EndDate">Slutdatum</label>
                 <input id="EndDate" type="date" class="form-control" asp-for="NewOrders.EndDate" />
             </div>
-        </div>
 
         <div class="form-check">
             <input id="Priority" class="form-check-input" type="checkbox" asp-for="NewOrders.Priority" />
@@ -176,11 +167,9 @@
             </label>
         </div>
 
-        <div class="text-end">
-            <button id="createOrderBtn" type="submit" class="btn btn-dark px-4">
-                Skapa order
-            </button>
-
+          <button id="createOrderBtn" type="submit" class="btn btn-dark px-4">
+              Skapa order
+          </button>
         </div>
 
     </form>
