@@ -5,8 +5,6 @@ using Hattmakare.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Hattmakare.Services;
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
-using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Hattmakare.Controllers;
 
@@ -29,22 +27,7 @@ public class HatController : Controller
         var model = new HatIndexViewModel
         {
             StandardHats = await _context.Hats
-             .Where(x => !x.IsDeleted && x.HatType.Name == "StandardHatt")
-             .Select(x => new HatViewModel
-             {
-                 Name = x.Name,
-                 Price = x.Price,
-                 Quantity = x.Quantity,
-                 Size = x.Size,
-                 Length = x.Length,
-                 Depth = x.Depth,
-                 Width = x.Width,
-                 ImageUrl = x.ImageUrl,
-                 Id = x.Id
-             }).ToListAsync(),
-
-            SpecialHats = await _context.Hats
-             .Where(x => !x.IsDeleted && x.HatType.Name == "Specialhatt")
+             .Where(x => !x.IsDeleted && x.HatType.Id == 1)
              .Select(x => new HatViewModel
              {
                  Name = x.Name,
@@ -100,6 +83,7 @@ public class HatController : Controller
             Depth = newHat.Depth,
             Width = newHat.Width,
             Quantity = newHat.Quantity,
+            Comment = newHat.Comment,
             Price = newHat.Price,
             HatMaterials = new List<HatMaterial>(),
             HatTypeId = hatTypeId,
@@ -253,7 +237,6 @@ public class HatController : Controller
     [HttpGet("SearchHat")]
     public IActionResult SearchHat(string searchTerm)
     {
-        
         var allHats = _context.Hats.AsEnumerable();  
 
         allHats = allHats.Where(h => !h.IsDeleted);
@@ -263,18 +246,19 @@ public class HatController : Controller
             allHats = allHats.Where(h => h.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase));
         }
 
-        
-        var model = allHats.Select(hat => new HatViewModel
+        var model = new HatIndexViewModel
         {
-            Id = hat.Id,
-            Name = hat.Name,
-            ImageUrl = hat.ImageUrl,
-            IsDeleted = hat.IsDeleted,
-            Size = hat.Size,
-            Quantity = hat.Quantity,
-            Price = hat.Price
-
-        }).ToList();
+            StandardHats = allHats.Where(hat => hat.HatTypeId == 1).Select(hat => new HatViewModel
+            {
+                Id = hat.Id,
+                Name = hat.Name,
+                ImageUrl = hat.ImageUrl,
+                IsDeleted = hat.IsDeleted,
+                Size = hat.Size,
+                Quantity = hat.Quantity,
+                Price = hat.Price
+            }).ToList()
+        };
 
         return View("Index", model);  
     }
@@ -303,5 +287,4 @@ public class HatController : Controller
     };
     return Ok(model);
   }
-
 }
